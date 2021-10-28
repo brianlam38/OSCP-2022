@@ -38,6 +38,8 @@ $ nmap --script smb-vuln-* [target]
 
 ### LDAP [389,636 etc. etc.]
 
+https://book.hacktricks.xyz/pentesting/pentesting-ldap
+
 Enumerate LDAP.
 ```
 $ nmap -n -sV --script "ldap* and not brute" [target]
