@@ -36,6 +36,12 @@ Check for SMB vulnerabilities.
 $ nmap --script smb-vuln-* [target]
 ```
 
+### LDAP [389,636 etc. etc.]
+
+Enumerate LDAP.
+```
+$ nmap -n -sV --script "ldap* and not brute" [target]
+```
 
 
 ## Linux Privilege Escalation
