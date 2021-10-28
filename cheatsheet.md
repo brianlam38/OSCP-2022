@@ -6,9 +6,9 @@ $ nmap -v -sUV -p [port1, port2] -Pn [host] -oN [filename]   # UDP
 ```
 
 
-# Initial Exploitation
+## Initial Exploitation
 
-## Shells
+### Shells
 
 Have a web shell? Check if server can reach you:
 ```
@@ -21,10 +21,10 @@ $ powershell -executionpolicy bypass ".\rshell.ps1 arg1 arg2"
 ```
 
 
-## FTP [21 TCP]
+### FTP [21 TCP]
 
 
-## SMB/Samba [139, 445 TCP]
+### SMB/Samba [139, 445 TCP]
 
 Enumerate via. SMB.
 ```
@@ -38,12 +38,12 @@ $ nmap --script smb-vuln-* [target]
 
 
 
-# Linux Privilege Escalation
+## Linux Privilege Escalation
 
 
-# Windows Privilege Escalation
+## Windows Privilege Escalation
 
-## Service Permissions
+### Service Permissions
 
 ```
 # windows/winXP
@@ -54,9 +54,9 @@ PS> Get-Acl
 PS> Get-ChildItem | Get-Acl
 ```
 
-## File & Folder Permissions
+### File & Folder Permissions
 
-## Acecss Token Abuse
+### Acecss Token Abuse
 
 https://www.notion.so/CHEATSHEET-ef447ed5ffb746248fec7528627c0405#5cedd479d1c1429e8018211371eec1ad
 
@@ -69,6 +69,6 @@ JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled.
 
 
 
-# Password Cracking
+## Password Cracking
 
 Online cracker: https://crackstation.net/
