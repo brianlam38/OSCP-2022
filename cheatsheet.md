@@ -111,11 +111,11 @@ JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled.
 
 ## File Transfer Methods
 
-### Linux.
+### Linux
 ```
 ```
 
-### Windows.
+### Windows
 
 Powershell
 ```
