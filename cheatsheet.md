@@ -37,6 +37,14 @@ $ nmap -n -sV --script "ldap* and not brute" [target]
 ```
 
 
+### MS SQL [1433]
+```
+# Recommended -windows-auth when you are going to use a domain. use as domain the netBIOS name of the machine
+$ python3 /usr/share/doc/python3-impacket/examples/mssqlclient.py -db volume -windows-auth <DOMAIN>/<USERNAME>:<PASSWORD>@<IP>
+$ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
+```
+
+
 ## Initial Exploitation
 
 ### Shells
