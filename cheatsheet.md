@@ -2,9 +2,10 @@
 
 Network - Nmap
 ```
-$ nmap -v -A [host]  # verbose, syn-stealth, svc versions, target ports, no-ping,
-$ nmap -v -p- [host] # TCP all ports
-$ nmap -v -sU [host] # UDP
+# Ideally run all 3 to get full coverage
+$ sudo nmap -v -A [host]  # TCP, OS detection, version detection, script scanning, and traceroute
+$ sudo nmap -v -p- [host] # TCP all ports
+$ sudo nmap -v -sU [host] # UDP
 ```
 
 Web - Gobuster
