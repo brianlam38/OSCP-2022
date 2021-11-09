@@ -2,9 +2,9 @@
 
 Network - Nmap
 ```
-$ sudo nmap -v -A [host]  # TCP, OS detection, version detection, script scanning, and traceroute
-$ sudo nmap -v -p- [host] # TCP all ports
-$ sudo nmap -v -sU [host] # UDP
+$ sudo nmap -v -A [host]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
+$ sudo nmap -v -p- [host] # TCP all ports.
+$ sudo nmap -v -sU [host] # UDP default ports.
 ```
 
 Web - Gobuster
