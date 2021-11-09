@@ -2,7 +2,6 @@
 
 Network - Nmap
 ```
-# Ideally run all 3 to get full coverage
 $ sudo nmap -v -A [host]  # TCP, OS detection, version detection, script scanning, and traceroute
 $ sudo nmap -v -p- [host] # TCP all ports
 $ sudo nmap -v -sU [host] # UDP
@@ -26,7 +25,7 @@ $ python3 ~/OSCP/Tools/enum4linux-ng/enum4linux-ng.py [target]
 
 Check for SMB vulnerabilities
 ```
-$ nmap --script smb-vuln-* [target]
+$ sudo nmap --script smb-vuln-* [target]
 ```
 
 Enumerate SMB
