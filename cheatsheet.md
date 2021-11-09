@@ -104,12 +104,19 @@ Bypass PHP disable functions
 
 ## Windows Privilege Escalation
 
-## Tips
+### Tips
 
 Ensure architecture of your PS shell = architecture of PS payload.
 * Check if PS shell is 64bit `[Environment]::Is64BitProcess`
 
-## OS Vulnerabilities
+
+### Automated Scripts
+
+```
+cmd> jaw
+```
+
+### OS Vulnerabilities
 
 Windows Exploit Suggester
 ```
@@ -125,6 +132,7 @@ Sherlock.ps1
 ### Insecure Service Permissions
 
 STEP 1: Check service permissions
+* Icacls output reference: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc753525(v=ws.10)?redirectedfrom=MSDN
 ```
 # windows/winXP
 cmd> icacls/cacls [fullpath/to/service]
