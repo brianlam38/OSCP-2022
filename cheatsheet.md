@@ -75,9 +75,7 @@ $ smbmap -u "guest" -R [share] -H 10.11.1.31  # recursively list files in a fold
 $ smbget -R smb://[target]/share                # recursively get files from target share/dir
 ```
 
-
-
-### LDAP [389,636 etc. etc.]
+### LDAP [389,636 TCP]
 
 https://book.hacktricks.xyz/pentesting/pentesting-ldap
 
@@ -86,19 +84,18 @@ Enumerate LDAP
 $ nmap -n -sV --script "ldap* and not brute" [target]
 ```
 
-
-### MS SQL [1433]
+### MS SQL [1433 TCP]
 ```
 # Recommended -windows-auth when you are going to use a domain. use as domain the netBIOS name of the machine
 $ python3 /usr/share/doc/python3-impacket/examples/mssqlclient.py -db volume -windows-auth <DOMAIN>/<USERNAME>:<PASSWORD>@<IP>
 $ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
 ```
 
-### James Remote Admin [4555]
+### Apache James Mail Server [4555 TCP]
 
 Default credentials are `root` / `root`.
 
-If `version 2.3.3` then vulnerable to [RCE - SEE HERE](https://packetstormsecurity.com/files/164313/Apache-James-Server-2.3.2-Remote-Command-Execution.html).
+`Version 2.3.3` is vulnerable to [RCE - SEE HERE](https://packetstormsecurity.com/files/164313/Apache-James-Server-2.3.2-Remote-Command-Execution.html).
 
 ## Shells
 
