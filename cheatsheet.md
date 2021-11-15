@@ -95,7 +95,7 @@ $ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
 
 Default credentials are `root` / `root`.
 
-`Version 2.3.3` is vulnerable to [RCE - SEE HERE](https://packetstormsecurity.com/files/164313/Apache-James-Server-2.3.2-Remote-Command-Execution.html).
+`Version 2.3.2` is vulnerable to [RCE - SEE HERE](https://packetstormsecurity.com/files/164313/Apache-James-Server-2.3.2-Remote-Command-Execution.html).
 
 ## Shells
 
