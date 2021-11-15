@@ -16,6 +16,18 @@ $ nikto -host [target]
 
 ### FTP [21 TCP]
 
+### SMTP [25 TCP]
+
+Manual fingerprinting
+```
+$ echo VRFY 'admin' | nc -nv -w 1 [target] 25
+```
+
+SMTP enum tools
+```
+$ smtp-user-enum -M VRFY -U /usr/share/wordlists/dirb/common.txt -t [target]
+```
+
 ### Web [80, 8080, 443 TCP]
 
 Apache Shellchock (/cgi-bin/*.cgi])
