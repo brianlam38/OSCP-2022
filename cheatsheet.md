@@ -113,6 +113,27 @@ Bypass PHP disable functions
 
 ## Linux Privilege Escalation
 
+### Automated recon
+
+Linpeas.sh
+Linenum.sh
+
+### SUID / SGID
+
+[SUID3ENUM.py](https://github.com/Anon-Exploiter/SUID3NUM)
+* Find SUID binaries -> cross-match with GTFO bins.
+* Don't use `-e` flag for auto-exploitation (OSCP banned).
+```
+$ python suid3num.py
+```
+
+### Binary service versions
+
+1. Look for binaries, especially non-standard ones.
+2. Run `$ searchsploit [binary_name] [version]` and exploit.
+
+
+
 
 ## Windows Privilege Escalation
 
