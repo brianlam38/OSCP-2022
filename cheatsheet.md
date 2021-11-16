@@ -23,7 +23,7 @@ Manual fingerprinting
 $ echo VRFY 'admin' | nc -nv -w 1 [target] 25
 ```
 
-SMTP enum tools
+SMTP user enumeration
 ```
 $ smtp-user-enum -M VRFY -U /usr/share/wordlists/dirb/common.txt -t [target]
 ```
