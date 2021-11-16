@@ -194,7 +194,7 @@ Method 2:
 
 Basic privesc example: https://flast101.github.io/docker-privesc/
 
-Writable Docker Socket */var/run/docker.sock*
+Writable Docker Socket */var/run/docker.sock* [see here](https://book.hacktricks.xyz/linux-unix/privilege-escalation#writable-docker-socket)
 * Detected Linpeas.sh or manually.
 * Requires image -> if none, run `docker pull` to download an image to machine.
 ```
