@@ -241,7 +241,9 @@ cmd> sc qc [servicename] restart
 
 ### Access Token Abuse
 
-https://www.notion.so/CHEATSHEET-ef447ed5ffb746248fec7528627c0405#5cedd479d1c1429e8018211371eec1ad
+Walkthrough: https://www.notion.so/CHEATSHEET-ef447ed5ffb746248fec7528627c0405#5cedd479d1c1429e8018211371eec1ad
+
+Windows CLSIDs: http://ohpe.it/juicy-potato/CLSID/
 
 
 JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled
