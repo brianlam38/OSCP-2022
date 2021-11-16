@@ -61,7 +61,7 @@ Automated enum
 $ python3 ~/OSCP/Tools/enum4linux-ng/enum4linux-ng.py [target] 
 ```
 
-Check for SMB vulnerabilities
+Eternal Blue check
 ```
 $ sudo nmap --script smb-vuln-* [target]
 ```
