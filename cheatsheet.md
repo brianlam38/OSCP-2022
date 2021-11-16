@@ -112,6 +112,9 @@ perl: exec "/bin/sh";
 :!bash                       # within vi
 :set shell=/bin/bash:shell   # within vi
 !sh                          # within nmap)
+
+# REMEMBER TO DO THIS
+$ export PATH=$PATH:/usr/bin:/bin:[other paths]
 ```
 
 Web shell + SMB exec
