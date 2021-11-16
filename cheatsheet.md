@@ -193,6 +193,7 @@ Method 2:
 ### Docker privesc
 
 Basic privesc example: https://flast101.github.io/docker-privesc/
+More on Docker breakout & privesc: https://book.hacktricks.xyz/linux-unix/privilege-escalation/docker-breakout
 
 Writable Docker Socket */var/run/docker.sock*: [see here](https://book.hacktricks.xyz/linux-unix/privilege-escalation#writable-docker-socket)
 * Detected Linpeas.sh or manually.
