@@ -168,6 +168,20 @@ Linenum.sh
 $ python suid3num.py
 ```
 
+### Running services
+
+Tips:
+* Check firewall rules.
+* Check for anti-virus software and see if you need to disable.
+
+Method 1:
+* Check if services running as root are writable by user.
+* Overwrite binary or reference file/arg with your own payload for privesc.
+
+Method 2:
+* Check version of services running as root.
+* See if vulnerable to a local privilege escalation vuln.
+
 ### Binary service versions
 
 1. Look for binaries, especially non-standard ones.
