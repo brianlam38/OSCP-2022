@@ -54,7 +54,7 @@ $ telnet [target] 110
 > RETR [message no.] # retrieve email
 ```
 
-### RPC [135 TCP]
+### RPC/Portmapper [111, 135 TCP]
 
 General enum
 ```
