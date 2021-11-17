@@ -54,6 +54,37 @@ $ telnet [target] 110
 > RETR [message no.] # retrieve email
 ```
 
+### RPC [135 TCP]
+
+General enum
+```
+$ rpcinfo -p [target]
+$ nmblookup -A [target]
+$ smbclient -L //[target]   // null session
+$ rpcclient -U "" [target]  // null session
+$ enum4linux [target]       // null session
+$ nbtscan [target]
+```
+
+RPC client
+```
+$ rpcclient -U "" -N [target]
+rpcclient> srvinfo
+rpcclient> enumdomains
+rpcclient> querydominfo
+rpcclient> enumdomusers
+rpcclient> enumdomgroups
+rpcclient> getdompwinfo
+
+# Follow up enum
+rpcclient> querygroup 0x200
+rpcclient> querygroupmem 0x200
+rpcclient> queryuser 0x3601
+rpcclient> getusrdompwinfo 0x3601
+```
+
+
+
 ### SMB/Samba [139, 445 TCP]
 
 Automated enum
