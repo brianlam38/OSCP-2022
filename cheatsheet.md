@@ -106,6 +106,29 @@ $ smbmap -u "guest" -R [share] -H 10.11.1.31  # recursively list files in a fold
 $ smbget -R smb://[target]/share                # recursively get files from target share/dir
 ```
 
+### SNMP [161 UDP]
+
+SNMP is an app-layer protocol for collecting and managing information about devices within a network.
+
+SNMP enumeration:
+(find further info about devices/software with vulns to gain a shell)
+```
+$ snmpwalk -c [community string] -v1 [ target ]
+$ onesixtyone [ target ] -c community.txt
+$ snmpenum
+$ snmp-check [ target ]
+```
+
+Snmpwalk brute-force script:
+* [Community string wordlist](https://github.com/danielmiessler/SecLists/blob/master/Discovery/SNMP/common-snmp-community-strings.txt)
+```
+#!/bin/bash
+while read line; do
+    echo "Testing $line"; snmpwalk -c $line -v1 10.10.10.105
+done < community.txt
+```
+
+
 ### LDAP [389,636 TCP]
 
 https://book.hacktricks.xyz/pentesting/pentesting-ldap
