@@ -188,6 +188,12 @@ $ python3 /usr/share/doc/python3-impacket/examples/mssqlclient.py -db volume -wi
 $ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
 ```
 
+### MuSQL [3306 TCP]
+
+[MySQL commands cheatsheet](http://g2pc1.bu.edu/~qzpeng/manual/MySQL%20Commands.htm)
+
+Ways to perform MySQL privesc (maybe move to privesc section).
+
 ### Apache James Mail Server [4555 TCP]
 
 Default credentials are `root` / `root`.
