@@ -19,6 +19,13 @@ $ nikto -host [target]
 
 ### FTP [21 TCP]
 
+Anonymous login
+```
+$ ftp [target]
+Name: anonymous
+Password
+```
+
 ### SMTP [25 TCP]
 
 Manual fingerprinting
