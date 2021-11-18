@@ -118,7 +118,7 @@ Pentesting IMAP: https://book.hacktricks.xyz/pentesting/pentesting-imap
 
 Check Samba service version.
 * Samba <2.2.8 versions are vulnerable to RCE.
-* Samba 3.5.11/3.6.3 is vulnerable to RCE.
+* Samba 3.5.11/3.6.3 versions are vulnerable to RCE.
 
 
 ### SMB (WINDOWS SMB) [139, 445 TCP]
