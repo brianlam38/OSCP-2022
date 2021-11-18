@@ -5,6 +5,9 @@ Network - Nmap
 $ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
 $ sudo nmap -v -p- [target] # TCP all ports.
 $ sudo nmap -v -sU [target] # UDP default ports.
+
+# UDP alternative - fast scan
+$ nmap -sUV -T4 -F --version-intensity 0 [target]
 ```
 
 Web - Gobuster
