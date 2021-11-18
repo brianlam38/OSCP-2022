@@ -34,6 +34,12 @@ TFTP is a simple protocol for transferring files.
 
 Pentest UDP TFTP: https://book.hacktricks.xyz/pentesting/69-udp-tftp
 
+TFTP Nmap enum
+```
+$ nmap -sU -p69 --script tftp-enum [target]
+```
+
+TFTP commands
 ```
 $ tftp
 tftp> connect [target]
