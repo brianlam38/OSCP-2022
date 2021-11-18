@@ -28,6 +28,20 @@ SMTP user enumeration
 $ smtp-user-enum -M VRFY -U /usr/share/wordlists/dirb/common.txt -t [target]
 ```
 
+### TFTP [69 UDP]
+
+TFTP is a simple protocol for transferring files.
+
+Pentest UDP TFTP: https://book.hacktricks.xyz/pentesting/69-udp-tftp
+
+```
+$ tftp
+tftp> connect [target]
+tftp> put [/path/to/local.txt]
+tftp> get [/path/to/remote.txt]
+```
+
+
 ### Web [80, 8080, 443 TCP]
 
 Apache Shellchock (/cgi-bin/*.cgi])
@@ -83,6 +97,9 @@ rpcclient> queryuser 0x3601
 rpcclient> getusrdompwinfo 0x3601
 ```
 
+### IMAP
+
+Pentesting IMAP: https://book.hacktricks.xyz/pentesting/pentesting-imap
 
 
 ### SMB/Samba [139, 445 TCP]
