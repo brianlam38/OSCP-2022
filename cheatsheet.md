@@ -290,6 +290,11 @@ Method 2:
 
 ### Binary service versions
 
+GTFOBins
+* GTFOBins are a list of Unix binaries that can be used for privesc in misconfigured systems.
+* Check your binaries against [GTFOBins list](https://gtfobins.github.io/).
+
+Vulnerable binary versions
 1. Look for binaries, especially non-standard ones.
 2. Run `$ searchsploit [binary_name] [version]` and exploit.
 
