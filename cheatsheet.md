@@ -178,8 +178,10 @@ https://book.hacktricks.xyz/pentesting/pentesting-ldap
 
 Enumerate LDAP
 ```
-$ nmap -n -sV --script "ldap* and not brute" [target]
+$ nmap -p389 -n -sV --script "ldap* and not brute" [target]
+$ ldapsearch -x -b "dc=acme,dc=com" "*" -h [target]
 ```
+
 
 ### MS SQL [1433 TCP]
 ```
