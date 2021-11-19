@@ -9,6 +9,9 @@ $ sudo nmap -v -sU [target] # UDP default ports.
 # Aggressive scans
 $ sudo nmap -sUV -T4 -F --version-intensity 0 [target]  # UDP aggresive
 $ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressive
+
+# OR alternative fast scans w/ NmapAutomator
+$ nmapAutomator.sh [target] Full
 ```
 
 Web - Gobuster
