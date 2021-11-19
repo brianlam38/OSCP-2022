@@ -6,8 +6,9 @@ $ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection
 $ sudo nmap -v -p- [target] # TCP all ports.
 $ sudo nmap -v -sU [target] # UDP default ports.
 
-# UDP alternative - fast scan
-$ nmap -sUV -T4 -F --version-intensity 0 [target]
+# Aggressive scans
+$ sudo nmap -sUV -T4 -F --version-intensity 0 [target]  # UDP aggresive
+$ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressive
 ```
 
 Web - Gobuster
