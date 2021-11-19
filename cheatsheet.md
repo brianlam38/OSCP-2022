@@ -202,6 +202,31 @@ Default credentials are `root` / `root`.
 
 `Version 2.3.2` is vulnerable to [RCE - SEE HERE](https://packetstormsecurity.com/files/164313/Apache-James-Server-2.3.2-Remote-Command-Execution.html).
 
+### VNC [5800, 5900 TCP]
+
+Connect to VNC
+```
+$ vncviewer [target]::[port]
+```
+
+VNC login brute-force
+```
+$ hydra -s 5900 -P /usr/share/wordlists/rockyou.txt [target] vnc
+```
+
+VNC authentication bypass:
+```
+# First, check if VNC service is vulnerable to auth bypass:
+https://github.com/curesec/tools/blob/master/vnc/vnc-authentication-bypass.py
+# If vulnerable, run manual exploit:
+https://github.com/arm13/exploits-1/blob/master/vncpwn.py
+# If that doesn't work, try MSF module:
+msf> use auxiliary/admin/vnc/realvnc_41_bypass
+```
+
+VNC password cracking:
+https://www.raymond.cc/blog/crack-or-decrypt-vnc-server-encrypted-password/
+
 ## Shells
 
 Tricks
