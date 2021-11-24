@@ -69,7 +69,9 @@ tftp> get \boot.ini
 ### Web [80, 8080, 443 TCP]
 
 Tips
-* If you can't find anything from initial scan, recursively scan subdirs including those that you don't think contain anything e.g. `/icons`
+* ALWAYS run Nikto.
+* ALWAYS run Gobuster.
+* If you can't find anything from initial scans, recursively scan subdirs including those that you don't think contain anything e.g. `/icons`
 * Append CLRF `%0d%0a` to payloads or file-extensions.
 
 Apache Shellchock (/cgi-bin/*.cgi])
