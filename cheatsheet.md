@@ -70,6 +70,7 @@ tftp> get \boot.ini
 
 Tips
 * If you can't find anything from initial scan, recursively scan subdirs including those that you don't think contain anything e.g. `/icons`
+* Append CLRF `%0d%0a` to payloads or file-extensions.
 
 Apache Shellchock (/cgi-bin/*.cgi])
 ```
