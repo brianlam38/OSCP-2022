@@ -68,6 +68,9 @@ tftp> get \boot.ini
 
 ### Web [80, 8080, 443 TCP]
 
+Tips
+* If you can't find anything from initial scan, recursively scan subdirs including those that you don't think contain anything e.g. `/icons`
+
 Apache Shellchock (/cgi-bin/*.cgi])
 ```
 # Test if vulnerable
