@@ -77,6 +77,11 @@ Tips
 Arbitrary file disclosure / LFI / RFI
 * Try all three if one works.
 
+SQL Injection
+1. Test single and double quotes for *500 Internal Server Error* response.
+2. Manually test payloads or use Burp Intruder with SQL payloads.
+3. Grab password hashes or perform code exec to obtain reverse shell.
+
 Apache Shellchock (/cgi-bin/*.cgi])
 ```
 # Test if vulnerable
