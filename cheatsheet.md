@@ -504,4 +504,11 @@ cmd> copy \\[kali]\[share]\[src_file] [/path/to/dest_file]  # copy file
 
 ## Password Cracking
 
-Online cracker: https://crackstation.net/
+Online hash cracker: https://crackstation.net/
+
+Cracking linux hashes - requires `/etc/passwd` and `/etc/shadow`
+```
+$ unshadow passwd.txt shadow.txt > passwords.txt
+$ john --wordlist=rockyou.txt passwords.txt
+```
+
