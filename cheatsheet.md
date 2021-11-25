@@ -277,6 +277,9 @@ Have a web shell? Check if server can reach you
 $ sudo tcpdump -i tun0 -n icmp -v
 ```
 
+CGI / Perl Web Server
+* If web server is running CGI scripts, try Perl rshell payload -> change extension to `.cgi`.
+
 Powershell
 ```
 # Exec local PS script
