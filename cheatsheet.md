@@ -74,6 +74,9 @@ Tips
 * If you can't find anything from initial scans, recursively scan subdirs including those that you don't think contain anything e.g. `/icons`
 * Append CLRF `%0d%0a` to payloads or file-extensions.
 
+Arbitrary file disclosure / LFI / RFI
+* Try all three if one works.
+
 Apache Shellchock (/cgi-bin/*.cgi])
 ```
 # Test if vulnerable
@@ -299,6 +302,9 @@ Bypass PHP disable functions
 ```
 
 ## Linux Privilege Escalation
+
+Tips:
+* PE could rely on the same vulnerability to obtain an initial foothold.
 
 ### Automated recon
 
