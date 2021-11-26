@@ -267,6 +267,23 @@ https://www.raymond.cc/blog/crack-or-decrypt-vnc-server-encrypted-password/
 
 Tricks
 * Try to URL encode payload if exploit is not working in webapp.
+* Try to remove firewall rules if rshell payloads don't trigger (see below). Confirm code exec by creating `test.txt` file on target if you have a way to identify that the file was created e.g. via. `smb` or `ftp` etc.
+
+
+Bypassing Linux firewalls
+```
+# flush Iptables - delete all rules temporarily.
+# add this command before executing reverse shell connection/command.
+$ iptables --flush
+
+
+```
+
+Bypassing Windows firewalls
+```
+# TODO
+```
+
 
 Spawn TTY shell / rbash restricted shell escape
 ```
