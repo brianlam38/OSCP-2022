@@ -530,6 +530,28 @@ cmd> net use \\[kali]\[share]       # connect to share
 cmd> copy \\[kali]\[share]\[src_file] [/path/to/dest_file]  # copy file
 ```
 
+## Compilation
+
+Linux C to .SO (shared library)
+```
+$ gcc -o exploit.so -shared exploit.c -fPIC 
+```
+
+Linux 32/64bit cross-architecture ELF
+```
+$ gcc -m32 -Wl,--hash-style=both exploit.c -o exploit
+```
+
+Linux to Windows EXE
+```
+$ i686-w64-mingw32-gcc 25912.c -o exploit.exe -lws2_32
+$ wine exploit.exe
+```
+
+Windows Python to Windows EXE
+```
+$ python pyinstaller.py --onefile <pythonscript>
+```
 
 ## Password Cracking
 
