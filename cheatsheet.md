@@ -1,5 +1,8 @@
 # Recon
 
+Tips
+* Use BOTH `searchsploit` and `google` to find vulnerable service versions. Sometimes searchsploit may not have updated results.
+
 Network - Nmap
 ```
 $ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
