@@ -275,13 +275,12 @@ Bypassing Linux firewalls
 # flush Iptables - delete all rules temporarily.
 # add this command before executing reverse shell connection/command.
 $ iptables --flush
-
-
 ```
 
 Bypassing Windows firewalls
+* different command depending on Windows version.
 ```
-# TODO
+cmd> netsh advfirewall set allprofiles state off
 ```
 
 
