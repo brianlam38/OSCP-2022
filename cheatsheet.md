@@ -278,11 +278,14 @@ $ iptables --flush
 ```
 
 Bypassing Windows firewalls
-* different command depending on Windows version.
 ```
+# Win Vista, 7, 8, Server 2008, 10
 cmd> netsh advfirewall set allprofiles state off
-```
+cmd> netsh advfirewall set currentprofile state off
 
+# Older Win, XP, Server 2003
+cmd> netsh firewall set opmode mode=DISABLE
+```
 
 Spawn TTY shell / rbash restricted shell escape
 ```
