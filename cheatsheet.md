@@ -177,7 +177,7 @@ $ python3 ~/OSCP/Tools/enum4linux-ng/enum4linux-ng.py [target]
 
 Eternal Blue check
 ```
-$ sudo nmap --script smb-vuln-* [target]
+$ sudo --script smb-vuln-* [target]
 ```
 
 Enumerate SMB
@@ -300,7 +300,9 @@ perl —e 'exec "/bin/sh";'
 perl: exec "/bin/sh";
 :!bash                       # within vi
 :set shell=/bin/bash:shell   # within vi
-!sh                          # within nmap)
+
+$ nmap --interactive         # within nmap
+nmap> !sh                          
 
 # REMEMBER TO DO THIS
 $ export PATH=$PATH:/usr/bin:/bin:[other paths]
