@@ -75,7 +75,14 @@ Tips
 * ALWAYS run Nikto.
 * ALWAYS run Gobuster.
 * If you can't find anything from initial scans, recursively scan subdirs including those that you don't think contain anything e.g. `/icons`
-* Append CLRF `%0d%0a` to payloads or file-extensions.
+
+Filter / file ext bypass
+```
+%0d%0a
+%00
+%en
+%00en
+```
 
 Arbitrary file disclosure / LFI / RFI
 * Try all three if one works.
