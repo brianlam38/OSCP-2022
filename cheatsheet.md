@@ -40,6 +40,11 @@ Nmap vuln scan
 $ sudo nmap -p25 --script smtp-vuln-* [target]
 ```
 
+Mail server shellshock
+* Grab SMTP service banner -> check service(s) against Shellshock vulnerability.
+* Known: Postfix w/ Procmail, qmail MTA, exim MTA.
+* See https://www.trendmicro.com/en_us/research/14/j/shellshock-related-attacks-continue-targets-smtp-servers.html
+
 Manual fingerprinting
 ```
 $ echo VRFY 'admin' | nc -nv -w 1 [target] 25
@@ -49,6 +54,8 @@ SMTP user enumeration
 ```
 $ smtp-user-enum -M VRFY -U /usr/share/wordlists/dirb/common.txt -t [target]
 ```
+
+
 
 ### TFTP [69 UDP]
 
