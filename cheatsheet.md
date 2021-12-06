@@ -35,6 +35,11 @@ Password
 
 ### SMTP [25 TCP]
 
+Nmap vuln scan
+```
+$ sudo nmap -p25 --script smtp-vuln-* [target]
+```
+
 Manual fingerprinting
 ```
 $ echo VRFY 'admin' | nc -nv -w 1 [target] 25
