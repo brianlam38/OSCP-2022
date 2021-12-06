@@ -40,7 +40,7 @@ Nmap vuln scan
 $ sudo nmap -p25 --script smtp-vuln-* [target]
 ```
 
-Mail server shellshock
+Mail server Shellshock RCE
 * Grab SMTP service banner -> check service(s) against Shellshock vulnerability.
 * Known: Postfix w/ Procmail, qmail MTA, exim MTA.
 * See https://www.trendmicro.com/en_us/research/14/j/shellshock-related-attacks-continue-targets-smtp-servers.html
