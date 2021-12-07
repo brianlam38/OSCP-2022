@@ -17,10 +17,11 @@ $ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressi
 $ nmapAutomator.sh [target] Full
 ```
 
-Web - Gobuster
+Web - Gobuster/Nikto/Nmap
 ```
 $ gobuster dir -u [target] -w ~/OSCP/SecLists/Discovery/Web-Content/[wordlist]
 $ nikto -host [target]
+$ sudo nmap -v -sV -p80,443 --script vuln [target]
 ```
 
 
@@ -87,6 +88,11 @@ Tips
 * ALWAYS run Nikto.
 * ALWAYS run Gobuster.
 * If you can't find anything from initial scans, recursively scan subdirs including those that you don't think contain anything e.g. `/icons`
+
+Nmap script vuln scan
+```
+$ sudo nmap -v -sV -p80,443 --script vuln [target]
+```
 
 Filter / file ext bypass
 ```
