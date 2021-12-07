@@ -668,6 +668,14 @@ $ unshadow passwd.txt shadow.txt > passwords.txt
 $ john --wordlist=rockyou.txt passwords.txt
 ```
 
+Hashcat
+```
+# Check hash type -> crack w/ hashcat
+$ hash-identifier [hash]    
+$ hashcat -m [hash-type] -a 0 [hash-file] [wordlist] -o cracked.txt
+```
+
+
 ## Active Directory / Lateral Movement
 
 ### Dumping Windows LM/HTLM Hashes
