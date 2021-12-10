@@ -57,7 +57,7 @@ $SearchString += $DistinguishedName
 
 # instantiate DirectorySearcher class with LDAP provider path.
 $Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
-$objDomain = New-Object System.DirectoryServices.DirectoryEntry($SearchString, "corp.com\offsec","lab")
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry($SearchString, "[domain_name]\[user]","[password]")
 $Searcher.SearchRoot = $objDomain
 
 # ###########################
