@@ -66,14 +66,18 @@ $Searcher.SearchRoot = $objDomain
 
 # filter by Domain Admin users
 $Searcher.filter="memberof=CN=Domain Admins,CN=Users,DC=corp,DC=com"
+
 # filter by all Users in domain
-$Searcher.filter="samAccountType=805306368"
+# $Searcher.filter="samAccountType=805306368"
+
 # filter by all Groups in domain
-$Searcher.filter="objectcategory=group"
+# $Searcher.filter="objectcategory=group"
+
 # filter by all Computers in domain
-$Searcher.filter="objectcategory=computer"
+# $Searcher.filter="objectcategory=computer"
+
 # filter by all Computers AND operating sys is Windows 10
-$Searcher.filter="(&(objectcategory=computer)(operatingsystem=*Windows 10*))"
+# $Searcher.filter="(&(objectcategory=computer)(operatingsystem=*Windows 10*))"
 
 # invoke
 $Result = $Searcher.FindAll()
