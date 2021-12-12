@@ -3,7 +3,7 @@
 ## AD Introduction
 
 Goal:
-1. Perform user hunting to track down where users are logged into in the network.
+1. Perform user hunting to track down where users are logged into in the network - find users that are members of high-value groups.
 2. Dump credentials and/or obtain Kerberos tickets.
 3. Gain access to the user's machine using creds/ticket.
 4. (Possibly) escalate privileges in the machine.
@@ -12,9 +12,6 @@ Goal:
 ## AD Enumeration
 
 ### Enumeration - Manual
-
-
-
 
 Enum users/groups/computers
 * Look for users with high-privs across the domain e.g. Domain Admins or Derivative Local Admins
@@ -39,13 +36,44 @@ PS> [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
 ```
 
 Enum via. Service Principal Names (Service Accounts)
+* SPNs are unique service instance identifiers, used to associate a service on a server to a service account in Active Directory.
+* Enum SPNs to obtain the IP address and port number of apps running on servers integrated with Active Directory.
+* Query the Domain Controller in search of SPNs.
+
+```
+# Example: search by web server (http) (see automated script below)
+$Searcher.filter="serviceprincipalname=*http*"
+
+----OUTPUT----
+serviceprincipalname     {HTTP/CorpWebServer.corp.com}
+----OUTPUT----
+
+# resolve the hostname
+$ nslookup corpwebserver.corp.com
+Server: UnKnown
+Address: 192.168.1.110
+
+Name: corpwebserver.corp.com
+Address: 192.168.1.110
+```
 
 
 ### Enumeration - Automated
 
-PowerShell
+PowerView.ps1
+* https://book.hacktricks.xyz/windows/basic-powershell-for-pentesters/powerview
+```
+# import module
+PS> Import-Module .\PowerView.ps1
 
-PowerShell automated users/groups/computers enum
+# enum logged-in users on target computer
+PS> Get-NetLoggedon -ComputerName [computer_name]
+
+# enum active user sessions, targeting computer/DC
+PS> Get-NetSession -ComputerName [domain_controller]
+```
+
+PowerShell automated users/groups/computers and SPN enum
 ```
 # build the LDAP path
 $domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
@@ -78,6 +106,9 @@ $Searcher.filter="memberof=CN=Domain Admins,CN=Users,DC=corp,DC=com"
 
 # filter by all Computers AND operating sys is Windows 10
 # $Searcher.filter="(&(objectcategory=computer)(operatingsystem=*Windows 10*))"
+
+# filter by SPN
+$Searcher.filter="serviceprincipalname=*http*"
 
 # invoke
 $Result = $Searcher.FindAll()
