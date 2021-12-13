@@ -1,10 +1,13 @@
 # Active Directory Cheatsheet
 
-## Contents
 [AD Enumeration](#AD-Enumeration) 
+
 [AD Authentication](#AD-Authentication)  
+
 [AD Lateral Movement](#AD-Lateral-Movement) 
+
 [AD Persistence](#AD-Persistence)  
+
 
 ## AD Introduction
 
