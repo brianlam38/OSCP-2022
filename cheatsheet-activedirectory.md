@@ -34,9 +34,9 @@ cmd> net user [username] /domain
 cmd> net group /domain
 cmd> net group [groupname] /domain
 
-# get all computers in the domain
-cmd> net computer /domain
-cmd> net computer \\[computername] /domain
+# list domains, computers, resources shared by the specified computer
+cmd> net view /domain
+cmd> net view \\[computer_name] /domain
 ```
 
 Enum Domain Controller hostname (PdcRoleOwner)
