@@ -34,8 +34,11 @@ cmd> net user [username] /domain
 cmd> net group /domain
 cmd> net group [groupname] /domain
 
-# list domains, computers, resources shared by the specified computer
+# get all computers in domain
+cmd> net view
 cmd> net view /domain
+
+# get resources/shares of specified computer
 cmd> net view \\[computer_name] /domain
 ```
 
