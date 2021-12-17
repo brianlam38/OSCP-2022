@@ -641,7 +641,13 @@ $ gcc -m32 -Wl,--hash-style=both exploit.c -o exploit
 
 Linux to Windows EXE
 ```
+# 32 bit Windows
 $ i686-w64-mingw32-gcc 25912.c -o exploit.exe -lws2_32
+
+# 64 bit Windows
+$ x86_64-w64-mingw32-gcc exploit.c -o exploit.exe 
+
+# run exe in linux
 $ wine exploit.exe
 ```
 
