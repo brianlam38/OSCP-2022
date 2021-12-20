@@ -75,14 +75,10 @@ Address: 192.168.1.110
 PowerView.ps1
 * https://book.hacktricks.xyz/windows/basic-powershell-for-pentesters/powerview
 ```
-# import module
+PS> Set-ExecutionPolicy Unrestricted
 PS> Import-Module .\PowerView.ps1
-
-# enum logged-in users on target computer
-PS> Get-NetLoggedon -ComputerName [computer_name]
-
-# enum active user sessions, targeting computer/DC
-PS> Get-NetSession -ComputerName [domain_controller]
+PS> Get-NetLoggedon -ComputerName [computer_name]    # enum logged-in users
+PS> Get-NetSession -ComputerName [domain_controller] # enum active user sessions
 ```
 
 PowerShell automated users/groups/computers and SPN enum
