@@ -94,6 +94,12 @@ Nmap script vuln scan
 $ sudo nmap -v -sV -p80,443 --script vuln [target]
 ```
 
+Brute-Force Logins
+```
+# generate wordlist from target website
+$ cewl http://target.com
+```
+
 Filter / file ext bypass
 ```
 %0d%0a
