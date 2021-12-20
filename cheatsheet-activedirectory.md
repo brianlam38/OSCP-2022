@@ -286,7 +286,13 @@ $com.Run("mymacro")
 ```
 
 
-## AD Persistence
+## Hash Cracking
+
+Cracking NT (NTLM) hashes
+```
+$ hashcat -m 1000 -a 0 hashes.txt [path/to/wordlist.txt] -o cracked.txt
+$ john --wordlist=[path/to/wordlist.txt] hashes.txt
+```
 
 
 
