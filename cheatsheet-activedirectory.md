@@ -191,6 +191,16 @@ $ john --wordlist=rockyou.txt johncrackfile
 
 ## AD Lateral Movement
 
+Have plaintext credentials?
+```
+# RDP clients
+$ rdesktop [target]
+$ remmina -c rdp://[username]:[password]@[target]
+
+# WinRM client (used in compromised computer) - ensure WSMAN port 5985 is open on target
+cmd> winrs -u:[username] -p:[password] -r:http://[target]:5985/wsman "cmd"
+```
+
 Pass-the-Hash
 * Requires pw-hash user to have local admin rights on target, as connection is made using the `Admin$` share.
 * Requires SMB connection through the firewall
