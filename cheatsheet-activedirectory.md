@@ -47,7 +47,7 @@ Enum Domain Controller hostname (PdcRoleOwner)
 PS> [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
 ```
 
-Enum via. Service Principal Names (Service Accounts)
+Enum Service Principal Names 1 (Service Accounts)
 * SPNs are unique service instance identifiers, used to associate a service on a server to a service account in Active Directory.
 * Enum SPNs to obtain the IP address and port number of apps running on servers integrated with Active Directory.
 * Query the Domain Controller in search of SPNs.
@@ -72,8 +72,14 @@ Address: 192.168.1.110
 
 ### Enumeration - Automated
 
-PowerView.ps1
-* https://book.hacktricks.xyz/windows/basic-powershell-for-pentesters/powerview
+Enum Service Principal Names.
+* Kerberoast `GetUserSPNs.ps1` script: https://github.com/nidem/kerberoast/blob/master/GetUserSPNs.ps1
+```
+PS> .\GetUserSPNs.ps1
+```
+
+Enum logged-in users and active user sessions.
+* More powerview commands https://book.hacktricks.xyz/windows/basic-powershell-for-pentesters/powerview
 ```
 PS> Set-ExecutionPolicy Unrestricted
 PS> Import-Module .\PowerView.ps1
@@ -81,7 +87,7 @@ PS> Get-NetLoggedon -ComputerName [computer_name]    # enum logged-in users
 PS> Get-NetSession -ComputerName [domain_controller] # enum active user sessions
 ```
 
-PowerShell automated users/groups/computers and SPN enum
+Enum users/groups/computers/SPNs
 ```
 # build the LDAP path
 $domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
@@ -322,5 +328,15 @@ $ hashcat -m 1000 -a 0 hashes.txt [path/to/wordlist.txt] -o cracked.txt
 $ john --wordlist=[path/to/wordlist.txt] hashes.txt
 ```
 
+Crack SPN hashes via. exported `.kirbi` tickets.
+```
+# Kerberoast
+$ python3 tgsrepcrack.py rockyou.txt [ticket.kirbi]  # locally crack hashes
+PS> Invoke-Kerberoast.ps1                            # crack hashes on target
+
+# John the Ripper
+$ python3 kirbi2john.py -o johncrackfile ticket.kirbi  # convert ticket to john file
+$ john --wordlist=rockyou.txt johncrackfile
+```
 
 
