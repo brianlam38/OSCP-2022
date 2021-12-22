@@ -201,8 +201,7 @@ $ remmina -c rdp://[username]:[password]@[target]
 cmd> winrs -u:[username] -p:[password] -r:http://[target]:5985/wsman "cmd"
 
 # Admin groups but with a "MANDATORY LABEL\MEDIUM" context?
-# Elevate token via. psexec
-cmd> psexec.exe -u xor\sqlserver -p [password] -h "cmd.exe"
+# Try UAC bypass technique.
 ```
 
 Pass-the-Hash
