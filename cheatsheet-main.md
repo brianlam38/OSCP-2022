@@ -534,6 +534,9 @@ EnableLUA                  REG_DWORD 0x1 # if 0x1 = UAC ENABLED
 ConsentPromptBehaviorAdmin REG_DWORD 0x5 # if NOT 0x0 = consent required
 PromptOnSecureDesktop      REG_DWORD 0x1 # if 0x1 = Force all credential/consent prompts
 ...
+
+# try to disable UAC
+cmd> reg add HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /d 0 /t REG_DWORD
 ```
 
 STEP 2: Prepare exploits
