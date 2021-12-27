@@ -11,5 +11,10 @@ Setup
 Directory brute-force example
 * Wfuzz works well, Gobuster requires some setup.
 ```
-wfuzz -p 127.0.0.1:9050:SOCKS4 -c -w [/path/to/wordlist] --hc=404 http://[internal_target]/FUZ
+$ wfuzz -p 127.0.0.1:9050:SOCKS4 -c -w [/path/to/wordlist] --hc=404 http://[internal_target]/FUZ
+```
+
+Nmap scanning via. Proxychains
+```
+$ proxychains nmap -Pn -sT [target]
 ```
