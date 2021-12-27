@@ -20,5 +20,5 @@ $ wfuzz -p 127.0.0.1:9050:SOCKS4 -c -w [/path/to/wordlist] --hc=404 http://[inte
 
 Nmap scanning via. Proxychains
 ```
-$ proxychains nmap -Pn -sT [target]
+$ proxychains nmap -Pn -sT -sV [target]
 ```
