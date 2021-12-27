@@ -1,5 +1,9 @@
 # Port Forwarding Techniques
 
+### Guides
+
+Tunneling and Pivoting Techniques (GIAC): https://www.giac.org/paper/gwapt/4686/tunneling-pivoting-web-application-penetration-testing/120229
+
 ### Dynamic Port Forwarding
 
 This will allow you to access internal network services on dynamic (as opposed to static) ports.
