@@ -197,7 +197,7 @@ NFS shares
 $ rpcinfo -p [target]                             # enum NFS shares
 $ showmount -e [ target IP ]                      # show mountable directories
 $ mount -t nfs [target IP]:/ /mnt -o nolock       # mount remote share to your local machine
-$ df -k      
+$ df -k                                           # show mounted file systems
 ```
 
 RPC client
