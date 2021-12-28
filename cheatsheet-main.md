@@ -14,6 +14,7 @@ $ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressi
 ```
 
 Web scans - Gobuster/Nikto/Nmap
+* Below is the minimum list to run for proper web enumeration.
 ```
 $ nikto -host [target]
 $ sudo nmap -v -sV -p80,443 --script vuln [target]
