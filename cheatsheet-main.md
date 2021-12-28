@@ -20,8 +20,8 @@ $ nikto -host [target]
 $ sudo nmap -v -sV -p80,443 --script vuln [target]
 
 $ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/common.txt                   # easiest
-$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/directory-list-2.3-small.txt # dirs longer
-$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/raft-small-files.txt         # files longer
+$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/directory-list-2.3-small.txt # dirs small
+$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/raft-small-files.txt         # files small
 ```
 
 ### FTP [21 TCP]
