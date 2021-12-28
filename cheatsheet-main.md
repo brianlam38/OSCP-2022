@@ -184,18 +184,14 @@ $ telnet [target] 110
 
 ### RPC/Portmapper [111, 135 TCP]
 
-General enum
+Enum
 ```
 $ rpcinfo -p [target]
-$ nmblookup -A [target]
-$ smbclient -L //[target]   // null session
-$ rpcclient -U "" [target]  // null session
-$ enum4linux [target]       // null session
-$ nbtscan [target]
 ```
 
 RPC client
 ```
+$ rpcclient -U "" [target]  // null session
 $ rpcclient -U "" -N [target]
 rpcclient> srvinfo
 rpcclient> enumdomains
@@ -223,6 +219,13 @@ Check Samba service version.
 
 
 ### SMB (WINDOWS SMB) [139, 445 TCP]
+
+```
+$ nmblookup -A [target]
+$ smbclient -L //[target]   // null session
+$ enum4linux [target]       // null session
+$ nbtscan [target]
+```
 
 Automated enum
 ```
