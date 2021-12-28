@@ -1,6 +1,8 @@
-# Recon
+## Recon
 
-Network - Nmap
+### Recon Starter
+
+Network scans
 ```
 $ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
 $ sudo nmap -v -p- [target] # TCP all ports.
@@ -11,13 +13,15 @@ $ sudo nmap -sUV -T4 -F --version-intensity 0 [target]  # UDP aggresive
 $ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressive
 ```
 
-Web - Gobuster/Nikto/Nmap
+Web scans - Gobuster/Nikto/Nmap
 ```
-$ gobuster dir -u [target] -w ~/OSCP/SecLists/Discovery/Web-Content/[wordlist]
 $ nikto -host [target]
 $ sudo nmap -v -sV -p80,443 --script vuln [target]
-```
 
+$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/common.txt                   # easiest
+$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/directory-list-2.3-small.txt # dirs longer
+$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/raft-small-files.txt         # files longer
+```
 
 ### FTP [21 TCP]
 
@@ -38,7 +42,6 @@ Hydra SSH brute-force
 ```
 $ hydra -L users.txt -P passwords.txt ssh://[target] -t 4
 ```
-
 
 ### SMTP [25 TCP]
 
@@ -759,3 +762,4 @@ Hashcat
 $ hash-identifier [hash]    
 $ hashcat -m [hash-type] -a 0 [hash-file] [wordlist] -o cracked.txt
 ```
+
