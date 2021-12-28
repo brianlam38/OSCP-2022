@@ -25,7 +25,7 @@ Directory brute-force example
 $ wfuzz -p 127.0.0.1:9050:SOCKS4 -c -w [/path/to/wordlist] --hc=404 http://[internal_target]/FUZ
 ```
 
-Nmap scanning via. Proxychains
+Nmap scanning via. Proxychains example
 ```
 $ proxychains nmap -Pn -sT -sV [target]
 ```
