@@ -1,8 +1,5 @@
 # Recon
 
-Tips
-* Use BOTH `searchsploit` and `google` to find vulnerable service versions. Sometimes searchsploit may not have updated results.
-
 Network - Nmap
 ```
 $ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
@@ -12,9 +9,6 @@ $ sudo nmap -v -sU [target] # UDP default ports.
 # Aggressive scans
 $ sudo nmap -sUV -T4 -F --version-intensity 0 [target]  # UDP aggresive
 $ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressive
-
-# OR alternative fast scans w/ NmapAutomator
-$ nmapAutomator.sh [target] Full
 ```
 
 Web - Gobuster/Nikto/Nmap
@@ -27,12 +21,24 @@ $ sudo nmap -v -sV -p80,443 --script vuln [target]
 
 ### FTP [21 TCP]
 
+Tips
+* Switch on `binary` mode before transferring files.
+* Try `PUT` and `GET`.
+
 Anonymous login
 ```
 $ ftp [target]
 Name: anonymous
 Password
 ```
+
+### SSH [22 TCP]
+
+Hydra SSH brute-force
+```
+$ hydra -L users.txt -P passwords.txt ssh://[target] -t 4
+```
+
 
 ### SMTP [25 TCP]
 
@@ -55,8 +61,6 @@ SMTP user enumeration
 ```
 $ smtp-user-enum -M VRFY -U /usr/share/wordlists/dirb/common.txt -t [target]
 ```
-
-
 
 ### TFTP [69 UDP]
 
@@ -100,7 +104,7 @@ Brute-Force Logins
 $ cewl http://target.com
 ```
 
-Filter / file ext bypass
+Filter / file extension bypass
 ```
 %0d%0a
 %00
@@ -598,8 +602,6 @@ STEP 2: Replace service binary with malicious binary and restart service.
 ```
 cmd> sc qc [servicename] restart
 ```
-
-
 
 ### File & Folder Permissions
 
