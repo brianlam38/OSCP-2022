@@ -41,7 +41,7 @@ Password
 
 Hydra SSH brute-force
 ```
-$ hydra -L users.txt -P passwords.txt ssh://[target] -t 4
+$ hydra -L users.txt -P SecLists/Passwords/Common-Credentials/top-20-common-SSH-passwords.txt [target] ssh -t 4
 ```
 
 ### SMTP [25 TCP]
