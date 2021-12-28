@@ -753,6 +753,12 @@ Linux C to .SO (shared library)
 $ gcc -o exploit.so -shared exploit.c -fPIC 
 ```
 
+Linux compiles
+```
+$ gcc -m32 exploit.c -o exploit # 32 bit
+$ gcc -m64 exploit.c -o exploit # 64 bit
+```
+
 Linux 32/64bit cross-architecture ELF
 ```
 $ gcc -m32 -Wl,--hash-style=both exploit.c -o exploit
