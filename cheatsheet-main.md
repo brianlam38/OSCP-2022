@@ -137,6 +137,9 @@ SQL Injection
 2. Manually test payloads or use Burp Intruder with SQL payloads.
 3. Grab password hashes or perform code exec to obtain reverse shell.
 
+Time-based SQLi
+* Find an exploit that can brute-force password of login via. time-based method.
+
 Apache Shellchock (/cgi-bin/*.cgi])
 ```
 # Test if vulnerable
