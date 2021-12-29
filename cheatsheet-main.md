@@ -136,9 +136,8 @@ SQL Injection
 1. Test single and double quotes for *500 Internal Server Error* response.
 2. Manually test payloads or use Burp Intruder with SQL payloads.
 3. Grab password hashes or perform code exec to obtain reverse shell.
-
-Time-based SQLi
-* Find an exploit that can brute-force password of login via. time-based method.
+* If authentication page is present, ALWAYS try *auth bypass payload* e.g. `' or '1'='1`
+* If time-based SQLi, you could also find a script to brute-force password one-char at-a-time.
 
 Apache Shellchock (/cgi-bin/*.cgi])
 ```
