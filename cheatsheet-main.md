@@ -1,8 +1,32 @@
 # OSCP 2022 Cheatsheet
 
-## Recon
 
-### Recon Starter
+### [Recon](#RECON)  
+### [Services](#SERVICES)  
+* [FTP [TCP 21]](#FTP---TCP-21) 
+* [SSH [TCP 22]](#SSH---TCP-22)  
+* [HTTP [TCP 80/8080/443/8443]](#HTTP---TCP-80/8080/443/8443)
+* [Telnet [TCP 23]](#Telnet---TCP-23)  
+* [SMTP [TCP 25]](#SMTP---TCP-25)
+* [DNS [TCP 53]](#DNS---TCP-53)
+* [TFTP [UDP 69]](#TFTP---UDP-69)
+* [Remote Procedure Call [TCP 111]](#Remote-Procedure-Call---TCP-111)
+* [Ident [TCP 113]](#Ident---TCP-113)
+* [SMB Netbios SMBD [TCP 135-139,445]](#SMB-NETBIOS-SMBD---TCP-135-139445)
+* [SMBD Samba [TCP 139]](#SMBD-SAMBA---TCP-139)
+* [RPC/MSRPC [TCP 135]](#RPCMSRPC---TCP-135)
+* [IMAP [TCP 143]](#IMAP---TCP-143)
+* [SNMP [UDP 161]](#SNMP---UDP-161)
+* [ISAKMP [UDP 500]](#ISAKMP---UDP-500)
+* [MSSQL Server [TCP/UDP 1433/1434]](#MSSQL-Server---TCPUDP-14331434)
+* [Oracle SQL Database Listener [TCP 1521]](#Oracle-SQL-Database-Listener---TCP-1521)
+* [MySQL [TCP 3306]](#MySQL---TCP-3306)
+* [RDP [TCP 3389]](#RDP---TCP-3389)
+* [VNC [TCP 5800, 5900]](#RealVNC-and-VNC---TCP-5800-5900)
+* [IRC [TCP 6660-6669,6697,67000]](#irc---tcp-6660-6669669767000)
+* [RDP [TCP 3389]](#RDP---TCP-3389)  
+
+## Surface Recon
 
 Network scans
 ```
@@ -25,6 +49,8 @@ $ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/common.txt         
 $ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/directory-list-2.3-small.txt # dirs small
 $ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/raft-small-files.txt         # files small
 ```
+
+## Services
 
 ### FTP [21 TCP]
 
