@@ -1,9 +1,9 @@
 # OSCP 2022 Cheatsheet
 
 
-### [Recon](#RECON)  
-### [Services](#SERVICES)  
-* [FTP [TCP 21]](#FTP---TCP-21) 
+### [Initial Recon](#Initial-Recon)  
+### [Services](#Services)  
+* [FTP [TCP 21]](#FTP-[TCP-21]) 
 * [SSH [TCP 22]](#SSH---TCP-22)  
 * [HTTP [TCP 80/8080/443/8443]](#HTTP---TCP-80/8080/443/8443)
 * [Telnet [TCP 23]](#Telnet---TCP-23)  
@@ -26,7 +26,7 @@
 * [IRC [TCP 6660-6669,6697,67000]](#irc---tcp-6660-6669669767000)
 * [RDP [TCP 3389]](#RDP---TCP-3389)  
 
-## Surface Recon
+## Initial Recon
 
 Network scans
 ```
