@@ -3,7 +3,7 @@
 
 ### [Initial Recon](#Initial-Recon)  
 ### [Services](#Services)  
-* [FTP [TCP 21]](#FTP-[21-TCP]) 
+* [FTP [21 TCP]](#FTP-[21-TCP]) 
 * [SSH [TCP 22]](#SSH---TCP-22)  
 * [HTTP [TCP 80/8080/443/8443]](#HTTP---TCP-80/8080/443/8443)
 * [Telnet [TCP 23]](#Telnet---TCP-23)  
