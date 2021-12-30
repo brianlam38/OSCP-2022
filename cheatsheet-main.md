@@ -1,14 +1,14 @@
 # OSCP 2022 Cheatsheet
 
 
-### [Initial Recon](#Initial-Recon)  
-### [Services](#Services)
-### [Shells](#Shells)
-### [Linux Privilege Escalation](#Linux-Privilege-Escalation)
-### [Windows Privilege Escalation](#Windows-Privilege-Escalation)
-### [Compilation](#Compilation)
-### [MSFvenom Payload Generation](#MSFvenom-Payload-Generation)
-### [Password Cracking](#Password-Cracking)
+### [Initial Recon](##Initial-Recon)  
+### [Services](##Services)
+### [Shells](##Shells)
+### [Linux Privilege Escalation](##Linux-Privilege-Escalation)
+### [Windows Privilege Escalation](##Windows-Privilege-Escalation)
+### [Compilation](##Compilation)
+### [MSFvenom Payload Generation](##MSFvenom-Payload-Generation)
+### [Password Cracking](##Password-Cracking)
 
 
 ## Initial Recon
