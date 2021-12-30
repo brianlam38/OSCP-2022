@@ -52,7 +52,7 @@ $ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/raft-small-files.tx
 
 ## Services
 
-### FTP [21 TCP]
+### FTP [TCP 21]
 
 Tips
 * Switch on `binary` mode before transferring files.
