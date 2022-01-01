@@ -47,10 +47,15 @@ Enum Domain Controller hostname (PdcRoleOwner)
 PS> [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
 ```
 
-Enum Service Principal Names 1 (Service Accounts)
-* SPNs are unique service instance identifiers, used to associate a service on a server to a service account in Active Directory.
+Enum Service Principal Names (AD Service Accounts)
+* A SPN is a unique name for a service on a host, used to associate with an Active Directory service account.
 * Enum SPNs to obtain the IP address and port number of apps running on servers integrated with Active Directory.
 * Query the Domain Controller in search of SPNs.
+* SPN Examples
+        * `CIFS/MYCOMPUTER$` - file share access.
+        * `LDAP/MYCOMPUTER$` - querying AD info.
+        * `HTTP/MYCOMPUTER$` - Web services such as IIS.
+        * `MSSQLSvc/MYCOMPUTER$` - MSSQL.
 
 ```
 # Example: search by web server (http) (see automated script below)
