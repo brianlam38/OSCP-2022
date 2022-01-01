@@ -52,10 +52,10 @@ Enum Service Principal Names (AD Service Accounts)
 * Enum SPNs to obtain the IP address and port number of apps running on servers integrated with Active Directory.
 * Query the Domain Controller in search of SPNs.
 * SPN Examples
-        * `CIFS/MYCOMPUTER$` - file share access.
-        * `LDAP/MYCOMPUTER$` - querying AD info.
-        * `HTTP/MYCOMPUTER$` - Web services such as IIS.
-        * `MSSQLSvc/MYCOMPUTER$` - MSSQL.
+  * `CIFS/MYCOMPUTER$` - file share access.
+  * `LDAP/MYCOMPUTER$` - querying AD info.
+  * `HTTP/MYCOMPUTER$` - Web services such as IIS.
+  * `MSSQLSvc/MYCOMPUTER$` - MSSQL.
 
 ```
 # Example: search by web server (http) (see automated script below)
