@@ -53,7 +53,7 @@ Enum Service Principal Names (AD Service Accounts)
 * Query the Domain Controller in search of SPNs.
 * SPN Examples
   * `CIFS/MYCOMPUTER$` - file share access.
-  * `LDAP/MYCOMPUTER$` - querying AD info.
+  * `LDAP/MYCOMPUTER$` - querying AD info via. LDAP.
   * `HTTP/MYCOMPUTER$` - Web services such as IIS.
   * `MSSQLSvc/MYCOMPUTER$` - MSSQL.
 
