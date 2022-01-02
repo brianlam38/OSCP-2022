@@ -19,13 +19,12 @@ $ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection
 $ sudo nmap -v -p- [target] # TCP all ports.
 $ sudo nmap -v -sU [target] # UDP default ports.
 
-# Aggressive scans
+# aggressive scans
 $ sudo nmap -sUV -T4 -F --version-intensity 0 [target]  # UDP aggresive
 $ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressive
 ```
 
 Web scans - Gobuster/Nikto/Nmap
-* Below is the minimum list to run for proper web enumeration.
 ```
 $ nikto -host [target]
 $ sudo nmap -v -sV -p80,443 --script vuln [target]
