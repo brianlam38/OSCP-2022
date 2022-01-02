@@ -44,11 +44,8 @@ Tips
 * Try `PUT` and `GET`.
 
 Anonymous login
-```bash
-$ ftp [target]
-Name: anonymous
-Password
-```
+* `anonymous:[empty pass]`
+
 
 ### SSH [22 TCP]
 
