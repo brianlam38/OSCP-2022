@@ -441,6 +441,15 @@ msf> use auxiliary/admin/vnc/realvnc_41_bypass
 VNC password cracking:
 https://www.raymond.cc/blog/crack-or-decrypt-vnc-server-encrypted-password/
 
+
+### WinRM [5985, 5986 TCP]
+
+WinRM is a Microsoft protocol that allows remote management of Windows machines over HTTP using SOAP.
+
+```
+$ ./evil-winrm -i [target] -u [username] -p [password]
+```
+
 ## Shells
 
 Tricks
