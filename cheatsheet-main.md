@@ -313,6 +313,8 @@ $ msf17-010-send-and-receive.py [target] ms17-010.exe
 ```
 
 Enumerate SMB
+* Look for exploitable services.
+* Look for custom directories/files that were not discoverable via. brute-force.
 ```bash
 $ smbclient --no-pass -L //10.11.1.31         # list shares
 $ smbclient --no-pass \\\\[target]\\[share]   # connect to a share
