@@ -364,9 +364,11 @@ $ ldapsearch -x -b "dc=acme,dc=com" "*" -h [target]
 
 MSSQL client
 ```
-# Recommended -windows-auth when you are going to use a domain. use as domain the netBIOS name of the machine
+# Recommended -windows-auth when you are going to use a domain. Use as domain the netBIOS name of the machine
 $ python3 /usr/share/doc/python3-impacket/examples/mssqlclient.py -db volume -windows-auth <DOMAIN>/<USERNAME>:<PASSWORD>@<IP>
 $ sqsh -S <IP> -U <Username> -P <Password> -D <Database>
+
+$ sqlcmd -S [target] -U [username] -P [password]
 ```
 
 MSSQL Injection
