@@ -676,6 +676,12 @@ cmd> shutdown /r /t 0
 
 ### Services - Unquoted Paths
 
+Conditions:
+* Path to service is unquoted and has spaces.
+* Running with LocalSystem or equivalent Administrative permissions.
+* User should have write permissions to a folder in the path.
+* User should have permission to start the service OR the service auto-restarts on shutdown/start-up.
+
 Find unquoted paths with WMIC:
 * Find all services with "auto" start mode (automatically starts at system start-up),
 ```
