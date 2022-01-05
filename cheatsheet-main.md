@@ -617,8 +617,8 @@ Ensure architecture of your PS shell = architecture of PS payload.
 ### Automated Scripts
 
 Scripts
-* Winpeas x86 x64
-* Jaws enum (Powershell)
+* [Winpeas x86 x64](https://github.com/carlospolop/PEASS-ng/tree/master/winPEAS)
+* [Jaws enum](https://github.com/411Hall/JAWS)
 
 
 ### OS Vulnerabilities
