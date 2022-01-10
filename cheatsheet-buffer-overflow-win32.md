@@ -14,7 +14,7 @@ Some BO guides:
 
 Guess the number of bytes it takes to crash the application.
 
-![BOF_STEP1_FUZZ](images/BOF_STEP1_FUZZ.png)
+![BOF_STEP1_FUZZ](Images/BOF_STEP1_FUZZ.png)
 
 
 ---
@@ -32,7 +32,7 @@ Look at the value in the **EIP** register.
 * Exploit execution flow: EIP -> JMP ESP -> ESP (shellcode location)
 
 EIP value: 39694438
-![BOF_STEP2_OFFSET](images/BOF_STEP2_OFFSET1.png)
+![BOF_STEP2_OFFSET](Images/BOF_STEP2_OFFSET1.png)
 
 
 ---
@@ -45,7 +45,7 @@ $ /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q [value in E
 ```
 
 Offset byte number: '2606'
-![BOF_STEP3_OFFSET](images/BOF_STEP3_OFFSET2.png)
+![BOF_STEP3_OFFSET](Images/BOF_STEP3_OFFSET2.png)
 
 ---
 
@@ -54,7 +54,7 @@ Offset byte number: '2606'
 Confirm that your offset is correct by placing a unique 4-byte string into the EIP register.
 
 EIP value: '42424242' = 'BBBB'
-![BOF_STEP3_OFFSET](images/BOF_STEP4_OFFSET3.png)
+![BOF_STEP3_OFFSET](Images/BOF_STEP4_OFFSET3.png)
 
 ---
 
@@ -83,30 +83,30 @@ chars =(
 ```
 
 Run code with character list -> 'Follow in dump' / go to memory dump:
-![BOF_STEP5_BADCHAR1](images/BOF_STEP5_BADCHAR1.png)
+![BOF_STEP5_BADCHAR1](Images/BOF_STEP5_BADCHAR1.png)
 
 Memory dump with chars payload -> see which bytes causes the truncation:
-![BOF_STEP5_BADCHAR2](images/BOF_STEP5_BADCHAR2.png)
+![BOF_STEP5_BADCHAR2](Images/BOF_STEP5_BADCHAR2.png)
 
 ---
 
 ### 6. FIND ADDRESS OF A JMP-ESP IN A .DLL
 
 Run `!mona modules` to find a suitable .DLL which has no internal security mechanisms:
-![BOF_STEP6_JMPESP1](images/BOF_STEP6_JMPESP1.png)
+![BOF_STEP6_JMPESP1](Images/BOF_STEP6_JMPESP1.png)
 
 Once a .DLL has been found, click on the `e` to list all executable modules/.DLLs loaded with the application and then double-click on the .DLL you found:
-![BOF_STEP6_JMPESP2](images/BOF_STEP6_JMPESP2.png)
+![BOF_STEP6_JMPESP2](Images/BOF_STEP6_JMPESP2.png)
 
 Right-click on the instructions windows and select `Search For` ->
 * `Command` -> ` JMP ESP`
 * `Sequence of Commands` -> `PUSH ESP | RETN`  
 
 Alternative, run `!mona find -s "/xFF/xE4" -m slmfc.dll` to find the OPCODE for `jmp esp` in the entire .DLL:
-![BOF_STEP6_JMPESP3](images/BOF_STEP6_JMPESP3.png)
+![BOF_STEP6_JMPESP3](Images/BOF_STEP6_JMPESP3.png)
 
 Choose one of the pointers -> copy its address -> click on "Go to address in Disassembler" -> paste address -> verify that the address actually contains a `JMP ESP` instruction:
-![BOF_STEP6_JMPESP4](images/BOF_STEP6_JMPESP4.png)
+![BOF_STEP6_JMPESP4](Images/BOF_STEP6_JMPESP4.png)
 
 ---
 
