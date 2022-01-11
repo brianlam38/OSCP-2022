@@ -227,7 +227,7 @@ Choose one of the pointers -> copy its address -> click on "Go to address in Dis
 ![BOF_STEP6_JMPESP4](Images/BOF_STEP6_JMPESP4.png)
 
 Redirect execution flow via. JMP_ESP instruction
-```
+```python
 # In this part, we have:
 # 1. Found a suitable module in the application with no DEP / ASLR / Rebasing
 # 2. Found a 'JMP ESP' instruction within the module + the address that the instruction is located at
