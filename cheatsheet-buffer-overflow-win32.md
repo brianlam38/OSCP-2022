@@ -347,7 +347,7 @@ $ JMP EAX/EBX/ECX/EDX
 4. Add payload to the front
 
 
-Alternate finally script which utilises a first stage payload:
+Alternate final script which utilises a first stage payload:
 ```python
 #!/usr/bin/python
 
