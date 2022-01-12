@@ -640,9 +640,14 @@ Scripts
 ### OS Vulnerabilities
 
 Windows Exploit Suggester
-```
+```bash
 $ python3 windows_exploit_suggester.py --update
 $ python3 windows_exploit_suggester.py --database 2021-10-27-mssb.xls --systeminfo systeminfo.out
+```
+
+Windows Exploit Suggester NEW
+```bash
+$ python3 windows-exploit-suggester-new/wes.py systeminfo.txt
 ```
 
 Enum missing software patches - Sherlock.ps1
