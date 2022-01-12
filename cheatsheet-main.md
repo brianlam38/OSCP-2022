@@ -615,6 +615,13 @@ Replace root password hash
 2. Target: replace root password `x` in `/etc/passwd` file with password hash i.e. `root:<has>:0:0:----`
 
 
+### MySQL User-Defined-Functions (UDF)
+
+Mysql UDF privilege escalation.
+* https://medium.com/r3d-buck3t/privilege-escalation-with-mysql-user-defined-functions-996ef7d5ceaf
+* https://steflan-security.com/linux-privilege-escalation-exploiting-user-defined-functions/
+
+
 ## Windows Privilege Escalation
 
 ### Tips
