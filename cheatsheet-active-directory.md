@@ -202,6 +202,9 @@ $ john --wordlist=rockyou.txt johncrackfile
 
 ## AD Lateral Movement
 
+Useful Powershell one-liners:
+* https://gist.github.com/jivoi/c354eaaf3019352ce32522f916c03d70
+
 Try Zerologon (requires reset after use as account pw is set to emtpy)
 * Source: https://github.com/risksense/zerologon
 * Affects ALL Windows Server versions, but we want to target DCs (high-value).
