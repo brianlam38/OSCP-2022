@@ -636,6 +636,9 @@ Scripts
 * [Winpeas x86 x64](https://github.com/carlospolop/PEASS-ng/tree/master/winPEAS)
 * [Jaws enum](https://github.com/411Hall/JAWS)
 
+Privesc Powershell one-liners
+* https://gist.github.com/jivoi/c354eaaf3019352ce32522f916c03d70
+
 
 ### OS Vulnerabilities
 
