@@ -1,6 +1,7 @@
 # Active Directory Cheatsheet
 
 ### [AD Enumeration](#AD-Enumeration) 
+* [Enumeration - Manual](###-Enumeration---Manual)
 
 ### [AD Authentication](#AD-Authentication)  
 
