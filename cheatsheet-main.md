@@ -551,10 +551,8 @@ Bypass PHP disable functions
 Tips:
 * PE could rely on the same vulnerability to obtain an initial foothold.
 
-### Automated recon
-
-Linpeas.sh
-Linenum.sh
+Scripts
+* [Linpeas.sh](https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS)
 
 ### SUID / SGID
 
@@ -564,6 +562,7 @@ Linenum.sh
 ```
 $ python suid3num.py
 ```
+
 
 ### Running services
 
