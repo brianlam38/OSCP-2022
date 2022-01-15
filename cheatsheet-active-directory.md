@@ -281,8 +281,7 @@ $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami"
 ### Overpass-the-Hash
 * Attack path: obtain a user's NTLM hash -> start new cmd/ps process as user -> request Kerberos TGT as user -> code exec on any machine where the user has permissions.
 * Requirement: user/service account to have local admin on target machine.
-* Useful when Kerberos is the only authentication mechanism allowed in a target.
-* "over" abuse a NTLM hash to gain a full Kerberos TGT or Service Ticket.
+* Useful when Kerberos is the only authentication mechanism allowed in a target (NTLM authN disabled).
 * `psexec.exe` requires local admin rights as it accesses admin$ share.
 ```powershell
 ### WITH MIMIKATZ ON COMPROMISED HOST
