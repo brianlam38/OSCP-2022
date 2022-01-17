@@ -166,6 +166,9 @@ Apache Tomcat
 IIS
 * IIS paths may be configured to be Case Sensitive. Take care when navigating / exploiting LFI/RFI or directory traversal.
 
+Wordpress guide
+* https://book.hacktricks.xyz/pentesting/pentesting-web/wordpress
+
 Wordpress wpscan
 ```bash
 # normal scan
