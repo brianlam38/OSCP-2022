@@ -47,6 +47,9 @@ Tips
 Anonymous login
 * `anonymous:[empty pass]`
 
+Brute-force
+* `hydra -L users.txt -P [passwords.txt] [target] ftp`
+
 
 ### SSH [22 TCP]
 
