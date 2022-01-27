@@ -487,6 +487,7 @@ Spawn TTY shell / rbash restricted shell escape
 python -c 'import pty; pty.spawn("/bin/sh")'
 echo os.system('/bin/bash')
 /bin/sh -i
+/bin/bash -i
 perl —e 'exec "/bin/sh";'
 perl: exec "/bin/sh";
 :!bash                       # within vi
