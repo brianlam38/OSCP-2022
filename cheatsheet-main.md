@@ -432,6 +432,12 @@ param='union SELECT col1, col2, colN FROM (SELECT ROWNUM r, col1, col2 FROM TABL
 
 Ways to perform MySQL privesc (maybe move to privesc section).
 
+Execute commands non-interactively
+* `mysql -u root -p[password] mysql -e "[mysql_command]"`
+
+Drop into shell non-interactively
+* `mysql -u root -p[assword mysql -e "\! /bin/sh"`
+
 ### Apache James Mail Server [4555 TCP]
 
 Default credentials are `root` / `root`.
