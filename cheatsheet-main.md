@@ -478,6 +478,10 @@ Tricks
 * Try to URL encode payload if exploit is not working in webapp.
 * Try to remove firewall rules if rshell payloads don't trigger (see below). Confirm code exec by creating `test.txt` file on target if you have a way to identify that the file was created e.g. via. `smb` or `ftp` etc.
 
+Reverse shell local ports
+* Try use open ports of the target as the receiving port, as both ingress/egress would typically be open for a service.
+* E.g. if 21/FTP is open on the target, try use port 21 as the local port for a reverse shell.
+
 Spawn TTY shell / rbash restricted shell escape
 ```
 python -c 'import pty; pty.spawn("/bin/sh")'
