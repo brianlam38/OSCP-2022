@@ -49,6 +49,7 @@ Anonymous login
 
 Brute-force
 * `hydra -L users.txt -P [passwords.txt] [target] ftp`
+* Try `admin:admin` or other stupid creds.
 
 
 ### SSH [22 TCP]
