@@ -434,6 +434,7 @@ Ways to perform MySQL privesc (maybe move to privesc section).
 
 Execute commands non-interactively
 * `mysql -u root -p[password] mysql -e "[mysql_command]"`
+* `mysql -u root -p[password] mysql -e "SHOW VERSION();"`
 
 Drop into shell non-interactively
 * `mysql -u root -p[assword mysql -e "\! /bin/sh"`
