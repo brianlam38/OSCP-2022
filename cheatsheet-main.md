@@ -909,10 +909,15 @@ cmd> netsh firewall set opmode mode=DISABLE
 Bypassing firewalls via. SSH local port forwarding.
 * Enum'd a new port/service via. `netstat` but can't access it from within the target / it is blocked?
 ```
+# static local port forwarding
 $ ssh -L [local_port]:[target/jumpbox]:[blocked_port] [user]@[target]
-
 # example - bypass blocked HTTP service on port 80
 $ ssh -L 80:192.168.218.99:80 bob@192.168.218.99
+
+# dynamic local port forwarding
+$ ssh -N -D localhost:9050 user@[target/jumpbox]
+$ proxychains curl http://localhost/exec            # interact with internal web server
+$ proxychains nmap -sT -Pn -sV [internal_target]    # interact with internal target/host
 ```
 
 ## File Transfer Methods
