@@ -40,3 +40,12 @@ SSH remote port forwarding is for opening a connection from within the target ->
 $ target> ssh -N -R [kali]:2049:127.0.0.1:2049 kali@[kali_ip]
 $ kali> mount -t nfs 127.0.0.1:/ /mnt -o nolock
 ```
+
+### SSH Port Forwarding to Bypass Firewalls
+
+```
+$ ssh -L [local_port]:[target/jumpbox]:[blocked_port] [user]@[target]
+
+# example - bypass blocked port 80 HTTP
+$ ssh -L 80:192.168.218.99 bob@192.168.218.99
+```
