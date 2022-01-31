@@ -1040,7 +1040,17 @@ Hashcat
 ```
 # Check hash type -> crack w/ hashcat
 $ hash-identifier [hash]    
-$ hashcat -m [hash-type] -a 0 [hash-file] [wordlist] -o cracked.txt
+$ hashcat -m [hash-type] -a 0 [hash-file] [wordlist] --show -o cracked.txt
+```
+
+Crack PDF files
+```
+# extract hash from PDF
+$ pdf2john.pl > hash
+
+# remove .pdf filename prepending hash
+# crack hash
+$ hashcat -m 10500 hash.txt -a 0 rockyou.txt --show -o cracked.txt
 ```
 
 
