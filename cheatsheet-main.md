@@ -908,6 +908,15 @@ cmd> netsh firewall set opmode mode=DISABLE
 
 ## File Transfer Methods
 
+### Generic
+
+SCP (SSH)
+```
+$ scp [/path/to/source/file] [user]@[target]:[/path/to/dest/file]
+$ scp nc.exe bob@10.10.1.11:C:\\users\\bob # win example
+$ scp nc alice@10.10.1.11:/tmp             # linux example
+```
+
 ### Linux
 ```
 ```
