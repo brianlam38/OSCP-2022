@@ -4,6 +4,18 @@
 
 Tunneling and Pivoting Techniques (GIAC): https://www.giac.org/paper/gwapt/4686/tunneling-pivoting-web-application-penetration-testing/120229
 
+### Local SSH Port Forwarding to Bypass Firewalls
+
+The SSH server redirects data from a specified port (which is local to the host running the SSH client e.g. Kali/attacker) through a secure tunnel to a specified destination host and port. This sometimes allows bypass of firewall rules.
+
+Have shell access -> enum'd a new port/service via. `netstat` but can't access it from within the target / blocked?
+```
+$ ssh -L [local_port]:[target/jumpbox]:[blocked_port] [user]@[target]
+
+# example - bypass blocked HTTP service on port 80
+$ ssh -L 80:192.168.218.99:80 bob@192.168.218.99
+```
+
 ### Dynamic Port Forwarding
 
 This will allow you to access internal network services on dynamic (as opposed to static) ports.
@@ -41,11 +53,4 @@ $ target> ssh -N -R [kali]:2049:127.0.0.1:2049 kali@[kali_ip]
 $ kali> mount -t nfs 127.0.0.1:/ /mnt -o nolock
 ```
 
-### SSH Port Forwarding to Bypass Firewalls
 
-```
-$ ssh -L [local_port]:[target/jumpbox]:[blocked_port] [user]@[target]
-
-# example - bypass blocked port 80 HTTP
-$ ssh -L 80:192.168.218.99 bob@192.168.218.99
-```
