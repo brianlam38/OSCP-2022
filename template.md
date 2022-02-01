@@ -1,1 +1,1 @@
-TODO: Template for note-taking during each pentest.
+TODO: Note-taking template during each pentest.
