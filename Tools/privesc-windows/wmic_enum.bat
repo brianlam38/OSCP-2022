@@ -1,5 +1,8 @@
+# Extract information via. wmic service on target.
 for /f "delims=" %%A in ('dir /s /b %WINDIR%\system32\*htable.xsl') do set "var=%%A"
 
+# Processes, services, user accounts, user groups, network interfaces, hard drive info, network share info, installed Winodws patches, programs that run
+# at startup, list of installed software, info about OS and timezone.
 wmic process get CSName,Description,ExecutablePath,ProcessId /format:"%var%" >> out.html
 wmic service get Caption,Name,PathName,ServiceType,Started,StartMode,StartName /format:"%var%" >> out.html
 wmic USERACCOUNT list full /format:"%var%" >> out.html
