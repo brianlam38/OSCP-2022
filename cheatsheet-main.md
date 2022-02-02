@@ -730,10 +730,25 @@ $ python3 windows_exploit_suggester.py --database 2021-10-27-mssb.xls --systemin
 
 Windows Exploit Suggester NEW
 ```bash
-$ python3 windows-exploit-suggester-new/wes.py systeminfo.txt
+# search only privesc vulenrabilities
+$ python3 windows-exploit-suggester-new/wes.py -i "Elevation of Privilege" systeminfo.txt
 ```
 
-Enum missing software patches - Sherlock.ps1
+Enum missing software patches
+```
+# automated - sherlock.ps1
+cmd> powershell -executionpolicy bypass ".\sherlock.ps1"
+cmd> 
+
+# manual - wmic
+# 1. check installed KB patches
+# 2. systeminfo -> search for privilege escalation vulns for the OS ver + service pack
+#                  and corresponding KB patch numbers.
+# 3. Use KB patch numbers and grep for the installed patches on the target.
+# Win exploit / KB patch list: https://github.com/SecWiki/windows-kernel-exploits
+cmd> wmic qfe get Caption,Description,HotFixID,InstalledOn
+
+```
 1. Copy local `sherlock.ps1` file to remote.
 2. Run `cmd> powershell -executionpolicy bypass ".\sherlock.ps1"`.
 
@@ -929,6 +944,14 @@ SCP (SSH)
 $ scp [/path/to/source/file] [user]@[target]:[/path/to/dest/file]
 $ scp nc.exe bob@10.10.1.11:C:\\users\\bob # win example
 $ scp nc alice@10.10.1.11:/tmp             # linux example
+```
+
+Netcat
+```
+# send - adjust seconds depending on filesize
+cmd> nc -w [seconds] [destination_ip] [port] < [file.txt] 
+# receive
+$ nc -nvlp [port] > [file.txt]
 ```
 
 ### Linux
