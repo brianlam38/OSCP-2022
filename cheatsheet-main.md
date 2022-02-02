@@ -733,7 +733,20 @@ Windows Exploit Suggester NEW
 $ python3 windows-exploit-suggester-new/wes.py systeminfo.txt
 ```
 
-Enum missing software patches - Sherlock.ps1
+Enum missing software patches
+```
+# automated - sherlock.ps1
+cmd> powershell -executionpolicy bypass ".\sherlock.ps1"
+cmd> 
+
+# manual - wmic
+# 1. check installed KB patches
+# 2. systeminfo -> search for privilege escalation vulns for the OS ver + service pack
+#                  and corresponding KB patch numbers.
+# 3. Use KB patch numbers and grep for the installed patches on the target.
+cmd> wmic qfe get Caption,Description,HotFixID,InstalledOn
+
+```
 1. Copy local `sherlock.ps1` file to remote.
 2. Run `cmd> powershell -executionpolicy bypass ".\sherlock.ps1"`.
 
