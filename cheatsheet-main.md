@@ -744,6 +744,7 @@ cmd>
 # 2. systeminfo -> search for privilege escalation vulns for the OS ver + service pack
 #                  and corresponding KB patch numbers.
 # 3. Use KB patch numbers and grep for the installed patches on the target.
+# Win exploit / KB patch list: https://github.com/SecWiki/windows-kernel-exploits
 cmd> wmic qfe get Caption,Description,HotFixID,InstalledOn
 
 ```
