@@ -730,7 +730,8 @@ $ python3 windows_exploit_suggester.py --database 2021-10-27-mssb.xls --systemin
 
 Windows Exploit Suggester NEW
 ```bash
-$ python3 windows-exploit-suggester-new/wes.py systeminfo.txt
+# search only privesc vulenrabilities
+$ python3 windows-exploit-suggester-new/wes.py -i "Elevation of Privilege" systeminfo.txt
 ```
 
 Enum missing software patches
