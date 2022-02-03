@@ -888,6 +888,11 @@ cmd> .\uac-bypass.exe
 
 ### File & Folder Permissions
 
+Writable web root? Upload reverse shell -> navigate to file path
+* Xampp: `C:\xampp\htdocs`
+* IIS: `C:\inetpub\wwwroot` 
+* etc.
+
 ### Access Token Abuse
 
 Abuse is possible if `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled
