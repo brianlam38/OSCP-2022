@@ -719,6 +719,12 @@ Scripts
 Privesc Powershell one-liners
 * https://gist.github.com/jivoi/c354eaaf3019352ce32522f916c03d70
 
+Powerup.ps1
+```powershell
+cmd> powershell -executionpolicy bypass
+PS> Import-Module C:\temp\powerup.ps1
+PS> Invoke-AllChecks
+```
 
 ### OS Vulnerabilities
 
