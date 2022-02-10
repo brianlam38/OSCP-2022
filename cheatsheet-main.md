@@ -16,13 +16,13 @@
 
 Network scans
 ```bash
+# 1st round of nmap scans
 $ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
 $ sudo nmap -v -p- [target] # TCP all ports.
 $ sudo nmap -v -sU [target] # UDP default ports.
 
-# aggressive scans
-$ sudo nmap -sUV -T4 -F --version-intensity 0 [target]  # UDP aggresive
-$ sudo nmap -v -p- -T4 [target]                         # TCP all-ports aggressive
+# 2nd round of nmap scans
+$ sudo nmap -p[newly_discovered_port_1,2,3] -sV -A [target]
 ```
 
 Web scans - Gobuster/Nikto/Nmap
