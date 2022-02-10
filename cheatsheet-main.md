@@ -17,9 +17,10 @@
 Network scans
 ```bash
 # 1st round of nmap scans
-$ sudo nmap -v -A [target]  # TCP default ports, OS detection, version detection, script scanning, and traceroute.
-$ sudo nmap -v -p- [target] # TCP all ports.
-$ sudo nmap -v -sU [target] # UDP default ports.
+$ sudo nmap -v -A [target]      # TCP default ports, OS detection, version detection, script scanning, and traceroute.
+$ sudo nmap -v -p- -sT [target] # TCP all ports (TCP connect)
+$ sudo nmap -v -p- -sS [target] # TCP all ports (TCP SYN only)
+$ sudo nmap -v -sU [target]     # UDP default ports.
 
 # 2nd round of nmap scans
 $ sudo nmap -p[newly_discovered_port_1,2,3] -sV -A [target]
