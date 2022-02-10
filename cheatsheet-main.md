@@ -22,6 +22,9 @@ $ sudo nmap -v -p- -sT [target] # TCP all ports (TCP connect)
 $ sudo nmap -v -p- -sS [target] # TCP all ports (TCP SYN only)
 $ sudo nmap -v -sU [target]     # UDP default ports.
 
+# force fast scan
+$ sudo nmap -v -p- -sS -T5 [target] # TCP all ports super fast
+
 # 2nd round of nmap scans
 $ sudo nmap -p[newly_discovered_port_1,2,3] -sV -A [target]
 ```
