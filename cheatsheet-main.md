@@ -369,6 +369,23 @@ while read line; do
 done < community.txt
 ```
 
+### IRC [194,6667,6660-7000 TCP]
+
+IRC client
+```
+$ sudo apt-get install irssi
+$ irssi -c [target] -p [port] -n [nickname]
+
+!irc> /version
+!irc> /list               # list channels + channel banner
+!irc> /admin              # admin info
+!irc> /oper [user] [pass] # login as operator (privileged user)
+!irc> /join [channel]
+!irc> /whois [user]       # user info
+
+#channel> /names          # list users inside each channel
+#channel> /leave          # leave channel
+```
 
 ### LDAP [389,636 TCP]
 
