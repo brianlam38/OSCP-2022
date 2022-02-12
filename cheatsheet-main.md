@@ -542,7 +542,7 @@ $ ./evil-winrm -i [target] -u [username] -p [password]
 
 ## Shells
 
-Reverse shell payloads: https://github.com/brianlam38/OSCP-2022/tree/main/Tools
+Reverse shell payloads: https://github.com/brianlam38/OSCP-2022/tree/main/Tools/shells
 
 Tricks
 * Try to URL encode payload if exploit is not working in webapp.
