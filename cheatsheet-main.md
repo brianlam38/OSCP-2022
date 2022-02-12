@@ -542,6 +542,8 @@ $ ./evil-winrm -i [target] -u [username] -p [password]
 
 ## Shells
 
+Reverse shell payloads: https://github.com/brianlam38/OSCP-2022/tree/main/Tools
+
 Tricks
 * Try to URL encode payload if exploit is not working in webapp.
 * Try to remove firewall rules if rshell payloads don't trigger (see below). Confirm code exec by creating `test.txt` file on target if you have a way to identify that the file was created e.g. via. `smb` or `ftp` etc.
