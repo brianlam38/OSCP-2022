@@ -152,6 +152,7 @@ shell_exec()
 ```
 
 SQL Injection
+* See SQL injection cheatsheet: https://github.com/brianlam38/Sec-Cheatsheets/blob/master/Web/Web_Cheatsheet.md#sql-injection
 1. Test single and double quotes for *500 Internal Server Error* response.
 2. Manually test payloads or use Burp Intruder with SQL payloads.
 3. Grab password hashes or perform code exec to obtain reverse shell.
