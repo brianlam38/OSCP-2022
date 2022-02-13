@@ -757,6 +757,16 @@ $ cp /root/Desktop/x /tmp/mymount/
 $ chmod u+s exploit
 ```
 
+### Git
+
+Found references to git / git repo + a private SSH key?
+```bash
+# extract remote repository
+$ mv /home/[user]/.ssh/id_rsa ~/.ssh/                # copy key to your .ssh dir
+$ git clone file:///[repo_name]                      # git clone OPTION 1
+$ git clone ssh://[user]@[target]:[port]/[repo_name] # git clone OPTION 2
+```
+
 ## Windows Privilege Escalation
 
 ### Tips
