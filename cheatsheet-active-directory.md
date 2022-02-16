@@ -320,6 +320,8 @@ python wmiexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 ```
 
 ### Silver Ticket
+
+Silver Tickets enable an attacker to create forged service tickets (TGS tickets)
 * In this attack, user/group permissions in a Service Ticket are blindly trusted by the application on a target server running in the context of the service account. We forge our own Service Ticket (Silver Ticket) to access the resource (e.g. IIS app, MSSQL app) with any permissions we want. If the SPN/service account is used across multiple servers, we can leverage our Silver Ticket against all.
 * Walkthrough of PTT via. compromised MSSQLSvc hash: https://stealthbits.com/blog/impersonating-service-accounts-with-silver-tickets/
 
