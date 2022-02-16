@@ -70,9 +70,13 @@ Service Principal Names (AD Service Accounts)
   * `HTTP/MYCOMPUTER$` - Web services such as IIS.
   * `MSSQLSvc/MYCOMPUTER$` - MSSQL.
 * Perform `nslookup` of the service hostname -> see if there is an entrypoint here.
-* Kerberoast `GetUserSPNs.ps1` script: https://github.com/nidem/kerberoast/blob/master/GetUserSPNs.ps1
+* Automated SPN enum scripts:
 ```powershell
+# Kerberoast: https://github.com/nidem/kerberoast/blob/master/GetUserSPNs.ps1
 PS> .\GetUserSPNs.ps1
+
+# Powershell Empire: https://github.com/compwiz32/PowerShell/blob/master/Get-SPN.ps1
+PS> .\Get-SPN.ps1
 ```
 
 Logged-in users and active user sessions.
