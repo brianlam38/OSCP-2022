@@ -1,16 +1,16 @@
 # Active Directory Cheatsheet
 
-### [AD Enumeration](#AD-Enumeration) 
+### [AD Enumeration](###AD-Enumeration) 
 * Users / Groups / Computers
 * Domain Controller
 * Service Principal Names (SPNs)
 * Logged-in Users and Active User Sessions
 
-### [AD Authentication](#AD-Authentication)
-* Dumping NTLM hashes
+### [AD Authentication](###AD-Authentication)
+* Dumping NTLM hashes and Plaintext Credentials
 * Dumping Kerberos tickets
 
-### [AD Lateral Movement](#AD-Lateral-Movement) 
+### [AD Lateral Movement](###AD-Lateral-Movement) 
 * ZeroLogon Vulnerability
 * Password Spraying
 * Plaintext Credentials
@@ -20,7 +20,7 @@
 * Silver Tickets
 * Distributed Component Object Model (DCOM)
 
-### [Hash Cracking Techniques](#)
+### [Hash Cracking Techniques](###Hash-Cracking-Techniques)
 * Cracking NTLM hashes
 * Kerberoasting
 
@@ -396,7 +396,7 @@ $com.Run("mymacro")
 ```
 
 
-## Hash Cracking
+## Hash Cracking Techniques
 
 Cracking NT (NTLM) hashes
 ```
