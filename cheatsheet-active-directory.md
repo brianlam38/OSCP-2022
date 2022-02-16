@@ -69,6 +69,7 @@ Service Principal Names (AD Service Accounts)
   * `LDAP/MYCOMPUTER$` - querying AD info via. LDAP.
   * `HTTP/MYCOMPUTER$` - Web services such as IIS.
   * `MSSQLSvc/MYCOMPUTER$` - MSSQL.
+* Perform `nslookup` of the service hostname -> see if there is an entrypoint here.
 * Kerberoast `GetUserSPNs.ps1` script: https://github.com/nidem/kerberoast/blob/master/GetUserSPNs.ps1
 ```powershell
 PS> .\GetUserSPNs.ps1
