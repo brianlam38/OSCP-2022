@@ -219,6 +219,7 @@ $ john --wordlist=rockyou.txt johncrackfile
 ```
 
 ### Pass-the-Hash
+(NTLM based AuthN)
 * Requires user/service account to have local admin rights on target, as connection is made using the `Admin$` share.
 * Requires SMB connection through the firewall
 * Requires Windows File and Print Sharing feature to be enabled.
@@ -245,6 +246,7 @@ $ crackmapexec smb [target] -u [username] -H [hash] -x "whoami"
 ```
 
 ### Overpass-the-Hash
+(NTLM Hash -> Kerberos-based AuthN)
 * Attack path: obtain a user's NTLM hash -> start new cmd/ps process as user -> request Kerberos TGT as user -> code exec on any machine where the user has permissions.
 * Requirement: user/service account to have local admin on target machine.
 * Useful when Kerberos is the only authentication mechanism allowed in a target (NTLM authN disabled).
@@ -290,6 +292,7 @@ $ python wmiexec.py <domain_name>/<user_name>@<remote_hostname> -k -no-pass
 ```
 
 ### Pass-the-Ticket
+(Kerberos-based AuthN)
 
 Pass-the-Ticket takes advantage of the TGS by exporting service tickets, injecting them into memory (on target) or caching as environment variable (on Kali) and then authenticating with the injected/cached ticket via. Kerberos-based authN as opposed to NTLM-based authN.
 * This attack does not require the service/user to have local admin rights on the target.
