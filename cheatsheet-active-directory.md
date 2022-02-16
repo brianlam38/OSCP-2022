@@ -1,8 +1,10 @@
 # Active Directory Cheatsheet
 
 ### [AD Enumeration](#AD-Enumeration) 
-* Manual Enumeration
-* Automated Enumeration
+* Users / Groups / Computers
+* Domain Controller
+* Service Principal Names (SPNs)
+* Logged-in Users and Active User Sessions
 
 ### [AD Authentication](#AD-Authentication)
 * Dumping NTLM hashes
@@ -33,9 +35,7 @@ Goal:
 
 ## AD Enumeration
 
-### Enumeration - Manual
-
-Enum users/groups/computers
+Users / Groups / Computers
 * Look for users with high-privs across the domain e.g. Domain Admins or Derivative Local Admins
 * Look for custom groups.
 ```powershell
@@ -55,12 +55,12 @@ cmd> net view /domain
 cmd> net view \\[computer_name] /domain
 ```
 
-Enum Domain Controller hostname (PdcRoleOwner)
+Domain Controller hostname (PdcRoleOwner)**
 ```powershell
 PS> [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
 ```
 
-Enum Service Principal Names (AD Service Accounts)
+Service Principal Names (AD Service Accounts)
 * A SPN is a unique name for a service on a host, used to associate with an Active Directory service account.
 * Enum SPNs to obtain the IP address and port number of apps running on servers integrated with Active Directory.
 * Query the Domain Controller in search of SPNs.
@@ -69,87 +69,18 @@ Enum Service Principal Names (AD Service Accounts)
   * `LDAP/MYCOMPUTER$` - querying AD info via. LDAP.
   * `HTTP/MYCOMPUTER$` - Web services such as IIS.
   * `MSSQLSvc/MYCOMPUTER$` - MSSQL.
-
-```bash
-# Example: search by web server (http) (see automated script below)
-$Searcher.filter="serviceprincipalname=*http*"
-
-----OUTPUT----
-serviceprincipalname     {HTTP/CorpWebServer.corp.com}
-----OUTPUT----
-
-# resolve the hostname
-$ nslookup corpwebserver.corp.com
-Server: UnKnown
-Address: 192.168.1.110
-
-Name: corpwebserver.corp.com
-Address: 192.168.1.110
-```
-
-
-### Enumeration - Automated
-
-Enum Service Principal Names.
 * Kerberoast `GetUserSPNs.ps1` script: https://github.com/nidem/kerberoast/blob/master/GetUserSPNs.ps1
 ```powershell
 PS> .\GetUserSPNs.ps1
 ```
 
-Enum logged-in users and active user sessions.
+Logged-in users and active user sessions.
 * More powerview commands https://book.hacktricks.xyz/windows/basic-powershell-for-pentesters/powerview
 ```powershell
 PS> Set-ExecutionPolicy Unrestricted
 PS> Import-Module .\PowerView.ps1
 PS> Get-NetLoggedon -ComputerName [computer_name]    # enum logged-in users
 PS> Get-NetSession -ComputerName [domain_controller] # enum active user sessions
-```
-
-Enum users/groups/computers/SPNs
-```powershell
-# build the LDAP path
-$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
-$PDC = ($domainObj.PdcRoleOwner).Name
-$SearchString = "LDAP://"
-$SearchString += $PDC + "/"
-$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
-$SearchString += $DistinguishedName
-
-# instantiate DirectorySearcher class with LDAP provider path.
-$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
-$objDomain = New-Object System.DirectoryServices.DirectoryEntry($SearchString, "[domain_name]\[user]","[password]")
-$Searcher.SearchRoot = $objDomain
-
-# ###########################
-# UNCOMMENT FILTERS AS NEEDED
-# ###########################
-
-# filter by Domain Admin users
-$Searcher.filter="memberof=CN=Domain Admins,CN=Users,DC=corp,DC=com"
-
-# filter by all Users in domain
-# $Searcher.filter="samAccountType=805306368"
-
-# filter by all Groups in domain
-# $Searcher.filter="objectcategory=group"
-
-# filter by all Computers in domain
-# $Searcher.filter="objectcategory=computer"
-
-# filter by all Computers AND operating sys is Windows 10
-# $Searcher.filter="(&(objectcategory=computer)(operatingsystem=*Windows 10*))"
-
-# filter by SPN
-$Searcher.filter="serviceprincipalname=*http*"
-
-# invoke
-$Result = $Searcher.FindAll()
-
-# print each object and its properties
-Foreach($obj in $Result) {
-        Foreach($prop in $obj.Properties){$prop}
-        Write-Host "------------------------"
-}
 ```
 
 ## AD Authentication
@@ -263,7 +194,7 @@ $ hydra -L users.txt -P pass.txt rdp://[target]
 ### Plaintext Credentials
 ```bash
 # RDP clients
-$ rdesktop [target]
+$ rdesktop [target] -d [domain] -u [user] -p [password]
 $ remmina -c rdp://[username]:[password]@[target]
 
 # WinRM client (used in compromised computer) - ensure WSMAN port 5985 is open on target
