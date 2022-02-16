@@ -1,16 +1,16 @@
 # Active Directory Cheatsheet
 
-### [AD Enumeration](###AD-Enumeration) 
+### [AD Enumeration](#AD-Enumeration-1) 
 * Users / Groups / Computers
 * Domain Controller
 * Service Principal Names (SPNs)
 * Logged-in Users and Active User Sessions
 
-### [AD Authentication](###AD-Authentication)
+### [AD Authentication](#AD-Authentication-1)
 * Dumping NTLM hashes and Plaintext Credentials
 * Dumping Kerberos tickets
 
-### [AD Lateral Movement](###AD-Lateral-Movement) 
+### [AD Lateral Movement](#AD-Lateral-Movement-1) 
 * ZeroLogon Vulnerability
 * Password Spraying
 * Plaintext Credentials
@@ -20,7 +20,7 @@
 * Silver Tickets
 * Distributed Component Object Model (DCOM)
 
-### [Hash Cracking Techniques](###Hash-Cracking-Techniques)
+### [Hash Cracking Techniques](#Hash-Cracking-Techniques-1)
 * Cracking NTLM hashes
 * Kerberoasting
 
